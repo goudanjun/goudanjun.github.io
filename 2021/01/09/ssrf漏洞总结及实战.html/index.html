@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="ssrf,">
 
 
 
@@ -81,17 +81,36 @@
 
 
 
-<meta name="description" content="Stay Hungry,Stay Foolish">
-<meta name="keywords" content="CTF,渗透">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Goudan&#39;s blog">
-<meta property="og:url" content="http://goudanjun.vip/index.html">
+<meta name="description" content="什么是SSRF？SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。 Example：123GET /index.php?url=http://google.com/ HTTP/">
+<meta name="keywords" content="ssrf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssrf漏洞总结及实战">
+<meta property="og:url" content="http://goudanjun.vip/2021/01/09/ssrf漏洞总结及实战.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="什么是SSRF？SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。 Example：123GET /index.php?url=http://google.com/ HTTP/">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/BXCedG2Dlz6EaKt.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/pd5fo1PDSFkNVr7.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/RJFnikj9Apb2ON5.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/6IaAdCSbDcMF3Ko.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/AHjnXzGoZQvrxSt.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/mu8nMTFzNafhZPs.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/rRWweQIZ6nkbhsH.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/TsdaMScUHOzGLmn.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/PWD5LF8dTyg9uia.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/VDqtLxAl2iFd9gC.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/uFWw4Uc2okJaIlv.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/BhK9NzIPZpf8Xie.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/2I4xhV5Qgudn6PF.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/fJyFN4GwZA78SR1.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/ZOfyAEYqIhPFxsi.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/H4JgAXPjwrC7zh2.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/09/v59Yh8l1fD4RuPS.png">
+<meta property="og:updated_time" content="2021-01-09T12:26:56.439Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Goudan&#39;s blog">
-<meta name="twitter:description" content="Stay Hungry,Stay Foolish">
+<meta name="twitter:title" content="ssrf漏洞总结及实战">
+<meta name="twitter:description" content="什么是SSRF？SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。 Example：123GET /index.php?url=http://google.com/ HTTP/">
+<meta name="twitter:image" content="https://i.loli.net/2021/01/09/BXCedG2Dlz6EaKt.jpg">
 
 
 
@@ -121,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="http://goudanjun.vip/">
+  <link rel="canonical" href="http://goudanjun.vip/2021/01/09/ssrf漏洞总结及实战.html/">
 
 
 
 
 
-  <title>Goudan's blog</title>
+  <title>ssrf漏洞总结及实战 | Goudan's blog</title>
   
 
 
@@ -146,8 +165,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-  page-home">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -240,9 +258,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -272,9 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/01/09/ssrf漏洞总结及实战.html/" itemprop="url">ssrf漏洞总结及实战</a></h1>
+          <h1 class="post-title" itemprop="name headline">ssrf漏洞总结及实战</h1>
         
 
         <div class="post-meta">
@@ -355,9 +371,7 @@
       
 
       
-        
-          
-            <h2 id="什么是SSRF？"><a href="#什么是SSRF？" class="headerlink" title="什么是SSRF？"></a><strong>什么是SSRF？</strong></h2><p>SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。</p>
+        <h2 id="什么是SSRF？"><a href="#什么是SSRF？" class="headerlink" title="什么是SSRF？"></a><strong>什么是SSRF？</strong></h2><p>SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。</p>
 <h3 id="Example："><a href="#Example：" class="headerlink" title="Example："></a>Example：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /index.php?url=http://google.com/ HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: example.com</span><br></pre></td></tr></table></figure>
 
 <p>在这里，<a href="http://example.com从它的服务器获取http://google.com" target="_blank" rel="noopener">http://example.com从它的服务器获取http://google.com</a></p>
@@ -436,8 +450,6 @@
 <p><img src="https://i.loli.net/2021/01/09/v59Yh8l1fD4RuPS.png" alt="微信截图_20210109202539"></p>
 <p>如果加载的时间很长，说明该端口是开放的。</p>
 
-          
-        
       
     </div>
     
@@ -452,324 +464,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2019/07/31/在win10上安装kali子系统.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/31/在win10上安装kali子系统.html/" itemprop="url">在win10上安装kali子系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-31T20:32:40+08:00">
-                2019-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/ssrf/" rel="tag"># ssrf</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  451 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <h2 id="打开windows开发人员模式"><a href="#打开windows开发人员模式" class="headerlink" title="打开windows开发人员模式"></a>打开windows开发人员模式</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/31/在win10上安装kali子系统.html/#more" rel="contents">
-              Read more &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/31/在win10上安装kali子系统.html/" rel="next" title="在win10上安装kali子系统">
+                <i class="fa fa-chevron-left"></i> 在win10上安装kali子系统
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2019/07/24/hello-world.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/24/hello-world.html/" itemprop="url">hello world</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-24T20:27:22+08:00">
-                2019-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  162 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <h3 id="Bat命令"><a href="#Bat命令" class="headerlink" title="Bat命令"></a>Bat命令</h3><figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> Hello, world!</span><br><span class="line"><span class="built_in">pause</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/24/hello-world.html/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -779,10 +503,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -790,6 +515,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -810,8 +539,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -879,6 +617,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是SSRF？"><span class="nav-number">1.</span> <span class="nav-text">什么是SSRF？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Example："><span class="nav-number">1.1.</span> <span class="nav-text">Example：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF的类型"><span class="nav-number">2.</span> <span class="nav-text">SSRF的类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么地方最容易出现SSRF"><span class="nav-number">3.</span> <span class="nav-text">什么地方最容易出现SSRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞的危害"><span class="nav-number">4.</span> <span class="nav-text">SSRF漏洞的危害</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF神器Curl的使用"><span class="nav-number">5.</span> <span class="nav-text">SSRF神器Curl的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最常用的跳转绕过"><span class="nav-number">6.</span> <span class="nav-text">最常用的跳转绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-SSRF实现端口扫描"><span class="nav-number">7.</span> <span class="nav-text">Python+SSRF实现端口扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF实战"><span class="nav-number">8.</span> <span class="nav-text">SSRF实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在kali上监听-6666-端口"><span class="nav-number">8.1.</span> <span class="nav-text">在kali上监听 6666 端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用Discuz-3-1的ssrf漏洞进行请求访问"><span class="nav-number">8.2.</span> <span class="nav-text">利用Discuz 3.1的ssrf漏洞进行请求访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可以看出在kali上监听到了本机发来的get请求"><span class="nav-number">8.3.</span> <span class="nav-text">可以看出在kali上监听到了本机发来的get请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绕过header限制"><span class="nav-number">8.4.</span> <span class="nav-text">绕过header限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#探测端口"><span class="nav-number">8.5.</span> <span class="nav-text">探测端口</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1038,6 +792,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
