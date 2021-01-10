@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="什么是SSRF？SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。">
+<meta name="description" content="SSRF攻击原理SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。">
 <meta name="keywords" content="ssrf">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ssrf漏洞总结及实战">
+<meta property="og:title" content="SSRF漏洞总结及实战">
 <meta property="og:url" content="http://goudanjun.vip/2021/01/09/ssrf漏洞总结及实战.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="什么是SSRF？SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。">
+<meta property="og:description" content="SSRF攻击原理SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://i.loli.net/2021/01/09/BXCedG2Dlz6EaKt.jpg">
 <meta property="og:image" content="https://i.loli.net/2021/01/09/pd5fo1PDSFkNVr7.jpg">
@@ -106,10 +106,10 @@
 <meta property="og:image" content="https://i.loli.net/2021/01/09/ZOfyAEYqIhPFxsi.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/09/H4JgAXPjwrC7zh2.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/09/v59Yh8l1fD4RuPS.png">
-<meta property="og:updated_time" content="2021-01-09T12:31:56.226Z">
+<meta property="og:updated_time" content="2021-01-10T03:25:33.568Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ssrf漏洞总结及实战">
-<meta name="twitter:description" content="什么是SSRF？SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。">
+<meta name="twitter:title" content="SSRF漏洞总结及实战">
+<meta name="twitter:description" content="SSRF攻击原理SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。">
 <meta name="twitter:image" content="https://i.loli.net/2021/01/09/BXCedG2Dlz6EaKt.jpg">
 
 
@@ -146,7 +146,7 @@
 
 
 
-  <title>ssrf漏洞总结及实战 | Goudan's blog</title>
+  <title>SSRF漏洞总结及实战 | Goudan's blog</title>
   
 
 
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ssrf漏洞总结及实战</h1>
+          <h1 class="post-title" itemprop="name headline">SSRF漏洞总结及实战</h1>
         
 
         <div class="post-meta">
@@ -371,7 +371,7 @@
       
 
       
-        <h2 id="什么是SSRF？"><a href="#什么是SSRF？" class="headerlink" title="什么是SSRF？"></a><strong>什么是SSRF？</strong></h2><p>SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。</p>
+        <h2 id="SSRF攻击原理"><a href="#SSRF攻击原理" class="headerlink" title="SSRF攻击原理"></a><strong>SSRF攻击原理</strong></h2><p>SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，利用服务器端发起的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统（正因为请求是由服务器端发起的，所以服务器能请求到与自身相连而外网隔离的内部系统）。</p>
 <a id="more"></a>
 
 <h3 id="Example："><a href="#Example：" class="headerlink" title="Example："></a>Example：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /index.php?url=http://google.com/ HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: example.com</span><br></pre></td></tr></table></figure>
@@ -491,6 +491,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2021/01/10/XSS漏洞总结及实战.html/" rel="prev" title="XSS漏洞总结及实战">
+                XSS漏洞总结及实战 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -566,7 +570,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -579,7 +583,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -629,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是SSRF？"><span class="nav-number">1.</span> <span class="nav-text">什么是SSRF？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Example："><span class="nav-number">1.1.</span> <span class="nav-text">Example：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF的类型"><span class="nav-number">2.</span> <span class="nav-text">SSRF的类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么地方最容易出现SSRF"><span class="nav-number">3.</span> <span class="nav-text">什么地方最容易出现SSRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞的危害"><span class="nav-number">4.</span> <span class="nav-text">SSRF漏洞的危害</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF神器Curl的使用"><span class="nav-number">5.</span> <span class="nav-text">SSRF神器Curl的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最常用的跳转绕过"><span class="nav-number">6.</span> <span class="nav-text">最常用的跳转绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-SSRF实现端口扫描"><span class="nav-number">7.</span> <span class="nav-text">Python+SSRF实现端口扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF实战"><span class="nav-number">8.</span> <span class="nav-text">SSRF实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在kali上监听-6666-端口"><span class="nav-number">8.1.</span> <span class="nav-text">在kali上监听 6666 端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用Discuz-3-1的ssrf漏洞进行请求访问"><span class="nav-number">8.2.</span> <span class="nav-text">利用Discuz 3.1的ssrf漏洞进行请求访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可以看出在kali上监听到了本机发来的get请求"><span class="nav-number">8.3.</span> <span class="nav-text">可以看出在kali上监听到了本机发来的get请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绕过header限制"><span class="nav-number">8.4.</span> <span class="nav-text">绕过header限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#探测端口"><span class="nav-number">8.5.</span> <span class="nav-text">探测端口</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF攻击原理"><span class="nav-number">1.</span> <span class="nav-text">SSRF攻击原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Example："><span class="nav-number">1.1.</span> <span class="nav-text">Example：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF的类型"><span class="nav-number">2.</span> <span class="nav-text">SSRF的类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么地方最容易出现SSRF"><span class="nav-number">3.</span> <span class="nav-text">什么地方最容易出现SSRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞的危害"><span class="nav-number">4.</span> <span class="nav-text">SSRF漏洞的危害</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF神器Curl的使用"><span class="nav-number">5.</span> <span class="nav-text">SSRF神器Curl的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最常用的跳转绕过"><span class="nav-number">6.</span> <span class="nav-text">最常用的跳转绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-SSRF实现端口扫描"><span class="nav-number">7.</span> <span class="nav-text">Python+SSRF实现端口扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF实战"><span class="nav-number">8.</span> <span class="nav-text">SSRF实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在kali上监听-6666-端口"><span class="nav-number">8.1.</span> <span class="nav-text">在kali上监听 6666 端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用Discuz-3-1的ssrf漏洞进行请求访问"><span class="nav-number">8.2.</span> <span class="nav-text">利用Discuz 3.1的ssrf漏洞进行请求访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可以看出在kali上监听到了本机发来的get请求"><span class="nav-number">8.3.</span> <span class="nav-text">可以看出在kali上监听到了本机发来的get请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绕过header限制"><span class="nav-number">8.4.</span> <span class="nav-text">绕过header限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#探测端口"><span class="nav-number">8.5.</span> <span class="nav-text">探测端口</span></a></li></ol></li></ol></div>
             
 
           </div>
