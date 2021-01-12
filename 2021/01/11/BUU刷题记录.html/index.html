@@ -94,7 +94,9 @@
 <meta property="og:image" content="https://i.loli.net/2021/01/11/TajpPA945koYRzn.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/HrJGOV6ULQWFRhg.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/yf3neJBNulXFIKj.png">
-<meta property="og:updated_time" content="2021-01-11T04:55:36.203Z">
+<meta property="og:image" content="https://i.loli.net/2021/01/12/KbxzFBj6M7adSGm.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/12/FxA6fmstJRy4dK1.png">
+<meta property="og:updated_time" content="2021-01-12T07:14:12.551Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BUU刷题记录">
 <meta name="twitter:description" content="​    考研初试已经结束，不管考的怎么样，要开始准备复试了，遂重新刷BUU，记录下做题过程。">
@@ -322,7 +324,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  786 字
+                  1.6k 字
                 </span>
               
 
@@ -338,7 +340,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  3 分钟
+                  6 分钟
                 </span>
               
             </div>
@@ -425,6 +427,32 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 通过HANDLER tbl_name OPEN打开一张表，无返回结果，实际上我们在这里声明了一个名为tb1_name的句柄。</span><br><span class="line">HANDLER tbl_name OPEN [ [AS] alias]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#通过HANDLER tbl_name READ FIRST获取句柄的第一行，通过READ NEXT依次获取其它行。最后一行执行之后再执行NEXT会返回一个空的结果。</span><br><span class="line">HANDLER tbl_name READ index_name &#123; = | &lt;= | &gt;= | &lt; | &gt; &#125; (value1,value2,...)</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line">#FIRST获取句柄第一行（索引最小的一行），NEXT获取下一行，PREV获取前一行，LAST获取最后一行（索引最大的一行）。</span><br><span class="line">HANDLER tbl_name READ index_name &#123; FIRST | NEXT | PREV | LAST &#125;</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line">HANDLER tbl_name READ &#123; FIRST | NEXT &#125;</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">#通过HANDLER tbl_name CLOSE来关闭打开的句柄。</span><br><span class="line">HANDLER tbl_name CLOSE</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过索引去查看的话可以按照一定的顺序，获取表中的数据。</span><br><span class="line">通过索引列指定一个值，可以指定从哪一行开始。</span><br><span class="line">通过HANDLER tbl_name READ index_name = value，指定从哪一行开始，通过NEXT继续浏览。</span><br><span class="line">如果我们不想浏览一个表的所有行，可以使用where和limit子句。</span><br></pre></td></tr></table></figure>
 
 <p>参考链接 : <a href="https://blog.csdn.net/JesseYoung/article/details/40785137" target="_blank" rel="noopener">https://blog.csdn.net/JesseYoung/article/details/40785137</a></p>
+<h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1><h2 id="方法一：PHP特性"><a href="#方法一：PHP特性" class="headerlink" title="方法一：PHP特性"></a>方法一：PHP特性</h2><p>在参数名称前加空格即“ num”，waf识别为“ num”，但是PHP解析时会自动将空格去掉。</p>
+<p>由于过滤了“ / ”，我们构造payload如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">calc.php? num=var_dump(scandir(chr(<span class="number">47</span>)))</span><br><span class="line">calc.php? num=var_dump(file_get_contents(chr(<span class="number">47</span>).chr(<span class="number">102</span>).chr(<span class="number">49</span>).chr(<span class="number">97</span>).chr(<span class="number">103</span>).chr(<span class="number">103</span>)))</span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line">calc.php? num=var_dump(file_get_contents(chr(<span class="number">47</span>).f1agg))</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二：HTTP走私"><a href="#方法二：HTTP走私" class="headerlink" title="方法二：HTTP走私"></a>方法二：HTTP走私</h2><p>看wp这道题还有HTTP走私这种方法，所以想来重点记录下</p>
+<h3 id="HTTP走私原理"><a href="#HTTP走私原理" class="headerlink" title="HTTP走私原理"></a>HTTP走私原理</h3><p>​    在HTTP1.1之后，HTTP规定了两种标识来表示请求结束，分别是 Content-Length（CL）标头和Transfer-Encoding（TE）标头</p>
+<p>​    CL：以字节为单位指定消息内容体的长度。</p>
+<p>​    TE：指定消息体使用分块编码（ChunkedEncode），即 Transfer-Encoding：chunked ，也就是说消息报文由一个或多个数据块组成，每个数据块大小以字节为单位（十六进制表示） 衡量，后跟CRLF（\r\n），然后是块内容，最后一个分块长度值必须为 0，对应的分块数据没有内容，表示实体结束。</p>
+<p>​    当我发送请求，包含Content-Length，前端服务器解析后没有问题发送给后端服务器，但是我在请求时后面还包含了Transfer-Encoding，这样后端服务器进行解析便可执行我写在下面的一些命令，这样便可以绕过前端的waf。</p>
+<h3 id="HTTP走私的四种方法"><a href="#HTTP走私的四种方法" class="headerlink" title="HTTP走私的四种方法"></a>HTTP走私的四种方法</h3><h4 id="CL不为0时"><a href="#CL不为0时" class="headerlink" title="CL不为0时"></a>CL不为0时</h4><p>这种情况一般发生在get请求下，当前端允许content-length，后端不允许时，此时后端服务器就不会解析content-length，这样就可能绕过waf。</p>
+<h4 id="CL-CL"><a href="#CL-CL" class="headerlink" title="CL-CL"></a>CL-CL</h4><p>这种利用的前提条件是服务器不会返回400错误。但是前端服务器按照第一个Content-Length的值对请求进行处理，而后端源站服务器按照第二个Content-Length的值进行处理,这样便有可能引发请求走私。比如出现下面这种情况时：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Length</span>: 68</span><br><span class="line"><span class="attribute">Content-Length</span>: 5</span><br><span class="line"> </span><br><span class="line">num=1GET /calc.php?num=1 HTTP/1.1</span><br><span class="line"><span class="attribute">123456</span></span><br></pre></td></tr></table></figure>
+
+<p>前端先解析第一个cl为68，就会把下面的“num=1GET/calc.php?num=1 HTTP/1.1”都当做请求的内容。但是后端会解析第二个cl，也就是说后端只解析“num=1” 后面的请求体就作为下次请求的请求头（前提是Connection:keep-alive）。这样就会引发走私。</p>
+<h4 id="CL-TE"><a href="#CL-TE" class="headerlink" title="CL-TE"></a>CL-TE</h4><p>就是当收到存在两个请求头的请求包时，前端代理服务器只处理Content-Length这一请求头，而后端服务器会忽略掉Content-Length，处理Transfer-Encoding这一请求头。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Length</span>: 123</span><br><span class="line"><span class="attribute">Transfer-Encoding</span>: chunked</span><br><span class="line"><span class="attribute">12</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的chunked对请求内容进行分块编码，并且直到有\r\n的时候才结束。</p>
+<h4 id="TE-CL"><a href="#TE-CL" class="headerlink" title="TE-CL"></a>TE-CL</h4><p>所谓TE-CL，就是当收到存在两个请求头的请求包时，前端代理服务器处理Transfer-Encoding这一请求头，而后端服务器处理Content-Length请求头。</p>
+<p>参考文章：<a href="https://paper.seebug.org/1048/" target="_blank" rel="noopener">https://paper.seebug.org/1048/</a></p>
+<hr>
+<p>回到这道题，因为是get请求，而CL字段只有在post请求时才会有用，所以我们利用TE字段来绕过前端的waf</p>
+<p><img src="https://i.loli.net/2021/01/12/KbxzFBj6M7adSGm.png" alt="image-20210112114930755"></p>
+<p>在数据部分必须要加一个换行，来标识请求的结束，Connection也要改为keep-live</p>
+<p>但是经过我的测试发现使用两个CL字段也可以进行绕过前端的waf</p>
+<p><img src="https://i.loli.net/2021/01/12/FxA6fmstJRy4dK1.png" alt="image-20210112115225675"></p>
 
       
     </div>
@@ -542,7 +570,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -605,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#强网杯-2019-随便注"><span class="nav-number">1.</span> <span class="nav-text">[强网杯 2019]随便注</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：更改表名和列名"><span class="nav-number">1.1.</span> <span class="nav-text">方法一：更改表名和列名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：绕过select限制"><span class="nav-number">1.2.</span> <span class="nav-text">方法二：绕过select限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法三：使用handler绕过"><span class="nav-number">1.3.</span> <span class="nav-text">方法三：使用handler绕过</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#强网杯-2019-随便注"><span class="nav-number">1.</span> <span class="nav-text">[强网杯 2019]随便注</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：更改表名和列名"><span class="nav-number">1.1.</span> <span class="nav-text">方法一：更改表名和列名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：绕过select限制"><span class="nav-number">1.2.</span> <span class="nav-text">方法二：绕过select限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法三：使用handler绕过"><span class="nav-number">1.3.</span> <span class="nav-text">方法三：使用handler绕过</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RoarCTF-2019-Easy-Calc"><span class="nav-number">2.</span> <span class="nav-text">[RoarCTF 2019]Easy Calc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：PHP特性"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：PHP特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：HTTP走私"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：HTTP走私</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP走私原理"><span class="nav-number">2.2.1.</span> <span class="nav-text">HTTP走私原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP走私的四种方法"><span class="nav-number">2.2.2.</span> <span class="nav-text">HTTP走私的四种方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CL不为0时"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">CL不为0时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CL-CL"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">CL-CL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CL-TE"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">CL-TE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TE-CL"><span class="nav-number">2.2.2.4.</span> <span class="nav-text">TE-CL</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
