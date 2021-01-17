@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="内网,">
+  <meta name="keywords" content="CTF,PHP,伪随机数,">
 
 
 
@@ -81,18 +81,23 @@
 
 
 
-<meta name="description" content="Stay Hungry,Stay Foolish">
-<meta name="keywords" content="内网">
+<meta name="description" content="[GWCTF 2019]枯燥的抽奖考点：php伪随机数 check.php中有 mt_srand()和mt_rand()两个伪随机函数  这里用到了php伪随机的种子爆破，利用网上的c语言脚本：php_mt_seed 逆向题目中的加密函数，使符合脚本的输入规范 12345678910111213str1=&apos;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJ">
+<meta name="keywords" content="CTF,PHP,伪随机数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="内网学习记录">
-<meta property="og:url" content="http://goudanjun.vip/2019/08/11/内网学习记录.html/index.html">
+<meta property="og:title" content="[GWCTF 2019]枯燥的抽奖">
+<meta property="og:url" content="http://goudanjun.vip/2021/01/17/GWCTF-2019-枯燥的抽奖.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="[GWCTF 2019]枯燥的抽奖考点：php伪随机数 check.php中有 mt_srand()和mt_rand()两个伪随机函数  这里用到了php伪随机的种子爆破，利用网上的c语言脚本：php_mt_seed 逆向题目中的加密函数，使符合脚本的输入规范 12345678910111213str1=&apos;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJ">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-01-12T06:40:26.136Z">
+<meta property="og:image" content="https://i.loli.net/2021/01/13/WwCku1RMVsdAPI8.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/x8DmpyH452TlakC.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/Kuwxg1ofsTdV9WI.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/13/3DYUHOhNkdM862W.png">
+<meta property="og:updated_time" content="2021-01-17T12:29:07.684Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="内网学习记录">
-<meta name="twitter:description" content="Stay Hungry,Stay Foolish">
+<meta name="twitter:title" content="[GWCTF 2019]枯燥的抽奖">
+<meta name="twitter:description" content="[GWCTF 2019]枯燥的抽奖考点：php伪随机数 check.php中有 mt_srand()和mt_rand()两个伪随机函数  这里用到了php伪随机的种子爆破，利用网上的c语言脚本：php_mt_seed 逆向题目中的加密函数，使符合脚本的输入规范 12345678910111213str1=&apos;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJ">
+<meta name="twitter:image" content="https://i.loli.net/2021/01/13/WwCku1RMVsdAPI8.png">
 
 
 
@@ -122,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://goudanjun.vip/2019/08/11/内网学习记录.html/">
+  <link rel="canonical" href="http://goudanjun.vip/2021/01/17/GWCTF-2019-枯燥的抽奖.html/">
 
 
 
 
 
-  <title>内网学习记录 | Goudan's blog</title>
+  <title>[GWCTF 2019]枯燥的抽奖 | Goudan's blog</title>
   
 
 
@@ -255,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2019/08/11/内网学习记录.html/">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/01/17/GWCTF-2019-枯燥的抽奖.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="狗蛋菌">
@@ -272,7 +277,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">内网学习记录</h1>
+          <h1 class="post-title" itemprop="name headline">[GWCTF 2019]枯燥的抽奖</h1>
         
 
         <div class="post-meta">
@@ -284,8 +289,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-11T19:36:50+08:00">
-                2019-08-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-17T20:23:07+08:00">
+                2021-01-17
               </time>
             
 
@@ -316,7 +321,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  0 字
+                  253 字
                 </span>
               
 
@@ -353,7 +358,27 @@
       
 
       
-        
+        <h1 id="GWCTF-2019-枯燥的抽奖"><a href="#GWCTF-2019-枯燥的抽奖" class="headerlink" title="[GWCTF 2019]枯燥的抽奖"></a>[GWCTF 2019]枯燥的抽奖</h1><p>考点：php伪随机数</p>
+<p>check.php中有 mt_srand()和mt_rand()两个伪随机函数</p>
+<p><img src="https://i.loli.net/2021/01/13/WwCku1RMVsdAPI8.png" alt="image-20210113181832863"></p>
+<p>这里用到了php伪随机的种子爆破，利用网上的c语言脚本：<a href="https://www.openwall.com/php_mt_seed/" target="_blank" rel="noopener">php_mt_seed</a></p>
+<p>逆向题目中的加密函数，使符合脚本的输入规范</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">str1=<span class="string">'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span></span><br><span class="line">str2=<span class="string">'A5rgiREesS'</span></span><br><span class="line">str3 = str1[::<span class="number">-1</span>]</span><br><span class="line">length = len(str2)</span><br><span class="line">res=<span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(str2)):</span><br><span class="line">    <span class="keyword">if</span> i&lt;=length/<span class="number">2</span>:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(str1)):</span><br><span class="line">            <span class="keyword">if</span> str2[i] == str1[j]:</span><br><span class="line">                res+=str(j)+<span class="string">' '</span>+str(j)+<span class="string">' '</span>+<span class="string">'0'</span>+<span class="string">' '</span>+str(len(str1)<span class="number">-1</span>)+<span class="string">' '</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">print(res)</span><br><span class="line"><span class="comment">#36 36 0 61 31 31 0 61 17 17 0 61 6 6 0 61 8 8 0 61 53 53 0 61 40 40 0 61 4 4 0 61 18 18 0 61 54 54 0 61</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/x8DmpyH452TlakC.png" alt="微信截图_20210113184021"></p>
+<p>用脚本爆破种子</p>
+<p><img src="https://i.loli.net/2021/01/14/Kuwxg1ofsTdV9WI.png" alt="QQ截图20210113184233"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./php_mt_seed 36 36 0 61 31 31 0 61 17 17 0 61 6 6 0 61 8 8 0 61 53 53 0 61 40 40 0 61 4 4 0 61 18 18 0 61 54 54 0 61</span><br><span class="line"><span class="comment">#961723226</span></span><br></pre></td></tr></table></figure>
+
+<p>将种子代入原函数得到字符串</p>
+<p><img src="https://i.loli.net/2021/01/13/3DYUHOhNkdM862W.png" alt="QQ截图20210113184329"></p>
+<p>php_my_seed使用方法：<a href="https://www.cnblogs.com/zaqzzz/p/9997855.html" target="_blank" rel="noopener">https://www.cnblogs.com/zaqzzz/p/9997855.html</a></p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://xz.aliyun.com/t/3656#toc-3" target="_blank" rel="noopener">https://xz.aliyun.com/t/3656#toc-3</a></li>
+<li><a href="https://www.freebuf.com/vuls/192012.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/192012.html</a></li>
+</ul>
+
       
     </div>
     
@@ -370,7 +395,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/内网/" rel="tag"># 内网</a>
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+            <a href="/tags/伪随机数/" rel="tag"># 伪随机数</a>
           
         </div>
       
@@ -383,8 +412,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/31/在win10上安装kali子系统.html/" rel="next" title="在win10上安装kali子系统">
-                <i class="fa fa-chevron-left"></i> 在win10上安装kali子系统
+              <a href="/2021/01/17/-网鼎杯-2020-青龙组-AreUSerialz.html/" rel="next" title="[网鼎杯 2020 青龙组] AreUSerialz">
+                <i class="fa fa-chevron-left"></i> [网鼎杯 2020 青龙组] AreUSerialz
               </a>
             
           </div>
@@ -393,8 +422,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/01/09/ssrf漏洞总结及实战.html/" rel="prev" title="SSRF漏洞总结及实战">
-                SSRF漏洞总结及实战 <i class="fa fa-chevron-right"></i>
+              <a href="/2021/01/17/极客大挑战-2019-HardSQL.html/" rel="prev" title=" [极客大挑战 2019]HardSQL">
+                 [极客大挑战 2019]HardSQL <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -447,8 +476,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -516,6 +554,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GWCTF-2019-枯燥的抽奖"><span class="nav-number">1.</span> <span class="nav-text">[GWCTF 2019]枯燥的抽奖</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
