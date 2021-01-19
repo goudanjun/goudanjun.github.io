@@ -81,23 +81,23 @@
 
 
 
-<meta name="description" content="[强网杯 2019]随便注考点：堆叠注入 ​        堆叠注入就是可以在一条sql语句后加分号，分号之后的就是一个全新的sql语句。但是使用条件十分有限，只有PHP的站在使用mysqli_multi_query()函数时，会同时解析多条语句。往往PHP的站会使用mysqli_ query()函数来限制只能执行一条语句，从而防止sql注入。 根据返回报错： 1return preg_match">
+<meta name="description" content="[强网杯 2019]随便注考点：堆叠注入">
 <meta name="keywords" content="CTF,SQL注入,堆叠注入">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[强网杯 2019]随便注">
 <meta property="og:url" content="http://goudanjun.vip/2021/01/17/强网杯-2019-随便注.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="[强网杯 2019]随便注考点：堆叠注入 ​        堆叠注入就是可以在一条sql语句后加分号，分号之后的就是一个全新的sql语句。但是使用条件十分有限，只有PHP的站在使用mysqli_multi_query()函数时，会同时解析多条语句。往往PHP的站会使用mysqli_ query()函数来限制只能执行一条语句，从而防止sql注入。 根据返回报错： 1return preg_match">
+<meta property="og:description" content="[强网杯 2019]随便注考点：堆叠注入">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/3Knxpz8MwAFNkqI.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/6Mi7CVoEzxd3LTD.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/TajpPA945koYRzn.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/HrJGOV6ULQWFRhg.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/yf3neJBNulXFIKj.png">
-<meta property="og:updated_time" content="2021-01-17T12:30:36.492Z">
+<meta property="og:updated_time" content="2021-01-17T13:02:00.921Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[强网杯 2019]随便注">
-<meta name="twitter:description" content="[强网杯 2019]随便注考点：堆叠注入 ​        堆叠注入就是可以在一条sql语句后加分号，分号之后的就是一个全新的sql语句。但是使用条件十分有限，只有PHP的站在使用mysqli_multi_query()函数时，会同时解析多条语句。往往PHP的站会使用mysqli_ query()函数来限制只能执行一条语句，从而防止sql注入。 根据返回报错： 1return preg_match">
+<meta name="twitter:description" content="[强网杯 2019]随便注考点：堆叠注入">
 <meta name="twitter:image" content="https://i.loli.net/2021/01/11/3Knxpz8MwAFNkqI.png">
 
 
@@ -360,6 +360,8 @@
 
       
         <h1 id="强网杯-2019-随便注"><a href="#强网杯-2019-随便注" class="headerlink" title="[强网杯 2019]随便注"></a>[强网杯 2019]随便注</h1><p>考点：堆叠注入</p>
+<a id="more"></a>
+
 <p>​        堆叠注入就是可以在一条sql语句后加分号，分号之后的就是一个全新的sql语句。但是使用条件十分有限，只有PHP的站在使用mysqli_multi_query()函数时，会同时解析多条语句。往往PHP的站会使用mysqli_ query()函数来限制只能执行一条语句，从而防止sql注入。</p>
 <p>根据返回报错：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return preg_match("/<span class="keyword">select</span>|<span class="keyword">update</span>|<span class="keyword">delete</span>|<span class="keyword">drop</span>|<span class="keyword">insert</span>|<span class="keyword">where</span>|\./i<span class="string">",$inject);</span></span><br></pre></td></tr></table></figure>
@@ -545,7 +547,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -558,7 +560,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

