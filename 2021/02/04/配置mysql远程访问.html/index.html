@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="内网,">
+  <meta name="keywords" content="mysql,">
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="Stay Hungry,Stay Foolish">
-<meta name="keywords" content="内网">
+<meta name="description" content="新装一台虚拟机mysql的时候，往往会出现win无法连接的情况，报错信息1130，是因为没有权限的问题，解决方案如下： 123456789101112mysql -u root -p#以权限用户root登录mysql&amp;gt;use mysql;#选择mysql库mysql&amp;gt;select &apos;host&apos; from user where user=&apos;root&apos;;#查看mysql库中的user表的h">
+<meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="内网学习记录">
-<meta property="og:url" content="http://goudanjun.vip/2019/08/11/内网学习记录.html/index.html">
+<meta property="og:title" content="配置mysql远程访问">
+<meta property="og:url" content="http://goudanjun.vip/2021/02/04/配置mysql远程访问.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="新装一台虚拟机mysql的时候，往往会出现win无法连接的情况，报错信息1130，是因为没有权限的问题，解决方案如下： 123456789101112mysql -u root -p#以权限用户root登录mysql&amp;gt;use mysql;#选择mysql库mysql&amp;gt;select &apos;host&apos; from user where user=&apos;root&apos;;#查看mysql库中的user表的h">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-01-12T06:40:26.136Z">
+<meta property="og:updated_time" content="2021-02-04T09:56:45.242Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="内网学习记录">
-<meta name="twitter:description" content="Stay Hungry,Stay Foolish">
+<meta name="twitter:title" content="配置mysql远程访问">
+<meta name="twitter:description" content="新装一台虚拟机mysql的时候，往往会出现win无法连接的情况，报错信息1130，是因为没有权限的问题，解决方案如下： 123456789101112mysql -u root -p#以权限用户root登录mysql&amp;gt;use mysql;#选择mysql库mysql&amp;gt;select &apos;host&apos; from user where user=&apos;root&apos;;#查看mysql库中的user表的h">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://goudanjun.vip/2019/08/11/内网学习记录.html/">
+  <link rel="canonical" href="http://goudanjun.vip/2021/02/04/配置mysql远程访问.html/">
 
 
 
 
 
-  <title>内网学习记录 | Goudan's blog</title>
+  <title>配置mysql远程访问 | Goudan's blog</title>
   
 
 
@@ -255,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2019/08/11/内网学习记录.html/">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/02/04/配置mysql远程访问.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="狗蛋菌">
@@ -272,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">内网学习记录</h1>
+          <h1 class="post-title" itemprop="name headline">配置mysql远程访问</h1>
         
 
         <div class="post-meta">
@@ -284,8 +284,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-11T19:36:50+08:00">
-                2019-08-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-02-04T16:40:48+08:00">
+                2021-02-04
               </time>
             
 
@@ -316,7 +316,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  0 字
+                  200 字
                 </span>
               
 
@@ -353,7 +353,11 @@
       
 
       
-        
+        <p>新装一台虚拟机mysql的时候，往往会出现win无法连接的情况，报错信息1130，是因为没有权限的问题，解决方案如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br><span class="line"><span class="comment">#以权限用户root登录</span></span><br><span class="line">mysql&gt;use mysql;</span><br><span class="line"><span class="comment">#选择mysql库</span></span><br><span class="line">mysql&gt;select <span class="string">'host'</span> from user <span class="built_in">where</span> user=<span class="string">'root'</span>;</span><br><span class="line"><span class="comment">#查看mysql库中的user表的host值（即可进行连接访问的主机/IP名称）</span></span><br><span class="line">mysql&gt;update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user =<span class="string">'root'</span>;</span><br><span class="line"><span class="comment">#修改host值（以通配符%的内容增加主机/IP地址），当然也可以直接增加IP地址</span></span><br><span class="line">mysql&gt;flush privileges;</span><br><span class="line"><span class="comment">#刷新MySQL的系统权限相关表</span></span><br><span class="line">mysql&gt;select <span class="string">'host'</span> from user <span class="built_in">where</span> user=<span class="string">'root'</span>;</span><br><span class="line"><span class="comment">#再重新查看user表时，有修改</span></span><br></pre></td></tr></table></figure>
+
+<p>记得Mysql服务需要重新启动（确保修改有效-service mysql restart），否则可能修改的结果无法体现。</p>
+
       
     </div>
     
@@ -370,7 +374,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/内网/" rel="tag"># 内网</a>
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
           
         </div>
       
@@ -383,8 +387,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/31/在win10上安装kali子系统.html/" rel="next" title="在win10上安装kali子系统">
-                <i class="fa fa-chevron-left"></i> 在win10上安装kali子系统
+              <a href="/2021/01/31/docker中awvs使用记录.html/" rel="next" title="docker中awvs使用记录">
+                <i class="fa fa-chevron-left"></i> docker中awvs使用记录
               </a>
             
           </div>
@@ -393,8 +397,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/01/09/ssrf漏洞总结及实战.html/" rel="prev" title="SSRF漏洞总结及实战">
-                SSRF漏洞总结及实战 <i class="fa fa-chevron-right"></i>
+              <a href="/2021/02/06/linux反弹shell的几种常见手段.html/" rel="prev" title="linux反弹shell的几种常见手段">
+                linux反弹shell的几种常见手段 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
