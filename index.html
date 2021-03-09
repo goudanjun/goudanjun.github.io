@@ -255,6 +255,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/08/内网学习记录.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/08/内网学习记录.html/" itemprop="url">内网学习记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-08T19:36:50+08:00">
+                2021-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  260 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">net user /domain		<span class="comment">#查看域用户</span></span><br><span class="line">net view /domain		<span class="comment">#查看有几个域</span></span><br><span class="line">net view /domain:XXX	<span class="comment">#查看域内主机</span></span><br><span class="line">net group /domain		<span class="comment">#查看域里面的组</span></span><br><span class="line">net group <span class="string">"domain computers"</span> /domain	<span class="comment">#查看域内所有主机名</span></span><br><span class="line">net group <span class="string">"domain admins"</span> /domain		<span class="comment">#查看域管理员</span></span><br><span class="line">net group <span class="string">"domain controllers"</span> /domain	<span class="comment">#查看域控制器</span></span><br><span class="line">net group <span class="string">"enterprise admins"</span> /domain	<span class="comment">#查看企业管理组</span></span><br><span class="line">nettime /domain			<span class="comment">#查看时间服务器</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h1><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>提权之前：第一次getshell的时候要进行进程的迁移，进而获取稳定的shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#手动迁移</span></span><br><span class="line">migrate &lt;PID&gt;</span><br><span class="line"><span class="comment">#自动迁移</span></span><br><span class="line">run post/windows/manage/migrate</span><br></pre></td></tr></table></figure>
+
+<h2 id="windows各漏洞对应补丁："><a href="#windows各漏洞对应补丁：" class="headerlink" title="windows各漏洞对应补丁："></a>windows各漏洞对应补丁：</h2><p><img src="https://i.loli.net/2021/03/08/bWeiuH2Cl9Xnmcw.jpg" alt="IMG_0726(20210308-110246)"><img src="https://i.loli.net/2021/03/08/2cKIuaoPyVNTCZl.jpg" alt="IMG_0727(20210308-110307)"></p>
+<h2 id="ms16-032实验："><a href="#ms16-032实验：" class="headerlink" title="ms16_032实验："></a>ms16_032实验：</h2><p>getshell后是用户权限：</p>
+<p><img src="https://i.loli.net/2021/03/08/jgHM8fcr5Eo7KlW.png" alt="image-20210308204554539"></p>
+<p>将这个session放到后台运行，搜索ms16032，设置session为刚才的session</p>
+<p><img src="https://i.loli.net/2021/03/08/gPA3LD7CSu2Bf1m.png" alt="image-20210308204708951"></p>
+<p>提权后：</p>
+<p><img src="https://i.loli.net/2021/03/08/Rev19GBgq4OVA2E.png" alt="image-20210308204751797"></p>
+<h1 id="内网横向移动（拿域控）"><a href="#内网横向移动（拿域控）" class="headerlink" title="内网横向移动（拿域控）"></a>内网横向移动（拿域控）</h1><ol>
+<li>使用当前权限添加内网路由，进行弱口令扫描</li>
+<li>使用powershell对内网进行扫描（目标机器 &gt; win7）</li>
+<li>架设Socket4a，然后Socket会自动进行内网扫描</li>
+<li>利用当前权限进行内网IPC$渗透</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/02/07/python学习记录.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1594,161 +1762,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2021/01/17/GWCTF-2019-枯燥的抽奖.html/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/01/17/-网鼎杯-2020-青龙组-AreUSerialz.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/01/17/-网鼎杯-2020-青龙组-AreUSerialz.html/" itemprop="url">[网鼎杯 2020 青龙组] AreUSerialz</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-17T20:22:49+08:00">
-                2021-01-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  581 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="网鼎杯-2020-青龙组-AreUSerialz"><a href="#网鼎杯-2020-青龙组-AreUSerialz" class="headerlink" title="[网鼎杯 2020 青龙组] AreUSerialz"></a>[网鼎杯 2020 青龙组] AreUSerialz</h1><p>借这道题复习记录下反序列化的小细节~</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/01/17/-网鼎杯-2020-青龙组-AreUSerialz.html/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>

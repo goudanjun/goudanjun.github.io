@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://goudanjun.vip/"/>
-  <updated>2021-03-05T01:32:46.677Z</updated>
+  <updated>2021-03-08T13:23:11.767Z</updated>
   <id>http://goudanjun.vip/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>内网学习记录</title>
+    <link href="http://goudanjun.vip/2021/03/08/%E5%86%85%E7%BD%91%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95.html/"/>
+    <id>http://goudanjun.vip/2021/03/08/内网学习记录.html/</id>
+    <published>2021-03-08T11:36:50.000Z</published>
+    <updated>2021-03-08T13:23:11.767Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">net user /domain<span class="comment">#查看域用户</span></span><br><span class="line">net view /domain<span class="comment">#查看有几个域</span></span><br><span class="line">net view /domain:XXX<span class="comment">#查看域内主机</span></span><br><span class="line">net group /domain<span class="comment">#查看域里面的组</span></span><br><span class="line">net group <span class="string">"domain computers"</span> /domain<span class="comment">#查看域内所有主机名</span></span><br><span class="line">net group <span class="string">"domain admins"</span> /domain<span class="comment">#查看域管理员</span></span><br><span class="line">net group <span class="string">"domain controllers"</span> /domain<span class="comment">#查看域控制器</span></span><br><span class="line">net group <span class="string">"enterprise admins"</span> /domain<span class="comment">#查看企业管理组</span></span><br><span class="line">nettime /domain<span class="comment">#查看时间服务器</span></span><br></pre></td></tr></table></figure><h1 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h1><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>提权之前：第一次getshell的时候要进行进程的迁移，进而获取稳定的shell</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#手动迁移</span></span><br><span class="line">migrate &lt;PID&gt;</span><br><span class="line"><span class="comment">#自动迁移</span></span><br><span class="line">run post/windows/manage/migrate</span><br></pre></td></tr></table></figure><h2 id="windows各漏洞对应补丁："><a href="#windows各漏洞对应补丁：" class="headerlink" title="windows各漏洞对应补丁："></a>windows各漏洞对应补丁：</h2><p><img src="https://i.loli.net/2021/03/08/bWeiuH2Cl9Xnmcw.jpg" alt="IMG_0726(20210308-110246)"><img src="https://i.loli.net/2021/03/08/2cKIuaoPyVNTCZl.jpg" alt="IMG_0727(20210308-110307)"></p><h2 id="ms16-032实验："><a href="#ms16-032实验：" class="headerlink" title="ms16_032实验："></a>ms16_032实验：</h2><p>getshell后是用户权限：</p><p><img src="https://i.loli.net/2021/03/08/jgHM8fcr5Eo7KlW.png" alt="image-20210308204554539"></p><p>将这个session放到后台运行，搜索ms16032，设置session为刚才的session</p><p><img src="https://i.loli.net/2021/03/08/gPA3LD7CSu2Bf1m.png" alt="image-20210308204708951"></p><p>提权后：</p><p><img src="https://i.loli.net/2021/03/08/Rev19GBgq4OVA2E.png" alt="image-20210308204751797"></p><h1 id="内网横向移动（拿域控）"><a href="#内网横向移动（拿域控）" class="headerlink" title="内网横向移动（拿域控）"></a>内网横向移动（拿域控）</h1><ol><li>使用当前权限添加内网路由，进行弱口令扫描</li><li>使用powershell对内网进行扫描（目标机器 &gt; win7）</li><li>架设Socket4a，然后Socket会自动进行内网扫描</li><li>利用当前权限进行内网IPC$渗透</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;信息收集&quot;&gt;&lt;a href=&quot;#信息收集&quot; class=&quot;headerlink&quot; title=&quot;信息收集&quot;&gt;&lt;/a&gt;信息收集&lt;/h1&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre
+      
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://goudanjun.vip/tags/%E5%86%85%E7%BD%91/"/>
+    
+  </entry>
   
   <entry>
     <title>python学习记录</title>
@@ -200,9 +223,9 @@
     </summary>
     
     
-      <category term="PHP" scheme="http://goudanjun.vip/tags/PHP/"/>
-    
       <category term="CTF" scheme="http://goudanjun.vip/tags/CTF/"/>
+    
+      <category term="PHP" scheme="http://goudanjun.vip/tags/PHP/"/>
     
       <category term="伪随机数" scheme="http://goudanjun.vip/tags/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0/"/>
     
@@ -224,9 +247,9 @@
     </summary>
     
     
-      <category term="PHP" scheme="http://goudanjun.vip/tags/PHP/"/>
-    
       <category term="CTF" scheme="http://goudanjun.vip/tags/CTF/"/>
+    
+      <category term="PHP" scheme="http://goudanjun.vip/tags/PHP/"/>
     
       <category term="反序列化" scheme="http://goudanjun.vip/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
     
@@ -248,9 +271,9 @@
     </summary>
     
     
-      <category term="PHP" scheme="http://goudanjun.vip/tags/PHP/"/>
-    
       <category term="CTF" scheme="http://goudanjun.vip/tags/CTF/"/>
+    
+      <category term="PHP" scheme="http://goudanjun.vip/tags/PHP/"/>
     
       <category term="HTTP走私" scheme="http://goudanjun.vip/tags/HTTP%E8%B5%B0%E7%A7%81/"/>
     
@@ -339,22 +362,6 @@
     
     
       <category term="ssrf" scheme="http://goudanjun.vip/tags/ssrf/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>内网学习记录</title>
-    <link href="http://goudanjun.vip/2019/08/11/%E5%86%85%E7%BD%91%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95.html/"/>
-    <id>http://goudanjun.vip/2019/08/11/内网学习记录.html/</id>
-    <published>2019-08-11T11:36:50.000Z</published>
-    <updated>2021-01-12T06:40:26.136Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-      <category term="内网" scheme="http://goudanjun.vip/tags/%E5%86%85%E7%BD%91/"/>
     
   </entry>
   
