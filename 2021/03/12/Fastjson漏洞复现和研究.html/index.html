@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="漏洞简述Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。 Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。 由于普通序列化的时候各个类的私有属性无法区别，比如： 1234567891011121314class bicycle implements vehicle &amp;#">
+<meta name="description" content="漏洞简述Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。 Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。">
 <meta name="keywords" content="反序列化,java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fastjson漏洞复现和研究">
 <meta property="og:url" content="http://goudanjun.vip/2021/03/12/Fastjson漏洞复现和研究.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="漏洞简述Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。 Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。 由于普通序列化的时候各个类的私有属性无法区别，比如： 1234567891011121314class bicycle implements vehicle &amp;#">
+<meta property="og:description" content="漏洞简述Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。 Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://i.loli.net/2021/03/12/YRFTLlD86e9tirU.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/12/4fJiXKI72cEWskh.png">
@@ -101,10 +101,10 @@
 <meta property="og:image" content="https://i.loli.net/2021/03/12/gjubXL4h6p2erUR.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/13/HhF14aPkXBVNI8p.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/13/dgFrIOXvRq79EU1.png">
-<meta property="og:updated_time" content="2021-03-12T16:11:14.870Z">
+<meta property="og:updated_time" content="2021-03-13T02:08:35.966Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fastjson漏洞复现和研究">
-<meta name="twitter:description" content="漏洞简述Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。 Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。 由于普通序列化的时候各个类的私有属性无法区别，比如： 1234567891011121314class bicycle implements vehicle &amp;#">
+<meta name="twitter:description" content="漏洞简述Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。 Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。">
 <meta name="twitter:image" content="https://i.loli.net/2021/03/12/YRFTLlD86e9tirU.png">
 
 
@@ -368,6 +368,8 @@
       
         <h1 id="漏洞简述"><a href="#漏洞简述" class="headerlink" title="漏洞简述"></a>漏洞简述</h1><p>Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。</p>
 <p>Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。</p>
+<a id="more"></a>
+
 <p>由于普通序列化的时候各个类的私有属性无法区别，比如：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bicycle</span> <span class="keyword">implements</span> <span class="title">vehicle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Big_Decimal wheels;</span><br><span class="line">    <span class="comment">//省略 setter/getter、toString等</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">car</span> <span class="keyword">implements</span> <span class="title">vehicle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Big_Decimal wheels;</span><br><span class="line">    <span class="comment">//省略 setter/getter、toString等</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//序列化之后：</span></span><br><span class="line">toJSONString : &#123;<span class="string">"vehicle"</span>:&#123;<span class="string">"wheels"</span>:<span class="number">2</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line">toJSONString : &#123;<span class="string">"vehicle"</span>:&#123;<span class="string">"wheels"</span>:<span class="number">4</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
 
@@ -474,6 +476,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2021/03/13/资料汇总.html/" rel="prev" title="资料汇总">
+                资料汇总 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -549,7 +555,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -562,7 +568,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
