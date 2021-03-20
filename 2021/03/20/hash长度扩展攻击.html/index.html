@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/favicon.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="密码学,CTF,">
+
+
+
+
+
+  <link rel="alternate" href="/stom.xml" title="Goudan's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="hash加密过程：hash加密类似于分组加密算法，每次会处理固定长度的信息（MD5是64bit）  MD5加密： 首先需要将要进行message的填充，将message填充成为64的倍数（实际只需要填充到 length%64 = 56(Byte)即可，因为最后8字节是表示message的长度，MD5算法会自动添加） 进行分组 ( 一组64bit ) 加密，每一组的信息会和前一组计算得出的iv向量进">
+<meta name="keywords" content="密码学,CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hash长度扩展攻击">
+<meta property="og:url" content="http://goudanjun.vip/2021/03/20/hash长度扩展攻击.html/index.html">
+<meta property="og:site_name" content="Goudan&#39;s blog">
+<meta property="og:description" content="hash加密过程：hash加密类似于分组加密算法，每次会处理固定长度的信息（MD5是64bit）  MD5加密： 首先需要将要进行message的填充，将message填充成为64的倍数（实际只需要填充到 length%64 = 56(Byte)即可，因为最后8字节是表示message的长度，MD5算法会自动添加） 进行分组 ( 一组64bit ) 加密，每一组的信息会和前一组计算得出的iv向量进">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C713f77fe417245c7ba29c6d32f233359%5Cclipboard.png">
+<meta property="og:image" content="http://goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C46c09a7f5f1f41038e9f15e6c9d30117%5Cclipboard.png">
+<meta property="og:image" content="http://goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C1842fb87543b4e0e90daf4c3ef560983%5Cclipboard.png">
+<meta property="og:image" content="http://goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C73d09eed135b4c5e9e3377cf50655c63%5Cclipboard.png">
+<meta property="og:image" content="http://goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C92fae7f9177d407c96a81a68c1605900%5Cclipboard.png">
+<meta property="og:image" content="http://goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C361ccba5516f49ff82751024711488fb%5Cclipboard.png">
+<meta property="og:updated_time" content="2021-03-20T02:22:19.956Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hash长度扩展攻击">
+<meta name="twitter:description" content="hash加密过程：hash加密类似于分组加密算法，每次会处理固定长度的信息（MD5是64bit）  MD5加密： 首先需要将要进行message的填充，将message填充成为64的倍数（实际只需要填充到 length%64 = 56(Byte)即可，因为最后8字节是表示message的长度，MD5算法会自动添加） 进行分组 ( 一组64bit ) 加密，每一组的信息会和前一组计算得出的iv向量进">
+<meta name="twitter:image" content="http://goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C713f77fe417245c7ba29c6d32f233359%5Cclipboard.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://goudanjun.vip/2021/03/20/hash长度扩展攻击.html/">
+
+
+
+
+
+  <title>hash长度扩展攻击 | Goudan's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Goudan's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-xssplatform">
+          <a href="http://j36f673471.zicp.vip/xssme/index.php" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-XSSPlatform"></i> <br>
+            
+            XSSPlatform
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/20/hash长度扩展攻击.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hash长度扩展攻击</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-20T10:17:25+08:00">
+                2021-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  826 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="hash加密过程："><a href="#hash加密过程：" class="headerlink" title="hash加密过程："></a><strong>hash加密过程：</strong></h1><p>hash加密类似于分组加密算法，每次会处理固定长度的信息（MD5是64bit）</p>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C713f77fe417245c7ba29c6d32f233359%5Cclipboard.png" alt="img"></p>
+<h1 id="MD5加密："><a href="#MD5加密：" class="headerlink" title="MD5加密："></a><strong>MD5加密：</strong></h1><ol>
+<li>首先需要将要进行message的填充，将message填充成为64的倍数（实际只需要填充到 <strong>length%64 = 56(Byte)</strong>即可，因为<strong>最后8字节</strong>是表示<strong>message的长度</strong>，MD5算法会自动添加）</li>
+<li>进行分组 ( 一组64bit ) 加密，每一组的信息会和<strong>前一组计算得出的iv向量</strong>进行一系列的复杂运算得到一个hash值和一组iv向量，如果第一组正好是64位，则第一组计算即可得出hash值。</li>
+<li>其中第一组加密的初始iv为固定值</li>
+</ol>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C46c09a7f5f1f41038e9f15e6c9d30117%5Cclipboard.png" alt="img"></p>
+<p>例如：</p>
+<p>对admin进行MD5加密：</p>
+<ol>
+<li><p>message = admin</p>
+</li>
+<li><p>padding</p>
+</li>
+<li><ol>
+<li>一个\x80</li>
+<li>N个\x00</li>
+</ol>
+</li>
+<li><p>填充后：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">61646d696e8000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002800000000000000</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>hex(admin) + ‘80’ + 50*’00’ + ‘2800000000000000’</li>
+<li>后8字节 (64bit / 16位hex ) 实际上是：’0000000000000028’，填充的时候要按小端存储，逆序存储，admin是5个字节，40bit，即十六进制的28</li>
+<li>最后分组进行MD5加密</li>
+</ol>
+<h1 id="hash长度扩展攻击："><a href="#hash长度扩展攻击：" class="headerlink" title="hash长度扩展攻击："></a><strong>hash长度扩展攻击：</strong></h1><p>需要知道：salt的长度 + message的值 + salt和message经过MD5加密后的字符串 + 我们要扩充的字符串</p>
+<p>一般在实际应用中，例如在cookie或session中加密传输用户名和密码时，服务器管理员为了提高数据的混淆度，会加上在本来的message前加上一段固定长度的盐值（salt），防止恶意用户截取到用户名或密码可以直接MD5加密预测cookie或session，从而冒充用户进行登陆。因为有了salt所以我们不能直接猜测出cookie或session，这就有了hash长度扩展攻击：</p>
+<p>本来的加密过程是：</p>
+<blockquote>
+<p><strong>原始被MD5加密的字符串</strong> = salt + message + padding + length</p>
+</blockquote>
+<p>我们可以将原来的 salt+message+padding+length 看作是一个新的 salt’ 再加上我们要扩充的字符串 ( message’ ) ，计算出一个新的MD5值</p>
+<blockquote>
+<p><strong>新的被MD5加密的字符串</strong> = salt’ + message’ + padding’ + length’</p>
+<p>length’ = lenth( salt + message + padding + message’)</p>
+</blockquote>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C1842fb87543b4e0e90daf4c3ef560983%5Cclipboard.png" alt="img"></p>
+<p>例如：</p>
+<p>已知原始消息为admin，salt的长度为4，要扩展的字符串是 ‘joychou’，计算 padding’ ， length’  和 新生成的MD5</p>
+<p>hex(admin) = 61646d696e</p>
+<p>hex(salt) = xxxxxxxx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原始被MD5加密的字符串 = xxxxxxxx61646d696e80000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 </span><br><span class="line">hex($salt) + hex(&apos;admin&apos;) + &apos;80&apos; +  54*&apos;00&apos;</span><br></pre></td></tr></table></figure>
+
+<p>len(‘原始被MD5加密的字符串’) = 64</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">新的被MD5加密的字符串 = 原始被MD5加密的字符串 + hex(&apos;joychou&apos;) + 80000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 + 3802000000000000 </span><br><span class="line">新的length = len(原始被MD5加密的字符串 + &apos;joychou&apos;) = 71(Byte) = 568(bit) = 0x238 </span><br><span class="line">padding&apos;= 800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003802000000000000</span><br></pre></td></tr></table></figure>
+
+<p>新生成的MD5：06cf5a94dcda53659f58c0f411ba0bd8</p>
+<p><strong>CTF例题：</strong></p>
+<p>题目连接： <a href="http://daka.whaledu.com/web/web44/答案格式：whaleCTF{xxxx}" target="_blank" rel="noopener">http://daka.whaledu.com/web/web44/</a></p>
+<p>源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">"已知一组role为admin，salt长度为4，hash为c7813629f22b6a7d28a08041db3e80a9,想要扩展的字符串是joychou"</span>.<span class="string">"&lt;br&gt;"</span>; </span><br><span class="line">$flag = <span class="string">"**********"</span>; </span><br><span class="line">$role = $_REQUEST[<span class="string">"role"</span>]; </span><br><span class="line">$hash = $_REQUEST[<span class="string">"hash"</span>]; </span><br><span class="line">$salt = <span class="string">"***********"</span>; <span class="comment">//The length is 4 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ($hash !== md5($salt.$role))&#123; <span class="comment">//这里判断加盐后的新生成的MD5和输入的MD5是否相等，若相等则可输出flag，这里就可用到我们的hash长度扩展攻击</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'wrong!'</span>;      </span><br><span class="line">    <span class="keyword">exit</span>; </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( $role == <span class="string">'admin'</span>)&#123; </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'no no no !, hash cann\'t be admin'</span>; </span><br><span class="line">    <span class="keyword">exit</span>; </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">//echo "You are ".$role.'&lt;/br&gt;'; </span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">'Congradulation! The flag is'</span>.$flag; </span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>利用自动填充脚本：</p>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C73d09eed135b4c5e9e3377cf50655c63%5Cclipboard.png" alt="img"></p>
+<p>使用方法：</p>
+<p>python md5pad.py 已知的MD5值 需要扩展的字符串 原message和salt的长度</p>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C92fae7f9177d407c96a81a68c1605900%5Cclipboard.png" alt="img"></p>
+<p>通过burp抓包，在post请求包的data中赋值并发送即可得到flag</p>
+<p><img src="//goudanjun.vip/2021/03/20/hash长度扩展攻击/E:%5CYoudaoNote%5Clocales%5Cqq95DFC21E9D6129E6F47BDD62200B295D%5C361ccba5516f49ff82751024711488fb%5Cclipboard.png" alt="img"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/密码学/" rel="tag"># 密码学</a>
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/18/RSA加密.html/" rel="next" title="RSA加密">
+                <i class="fa fa-chevron-left"></i> RSA加密
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">狗蛋菌</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry,Stay Foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/stom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/goudanjun" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hash加密过程："><span class="nav-number">1.</span> <span class="nav-text">hash加密过程：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MD5加密："><span class="nav-number">2.</span> <span class="nav-text">MD5加密：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hash长度扩展攻击："><span class="nav-number">3.</span> <span class="nav-text">hash长度扩展攻击：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">狗蛋菌</span>
+
+  
+</div>
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
