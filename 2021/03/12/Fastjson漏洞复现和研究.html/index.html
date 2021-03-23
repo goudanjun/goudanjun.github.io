@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://i.loli.net/2021/03/12/gjubXL4h6p2erUR.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/13/HhF14aPkXBVNI8p.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/13/dgFrIOXvRq79EU1.png">
-<meta property="og:updated_time" content="2021-03-13T02:08:35.966Z">
+<meta property="og:updated_time" content="2021-03-23T02:06:42.855Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fastjson漏洞复现和研究">
 <meta name="twitter:description" content="漏洞简述Fastjson 是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。 Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。">
@@ -329,7 +329,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  821 字
+                  830 字
                 </span>
               
 
@@ -370,6 +370,7 @@
 <p>Fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。</p>
 <a id="more"></a>
 
+<p><a href="https://zhuanlan.zhihu.com/p/157211675?from_voters_page=true" target="_blank" rel="noopener">fastjson各个版本漏洞简介</a></p>
 <p>由于普通序列化的时候各个类的私有属性无法区别，比如：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bicycle</span> <span class="keyword">implements</span> <span class="title">vehicle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Big_Decimal wheels;</span><br><span class="line">    <span class="comment">//省略 setter/getter、toString等</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">car</span> <span class="keyword">implements</span> <span class="title">vehicle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Big_Decimal wheels;</span><br><span class="line">    <span class="comment">//省略 setter/getter、toString等</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//序列化之后：</span></span><br><span class="line">toJSONString : &#123;<span class="string">"vehicle"</span>:&#123;<span class="string">"wheels"</span>:<span class="number">2</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line">toJSONString : &#123;<span class="string">"vehicle"</span>:&#123;<span class="string">"wheels"</span>:<span class="number">4</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
 

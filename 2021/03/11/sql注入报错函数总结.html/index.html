@@ -94,7 +94,21 @@
 <meta property="og:image" content="https://i.loli.net/2021/03/11/oJH7CKteA1R6EPh.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/11/AOJqScjifuYnN7l.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/11/u3PRsDgTCpS8bMK.png">
-<meta property="og:updated_time" content="2021-03-11T11:42:35.607Z">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/gst6LGHlj754OAE.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/z3CdrTqDLPe7fks.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/vBR2oY1a9fPdblh.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/IgfpsAU4YyGXLxr.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/qWHT8L1FIEMtnur.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/AmplyH2aQWDdbuF.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/zbHPBJFY9NnvcMo.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/FyzgXVeZoid4DY2.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/fshmX71UDzJtl9G.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/z3ACZugm7pc6MB4.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/qfrw3elXzM4yWFZ.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/VdvJPs6xFBDi1uG.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/E1sS8OH63bFmwtT.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/03/23/7yo4WYqCmkZITfA.jpg">
+<meta property="og:updated_time" content="2021-03-23T02:05:22.789Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sql注入报错函数总结">
 <meta name="twitter:description" content="关于SQL注入的五大报错注入函数全部都以查user()为例子">
@@ -322,7 +336,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  175 字
+                  1.9k 字
                 </span>
               
 
@@ -338,7 +352,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1 分钟
+                  7 分钟
                 </span>
               
             </div>
@@ -377,6 +391,51 @@
 <h2 id="5-有六种函数（但总的来说可以归为一类）"><a href="#5-有六种函数（但总的来说可以归为一类）" class="headerlink" title="5.有六种函数（但总的来说可以归为一类）"></a>5.有六种函数（但总的来说可以归为一类）</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">GeometryCollection()</span><br><span class="line">id = 1 AND GeometryCollection((<span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">polygon()</span><br><span class="line"><span class="keyword">id</span> =<span class="number">1</span> <span class="keyword">AND</span> polygon((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">multipoint()</span><br><span class="line"><span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">AND</span> multipoint((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">multilinestring()</span><br><span class="line"><span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">AND</span> multilinestring((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">linestring()</span><br><span class="line"><span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">AND</span> LINESTRING((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">multipolygon()</span><br><span class="line"><span class="keyword">id</span> =<span class="number">1</span> <span class="keyword">AND</span> multipolygon((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i.loli.net/2021/03/11/u3PRsDgTCpS8bMK.png" alt="953194-20160514223651015-716657416"></p>
+<h1 id="Floor-函数报错原理"><a href="#Floor-函数报错原理" class="headerlink" title="Floor() 函数报错原理"></a>Floor() 函数报错原理</h1><h2 id="一、简述"><a href="#一、简述" class="headerlink" title="一、简述"></a><strong>一、简述</strong></h2><p>floor报错注入是利用 `select count(<em>),(floor(rand(0)</em>2)) x from users group by x```这个相对固定的语句格式，导致的数据库报错。实际利用中通过 concat 函数，连接注入语句与 floor(rand(0)*2)函数，就实现了注入结果与报错信息回显的注入方式。具体利用本文不做阐述，本文重点探究该语句报错的原因，要理解该语句的报错原因，首先大家需要理解如下的关键函数的作用： count() 、group by 、floor()、rand()。</p>
+<h2 id="二、关键函数说明"><a href="#二、关键函数说明" class="headerlink" title="二、关键函数说明"></a><strong>二、关键函数说明</strong></h2><h3 id="1-理解rand-函数"><a href="#1-理解rand-函数" class="headerlink" title="1.理解rand()函数"></a><strong>1.理解rand()函数</strong></h3><p>rand() 是一个随机函数，通过一个固定的随机数的种子0之后，可以形成固定的伪随机序列。结果如下图所示：</p>
+<p>可见，直接使用rand函数每次产生的数都不同，但是当提供了一个固定的随机数的种子0之后：</p>
+<p>这样每次产生的值都是一样的。也可以称之为伪随机（产生的数据都是可预知的）。<br>查看多个数据看一下。（users是一个有6行数据的表）</p>
+<p><img src="https://i.loli.net/2021/03/23/gst6LGHlj754OAE.jpg" alt="图片.png"></p>
+<p>这样第一次产生的随机数和第二次完全一样，也就是可以预测的。<br>那么floor报错注入利用的时候rand（0）*2为什么要乘以 2 呢？这就要配合floor 函数来说了。</p>
+<h3 id="2-理解floor-rand-0-2-函数"><a href="#2-理解floor-rand-0-2-函数" class="headerlink" title="2.理解floor(rand(0)*2)函数"></a><strong>2.理解floor(rand(0)*2)函数</strong></h3><p>floor() 函数的作用就是返回小于等于括号内该值的最大整数，也就是取整。</p>
+<p>floor(rand(0)*2）就是对rand(0)产生的随机序列诚意2后的结果，再进行取整。得到伪随机序列为如下图所示：</p>
+<p><img src="https://i.loli.net/2021/03/23/z3CdrTqDLPe7fks.jpg" alt="图片.png"></p>
+<p>因为使用了固定的随机数种子0，他每次产生的随机数列都是相同的0 1 1 0 1 1的顺序。</p>
+<h3 id="3-group-by-函数"><a href="#3-group-by-函数" class="headerlink" title="3.group by 函数"></a><strong>3.group by</strong> <strong>函数</strong></h3><p>group by 主要用来对数据进行分组（相同的分为一组）。</p>
+<p>例如建立如下表进行实验</p>
+<p><img src="https://i.loli.net/2021/03/23/vBR2oY1a9fPdblh.jpg" alt="图片.png"></p>
+<p>通过如下语句进行查询。（这里在a和x之前缺省了as ，作用为用a和x代替原有的字段显示），显示的结果如下图所示：</p>
+<p><img src="https://i.loli.net/2021/03/23/IgfpsAU4YyGXLxr.jpg" alt="图片.png"></p>
+<p>但通过group by进行分组排序是，结果会进行分组，相同名字为合并。如下图所示</p>
+<p><strong>注意：</strong>最后x这列中显示的每一类只有一次，前面的a的是第一次出现的id值</p>
+<p><img src="https://i.loli.net/2021/03/23/qWHT8L1FIEMtnur.jpg" alt="图片.png"></p>
+<h3 id="4-理解count（-）函数"><a href="#4-理解count（-）函数" class="headerlink" title="4.理解count（*）函数"></a><strong>4.理解count（*）函数</strong></h3><p><strong>count（*）统计结果的记录数。</strong></p>
+<p>这里与group by结合使用看一下：</p>
+<p><img src="https://i.loli.net/2021/03/23/AmplyH2aQWDdbuF.jpg" alt="图片.png"></p>
+<p>这里就是对a中的重复性的数据进行了整合，然后计数，后面的x就是每一类的数量。也就是lisi有2个，wangwu有1个，zhangsan有3个。注意显示同样是按照ascii排序。</p>
+<h2 id="三、报错原因分析"><a href="#三、报错原因分析" class="headerlink" title="三、报错原因分析"></a>三、报错原因分析</h2><p>大家已经了解，当执行如下语句时，就会产生一个报错。如下图所示</p>
+<p><strong>select count(*),floor(rand(0)*2) x from users group by x;</strong></p>
+<p><img src="https://i.loli.net/2021/03/23/zbHPBJFY9NnvcMo.jpg" alt="图片.png"></p>
+<p>根据前面函数的理解，这句话本义就是统计后面产生随机数的种类并计算每种数量。原本执行结果一共6行数据，产生的随机序列应该为0 1 1 0 1 1 ，按照语句的含义，统计如果应该是：0是2个，1是4个，但是此处却产生了报错？这是为什么呢？下面来分析一下。</p>
+<p>这里最关键的及时要理解group by函数的工作过程。group by key 在执行时循环读取数据的每一行，将结果保存于临时表中。读取每一行的key时，如果key存在于临时表中，则更新临时表中的数据（更新数据时，不再计算rand值）；如果该key不存在于临时表中，则在临时表中插入key所在行的数据。（插入数据时，会再计算rand值）</p>
+<p>如果此时临时表只有key为1的行不存在key为0的行，那么数据库要将该条记录插入临时表，由于是随机数，插时又要计算一下随机值，此时 floor(random(0)*2)结果可能为1，就会导致插入时冲突而报错。即检测时和插入时两次计算了随机数的值。</p>
+<p>具体报错原因可以通过下列过程展示：</p>
+<p>mysql执行结果，会产生 011011 这个序列，group by时，会建立空虚拟表如下图，然后从sql语句执行结果序列（011011）读取数据并插入虚表:</p>
+<p><img src="https://i.loli.net/2021/03/23/FyzgXVeZoid4DY2.jpg" alt="图片.png"></p>
+<p>（1）虚表写入第一条记录，执行floor(rand(0)*2)，发现结果为0(此时为第一次计算)</p>
+<p><img src="https://i.loli.net/2021/03/23/fshmX71UDzJtl9G.jpg" alt="图片.png"></p>
+<p>（2）查询虚拟表，发现0的键值不存在，则插入新的键值的时候floor(rand(0)*2)会被再计算一次，结果为1(此时为第二次计算)，插入虚表，第一条记录插入完毕，结果为1。如下图:</p>
+<p><img src="https://i.loli.net/2021/03/23/z3ACZugm7pc6MB4.jpg" alt="图片.png"></p>
+<p>（3）虚表写入第二条记录，再次计算floor(rand(0)<em>2)，发现结果为1(此时为第三次计算)，此时结算结果为1，所以floor(rand(0)</em>2)不会被计算，直接count(<em>)加1，第二条记录写入完毕。（5）查询虚表，发现1的键值存在，所以floor(rand(0)</em>2)不会被计算第二次，直接count(*)加1，第二条记录查询完毕，结果如下:</p>
+<p><img src="https://i.loli.net/2021/03/23/qfrw3elXzM4yWFZ.jpg" alt="图片.png"></p>
+<p>（4）虚表写入第三条记录，再次计算floor(rand(0)<em>2)，发现结果为0(此时为第4次计算)，计算结果为0，此时虚表中没有0的数据记录，则执行插入该数据，插入时会再次计算floor(rand(0)</em>2)（此时为第5次计算），计算结果为1。然而1这个主键已经存在于虚拟表中，而新计算的值也为1(主键键值必须唯一)，所以就产生了主键冲突的错误，也就是：Duplicate entry 的报错。</p>
+<p><img src="https://i.loli.net/2021/03/23/VdvJPs6xFBDi1uG.jpg" alt="图片.png"></p>
+<p>总结：</p>
+<p>通过上述分析，在虚表中写入第三条记录是时，产生了报错。此时floor(rand(0)*2)一共被计算了5次，这也解释了为什么数据表中需要最少3条数据才会报错的原因。</p>
+<p>另外，要注意加入随机数种子的问题，如果没加入随机数种子或者加入其他的数，那么floor(rand()<em>2)产生的序列是不可测的，这样可能会出现正常插入无法报错的情况。最重要的是前面几条记录查询后不能让虚表存在0,1键值，如果存在了，那无论多少条记录，也都没办法报错，因为floor(rand()</em>2)不会再被计算做为虚表的键值，这也就是为什么不加随机数种子有时候会报错，有时候不会报错的原因。</p>
+<p>比如下面用1作为随机数种子，就不会产生报错：</p>
+<p><img src="https://i.loli.net/2021/03/23/E1sS8OH63bFmwtT.jpg" alt="图片.png"></p>
+<p><img src="https://i.loli.net/2021/03/23/7yo4WYqCmkZITfA.jpg" alt="图片.png"></p>
 
       
     </div>
@@ -559,7 +618,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于SQL注入的五大报错注入函数"><span class="nav-number">1.</span> <span class="nav-text">关于SQL注入的五大报错注入函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-floor"><span class="nav-number">1.1.</span> <span class="nav-text">1.floor()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-extractvalue"><span class="nav-number">1.2.</span> <span class="nav-text">2.extractvalue()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-updatexml"><span class="nav-number">1.3.</span> <span class="nav-text">3.updatexml()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-exp"><span class="nav-number">1.4.</span> <span class="nav-text">4.exp()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-有六种函数（但总的来说可以归为一类）"><span class="nav-number">1.5.</span> <span class="nav-text">5.有六种函数（但总的来说可以归为一类）</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于SQL注入的五大报错注入函数"><span class="nav-number">1.</span> <span class="nav-text">关于SQL注入的五大报错注入函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-floor"><span class="nav-number">1.1.</span> <span class="nav-text">1.floor()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-extractvalue"><span class="nav-number">1.2.</span> <span class="nav-text">2.extractvalue()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-updatexml"><span class="nav-number">1.3.</span> <span class="nav-text">3.updatexml()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-exp"><span class="nav-number">1.4.</span> <span class="nav-text">4.exp()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-有六种函数（但总的来说可以归为一类）"><span class="nav-number">1.5.</span> <span class="nav-text">5.有六种函数（但总的来说可以归为一类）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Floor-函数报错原理"><span class="nav-number">2.</span> <span class="nav-text">Floor() 函数报错原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、简述"><span class="nav-number">2.1.</span> <span class="nav-text">一、简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、关键函数说明"><span class="nav-number">2.2.</span> <span class="nav-text">二、关键函数说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-理解rand-函数"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.理解rand()函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-理解floor-rand-0-2-函数"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.理解floor(rand(0)*2)函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-group-by-函数"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.group by 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-理解count（-）函数"><span class="nav-number">2.2.4.</span> <span class="nav-text">4.理解count（*）函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、报错原因分析"><span class="nav-number">2.3.</span> <span class="nav-text">三、报错原因分析</span></a></li></ol></li></ol></div>
             
 
           </div>
