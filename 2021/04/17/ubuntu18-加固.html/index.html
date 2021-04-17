@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="ubuntu,">
 
 
 
@@ -81,18 +81,22 @@
 
 
 
-<meta name="description" content="Stay Hungry,Stay Foolish">
-<meta name="keywords" content="CTF,渗透">
+<meta name="description" content="建立同步日志服务器服务端（保存日志的服务器）安装Rsyslog12apt-get install rsyslog -yrsyslogd -v  #查看是否安装成功   12345678910111213141516171819systemctl start rsyslog #启动服务#修改配置文件# /etc/rsyslog.conf#取消以下的注释$ModLoad imudp$UDPServer">
+<meta name="keywords" content="ubuntu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux反弹shell的几种常见手段">
-<meta property="og:url" content="http://goudanjun.vip/2021/02/06/linux反弹shell的几种常见手段.html/index.html">
+<meta property="og:title" content="ubuntu18 加固">
+<meta property="og:url" content="http://goudanjun.vip/2021/04/17/ubuntu18-加固.html/index.html">
 <meta property="og:site_name" content="Goudan&#39;s blog">
-<meta property="og:description" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="建立同步日志服务器服务端（保存日志的服务器）安装Rsyslog12apt-get install rsyslog -yrsyslogd -v  #查看是否安装成功   12345678910111213141516171819systemctl start rsyslog #启动服务#修改配置文件# /etc/rsyslog.conf#取消以下的注释$ModLoad imudp$UDPServer">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-02-06T13:04:23.343Z">
+<meta property="og:image" content="https://i.loli.net/2021/04/17/UJQvCpyjl3I6R4r.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/17/GZou1wBmNaK9ScH.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/17/aIe9y2kU1NZKfrq.png">
+<meta property="og:updated_time" content="2021-04-17T05:59:39.504Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux反弹shell的几种常见手段">
-<meta name="twitter:description" content="Stay Hungry,Stay Foolish">
+<meta name="twitter:title" content="ubuntu18 加固">
+<meta name="twitter:description" content="建立同步日志服务器服务端（保存日志的服务器）安装Rsyslog12apt-get install rsyslog -yrsyslogd -v  #查看是否安装成功   12345678910111213141516171819systemctl start rsyslog #启动服务#修改配置文件# /etc/rsyslog.conf#取消以下的注释$ModLoad imudp$UDPServer">
+<meta name="twitter:image" content="https://i.loli.net/2021/04/17/UJQvCpyjl3I6R4r.png">
 
 
 
@@ -122,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://goudanjun.vip/2021/02/06/linux反弹shell的几种常见手段.html/">
+  <link rel="canonical" href="http://goudanjun.vip/2021/04/17/ubuntu18-加固.html/">
 
 
 
 
 
-  <title>linux反弹shell的几种常见手段 | Goudan's blog</title>
+  <title>ubuntu18 加固 | Goudan's blog</title>
   
 
 
@@ -255,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/02/06/linux反弹shell的几种常见手段.html/">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/04/17/ubuntu18-加固.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="狗蛋菌">
@@ -272,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">linux反弹shell的几种常见手段</h1>
+          <h1 class="post-title" itemprop="name headline">ubuntu18 加固</h1>
         
 
         <div class="post-meta">
@@ -284,8 +288,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-02-06T21:04:23+08:00">
-                2021-02-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-17T13:45:19+08:00">
+                2021-04-17
               </time>
             
 
@@ -316,7 +320,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  0 字
+                  330 字
                 </span>
               
 
@@ -353,7 +357,19 @@
       
 
       
-        
+        <h1 id="建立同步日志服务器"><a href="#建立同步日志服务器" class="headerlink" title="建立同步日志服务器"></a>建立同步日志服务器</h1><h2 id="服务端（保存日志的服务器）"><a href="#服务端（保存日志的服务器）" class="headerlink" title="服务端（保存日志的服务器）"></a>服务端（保存日志的服务器）</h2><h3 id="安装Rsyslog"><a href="#安装Rsyslog" class="headerlink" title="安装Rsyslog"></a>安装Rsyslog</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install rsyslog -y</span><br><span class="line">rsyslogd -v  <span class="comment">#查看是否安装成功</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/04/17/UJQvCpyjl3I6R4r.png" alt="image-20210417134922553"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">systemctl start rsyslog <span class="comment">#启动服务</span></span><br><span class="line"><span class="comment">#修改配置文件</span></span><br><span class="line"><span class="comment"># /etc/rsyslog.conf</span></span><br><span class="line"><span class="comment">#取消以下的注释</span></span><br><span class="line"><span class="variable">$ModLoad</span> imudp</span><br><span class="line"><span class="variable">$UDPServerRun</span> 514</span><br><span class="line"><span class="variable">$ModLoad</span> imtcp</span><br><span class="line"><span class="variable">$InputTCPServerRun</span> 514</span><br><span class="line"></span><br><span class="line"><span class="comment">#定义特定的子网，IP或域以限制访问</span></span><br><span class="line"><span class="variable">$AllowedSender</span> TCP, 127.0.0.1, 192.168.0.0/24, *.example.com</span><br><span class="line"><span class="variable">$AllowedSender</span> UDP, 127.0.0.1, 192.168.0.0/24, *.example.com</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建一个模板来告诉Rsyslog服务器如何存储传入的syslog消息。在GLOBAL DIRECTIVES部分之前添加以下行</span></span><br><span class="line"><span class="variable">$template</span> remote-incoming-logs,<span class="string">"/var/log/%HOSTNAME%/%PROGRAMNAME%.log"</span> </span><br><span class="line">*.* ?remote-incoming-logs</span><br><span class="line"></span><br><span class="line"><span class="comment">#保存完之后，检查Rsyslog配置是否存在语法错误</span></span><br><span class="line">rsyslogd -f /etc/rsyslog.conf -N1</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/04/17/GZou1wBmNaK9ScH.png" alt="image-20210417135320365"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#重启Rsyslog服务</span></span><br><span class="line">systemctl restart rsyslog</span><br><span class="line"><span class="comment">#验证Rsyslog是否正在侦听 TCP/UDP</span></span><br><span class="line">netstat -4altunp | grep 514</span><br></pre></td></tr></table></figure>
+
+<h2 id="客户端（需要保存日志的服务器）"><a href="#客户端（需要保存日志的服务器）" class="headerlink" title="客户端（需要保存日志的服务器）"></a>客户端（需要保存日志的服务器）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#修改配置文件 </span></span><br><span class="line"><span class="comment"># /etc/rsyslog.conf</span></span><br><span class="line"><span class="comment">#在末尾加入如下行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##Enable sending of logs over UDP add the following line:</span></span><br><span class="line">*.* @192.168.0.101:514</span><br><span class="line"><span class="comment">##Enable sending of logs over TCP add the following line:</span></span><br><span class="line">*.* @@192.168.0.101:514</span><br><span class="line"><span class="comment">##Set disk queue when rsyslog server will be down:</span></span><br><span class="line"><span class="variable">$ActionQueueFileName</span> queue</span><br><span class="line"><span class="variable">$ActionQueueMaxDiskSpace</span> 1g</span><br><span class="line"><span class="variable">$ActionQueueSaveOnShutdown</span> on</span><br><span class="line"><span class="variable">$ActionQueueType</span> LinkedList</span><br><span class="line"><span class="variable">$ActionResumeRetryCount</span> -1</span><br><span class="line"></span><br><span class="line"><span class="comment">#保存并关闭文件。然后，重新启动Rsyslog服务器以应用配置更改：</span></span><br><span class="line">systemtcl restart rsyslog</span><br></pre></td></tr></table></figure>
+
+<p>这时在服务器端的 /var/log 目录下有有一个主机名字的文件</p>
+<p><img src="https://i.loli.net/2021/04/17/aIe9y2kU1NZKfrq.png" alt="image-20210417135818034"></p>
+
       
     </div>
     
@@ -368,6 +384,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
+          
+        </div>
+      
 
       
       
@@ -377,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/02/04/配置mysql远程访问.html/" rel="next" title="配置mysql远程访问">
-                <i class="fa fa-chevron-left"></i> 配置mysql远程访问
+              <a href="/2021/04/13/内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf.html/" rel="next" title="内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf">
+                <i class="fa fa-chevron-left"></i> 内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf
               </a>
             
           </div>
@@ -386,10 +408,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2021/02/07/python学习记录.html/" rel="prev" title="python学习记录">
-                python学习记录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -441,8 +459,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -510,6 +537,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#建立同步日志服务器"><span class="nav-number">1.</span> <span class="nav-text">建立同步日志服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端（保存日志的服务器）"><span class="nav-number">1.1.</span> <span class="nav-text">服务端（保存日志的服务器）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Rsyslog"><span class="nav-number">1.1.1.</span> <span class="nav-text">安装Rsyslog</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端（需要保存日志的服务器）"><span class="nav-number">1.2.</span> <span class="nav-text">客户端（需要保存日志的服务器）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

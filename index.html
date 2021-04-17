@@ -255,6 +255,168 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/04/17/ubuntu18-加固.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="狗蛋菌">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Goudan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/04/17/ubuntu18-加固.html/" itemprop="url">ubuntu18 加固</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-17T13:45:19+08:00">
+                2021-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  330 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="建立同步日志服务器"><a href="#建立同步日志服务器" class="headerlink" title="建立同步日志服务器"></a>建立同步日志服务器</h1><h2 id="服务端（保存日志的服务器）"><a href="#服务端（保存日志的服务器）" class="headerlink" title="服务端（保存日志的服务器）"></a>服务端（保存日志的服务器）</h2><h3 id="安装Rsyslog"><a href="#安装Rsyslog" class="headerlink" title="安装Rsyslog"></a>安装Rsyslog</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install rsyslog -y</span><br><span class="line">rsyslogd -v  <span class="comment">#查看是否安装成功</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/04/17/UJQvCpyjl3I6R4r.png" alt="image-20210417134922553"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">systemctl start rsyslog <span class="comment">#启动服务</span></span><br><span class="line"><span class="comment">#修改配置文件</span></span><br><span class="line"><span class="comment"># /etc/rsyslog.conf</span></span><br><span class="line"><span class="comment">#取消以下的注释</span></span><br><span class="line"><span class="variable">$ModLoad</span> imudp</span><br><span class="line"><span class="variable">$UDPServerRun</span> 514</span><br><span class="line"><span class="variable">$ModLoad</span> imtcp</span><br><span class="line"><span class="variable">$InputTCPServerRun</span> 514</span><br><span class="line"></span><br><span class="line"><span class="comment">#定义特定的子网，IP或域以限制访问</span></span><br><span class="line"><span class="variable">$AllowedSender</span> TCP, 127.0.0.1, 192.168.0.0/24, *.example.com</span><br><span class="line"><span class="variable">$AllowedSender</span> UDP, 127.0.0.1, 192.168.0.0/24, *.example.com</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建一个模板来告诉Rsyslog服务器如何存储传入的syslog消息。在GLOBAL DIRECTIVES部分之前添加以下行</span></span><br><span class="line"><span class="variable">$template</span> remote-incoming-logs,<span class="string">"/var/log/%HOSTNAME%/%PROGRAMNAME%.log"</span> </span><br><span class="line">*.* ?remote-incoming-logs</span><br><span class="line"></span><br><span class="line"><span class="comment">#保存完之后，检查Rsyslog配置是否存在语法错误</span></span><br><span class="line">rsyslogd -f /etc/rsyslog.conf -N1</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/04/17/GZou1wBmNaK9ScH.png" alt="image-20210417135320365"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#重启Rsyslog服务</span></span><br><span class="line">systemctl restart rsyslog</span><br><span class="line"><span class="comment">#验证Rsyslog是否正在侦听 TCP/UDP</span></span><br><span class="line">netstat -4altunp | grep 514</span><br></pre></td></tr></table></figure>
+
+<h2 id="客户端（需要保存日志的服务器）"><a href="#客户端（需要保存日志的服务器）" class="headerlink" title="客户端（需要保存日志的服务器）"></a>客户端（需要保存日志的服务器）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#修改配置文件 </span></span><br><span class="line"><span class="comment"># /etc/rsyslog.conf</span></span><br><span class="line"><span class="comment">#在末尾加入如下行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##Enable sending of logs over UDP add the following line:</span></span><br><span class="line">*.* @192.168.0.101:514</span><br><span class="line"><span class="comment">##Enable sending of logs over TCP add the following line:</span></span><br><span class="line">*.* @@192.168.0.101:514</span><br><span class="line"><span class="comment">##Set disk queue when rsyslog server will be down:</span></span><br><span class="line"><span class="variable">$ActionQueueFileName</span> queue</span><br><span class="line"><span class="variable">$ActionQueueMaxDiskSpace</span> 1g</span><br><span class="line"><span class="variable">$ActionQueueSaveOnShutdown</span> on</span><br><span class="line"><span class="variable">$ActionQueueType</span> LinkedList</span><br><span class="line"><span class="variable">$ActionResumeRetryCount</span> -1</span><br><span class="line"></span><br><span class="line"><span class="comment">#保存并关闭文件。然后，重新启动Rsyslog服务器以应用配置更改：</span></span><br><span class="line">systemtcl restart rsyslog</span><br></pre></td></tr></table></figure>
+
+<p>这时在服务器端的 /var/log 目录下有有一个主机名字的文件</p>
+<p><img src="https://i.loli.net/2021/04/17/aIe9y2kU1NZKfrq.png" alt="image-20210417135818034"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/04/13/内网隧道技术之frp：简单代理、msf反弹shell、CS联动msf.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1661,161 +1823,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://goudanjun.vip/2021/03/08/内网学习记录.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="狗蛋菌">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Goudan's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/03/08/内网学习记录.html/" itemprop="url">内网学习记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-08T19:36:50+08:00">
-                2021-03-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  3k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  17 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">net user /domain		<span class="comment">#查看域用户</span></span><br><span class="line">net view /domain		<span class="comment">#查看有几个域</span></span><br><span class="line">net view /domain:XXX	<span class="comment">#查看域内主机</span></span><br><span class="line">net group /domain		<span class="comment">#查看域里面的组</span></span><br><span class="line">net group <span class="string">"domain computers"</span> /domain	<span class="comment">#查看域内所有主机名</span></span><br><span class="line">net group <span class="string">"domain admins"</span> /domain		<span class="comment">#查看域管理员</span></span><br><span class="line">net group <span class="string">"domain controllers"</span> /domain	<span class="comment">#查看域控制器</span></span><br><span class="line">net group <span class="string">"enterprise admins"</span> /domain	<span class="comment">#查看企业管理组</span></span><br><span class="line">nettime /domain			<span class="comment">#查看时间服务器</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/03/08/内网学习记录.html/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1866,7 +1873,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1879,7 +1886,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
